@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 登录请求过滤器，当接收到登录请求时进入这里
+ * 验证用户名、密码，生成 token 并返回结果
+ */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
@@ -43,7 +47,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             return null;
         }
-        if(httpServletRequest.getParameter("username").equals("")){
+        if(httpServletRequest.getParameter("username") == ""){
             try {
                 BufferedReader streamReader = new BufferedReader( new InputStreamReader(httpServletRequest.getInputStream(), "UTF-8"));
                 StringBuilder responseStrBuilder = new StringBuilder();
@@ -65,6 +69,16 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         return getAuthenticationManager().authenticate(token);
     }
 
+    /**
+     * 登陆成功，生成 token 并返回
+     * 注意：生成的 token 放置的地方为 response 的头部
+     * @param request
+     * @param response
+     * @param chain
+     * @param authResult
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         response.setContentType("application/json");
@@ -82,6 +96,14 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         printWriter.write(JSON.toJSONString(ResultTool.success(list)));
     }
 
+    /**
+     * 登录失败，返回失败原因
+     * @param request
+     * @param response
+     * @param failed
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setContentType("application/json");

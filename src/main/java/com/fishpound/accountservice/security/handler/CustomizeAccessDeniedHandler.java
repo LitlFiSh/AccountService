@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 自定义权限不足处理逻辑
+ * 当访问无权限资源时进入该方法处理
+ */
 @Component
 public class CustomizeAccessDeniedHandler implements AccessDeniedHandler {
     @Override

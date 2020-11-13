@@ -1,9 +1,10 @@
 package com.fishpound.accountservice.result;
 
-import com.fishpound.accountservice.entity.Role;
-
 import java.util.List;
 
+/**
+ * 用于用户信息的返回以及添加用户时前端传入参数的对应
+ */
 public class ResultUser {
     private Integer id;
     private String username;

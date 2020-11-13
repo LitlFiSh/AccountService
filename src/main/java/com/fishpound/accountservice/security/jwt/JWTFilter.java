@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * 前置拦截，当请求除登录 url 外的所有地址都会进入这里
+ * 验证 token 的合法性
+ */
 public class JWTFilter extends BasicAuthenticationFilter {
     public JWTFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);

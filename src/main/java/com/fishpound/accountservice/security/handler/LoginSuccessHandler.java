@@ -15,6 +15,10 @@
 //import java.io.IOException;
 //import java.util.List;
 //
+///**
+// * 登陆成功处理
+// * 在其他过滤器中完成了结果的返回
+// */
 //@Component
 //public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 //    @Override

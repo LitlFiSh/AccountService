@@ -2,6 +2,9 @@ package com.fishpound.accountservice.entity;
 
 import javax.persistence.*;
 
+/**
+ * 与数据库对应的用户信息实体
+ */
 @Entity
 @Table(name = "userInfo")
 public class UserInfo {

@@ -9,12 +9,9 @@ import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.result.ResultUser;
-import com.fishpound.accountservice.security.jwt.JWTTokenUtils;
 import com.fishpound.accountservice.service.AccountService;
 import com.fishpound.accountservice.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +30,11 @@ public class UserController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * 通过用户名查找用户信息并返回
+     * @param username
+     * @return
+     */
     @GetMapping("/info")
     public JsonResult getUserInfo(@RequestParam String username){
         UserInfo userInfo = userInfoService.findByUsername(username);
@@ -53,6 +55,11 @@ public class UserController {
                 );
     }
 
+    /**
+     * 添加用户，之后放到管理员控制器中
+     * @param user
+     * @return
+     */
     @PostMapping("/signup")
     public JsonResult signup(@RequestParam ResultUser user){
         Account account = new Account();

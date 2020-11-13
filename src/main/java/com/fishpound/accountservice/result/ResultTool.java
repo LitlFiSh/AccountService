@@ -1,5 +1,8 @@
 package com.fishpound.accountservice.result;
 
+/**
+ * 统一 JSON 返回结果构造器
+ */
 public class ResultTool {
     public static JsonResult success(){
         return new JsonResult(true);

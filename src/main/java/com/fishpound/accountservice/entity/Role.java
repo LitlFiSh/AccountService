@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 与数据库对应的角色实体
+ */
 @Entity
 @Table(name = "role")
 public class Role {

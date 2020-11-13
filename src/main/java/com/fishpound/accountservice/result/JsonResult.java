@@ -2,6 +2,10 @@ package com.fishpound.accountservice.result;
 
 import java.io.Serializable;
 
+/**
+ * 统一 JSON 返回结果
+ * @param <T>
+ */
 public class JsonResult<T> implements Serializable {
     private Boolean success;
     private Integer code;

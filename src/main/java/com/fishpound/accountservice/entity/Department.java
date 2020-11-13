@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 与数据库对应的部门实体
+ */
 @Entity
 @Table(name = "department")
 public class Department {

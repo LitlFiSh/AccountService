@@ -1,5 +1,8 @@
 package com.fishpound.accountservice.result;
 
+/**
+ * 返回结果枚举类型
+ */
 public enum ResultCode {
     SUCCESS(1, "成功"),
     FAIL(0, "失败"),

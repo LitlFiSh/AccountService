@@ -16,6 +16,10 @@
 //import javax.servlet.http.HttpServletResponse;
 //import java.io.IOException;
 //
+///**
+// * 登录失败处理逻辑
+// * 在其他过滤器中已经完成了结果的返回
+// */
 //@Component
 //public class LoginFailureHandler implements AuthenticationFailureHandler {
 //    @Override

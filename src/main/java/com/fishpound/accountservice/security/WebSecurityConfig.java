@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        super.configure(http);
         http.cors().and().csrf().disable();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/user/login").permitAll()
+                //只开放登录接口，其他访问路径都需要身份验证
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers("/user/**").hasAuthority("ROLE_User")
                 .antMatchers("/admin/**").hasAuthority("ROLE_Admin")

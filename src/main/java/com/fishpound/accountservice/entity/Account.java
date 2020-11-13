@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 与数据库对应的账户实体
+ * id：主键
+ * openID：暂时留空，用于以后微信登录
+ */
 @Entity
 @Table(name="account")
 public class Account {
