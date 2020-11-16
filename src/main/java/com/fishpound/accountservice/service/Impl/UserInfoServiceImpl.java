@@ -23,4 +23,12 @@ public class UserInfoServiceImpl implements UserInfoService{
         userInfoRepository.save(userInfo);
         return true;
     }
+
+    @Override
+    public boolean delete(UserInfo userInfo) {
+        userInfoRepository.delete(userInfo);
+        return true;
+    }
+
+
 }

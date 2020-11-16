@@ -33,14 +33,10 @@ public class JWTFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        response.setHeader("Access-Control-Allow-Origin", "192.168.50.20");
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        if(request.getMethod().equals("OPTIONS")){
-            response.setStatus(HttpServletResponse.SC_OK);
-            return ;
-        }
+//        if(request.getMethod().equals("OPTIONS")){
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            return ;
+//        }
         PrintWriter printWriter;
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

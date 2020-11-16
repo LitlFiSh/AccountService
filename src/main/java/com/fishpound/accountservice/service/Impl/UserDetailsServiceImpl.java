@@ -35,11 +35,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         Account account = user.getAccount();
         if(user != null) {
-            List<Role> roles = account.getRoles();
-            for (Role role : roles) {
-                GrantedAuthority authority = new SimpleGrantedAuthority(JWTTokenUtils.ROLE_CLAIMS + role.getRoleName());
-                grantedAuthorities.add(authority);
-            }
+            Role role = account.getRole();
+            GrantedAuthority authority = new SimpleGrantedAuthority(JWTTokenUtils.ROLE_CLAIMS + role.getRoleName());
+            grantedAuthorities.add(authority);
         }
         return new JWTUser(user.getId(), user.getUsername(), account.getPassword(), account.isActive(), grantedAuthorities);
     }

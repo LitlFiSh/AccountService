@@ -39,18 +39,14 @@ public class UserController {
     public JsonResult getUserInfo(@RequestParam String username){
         UserInfo userInfo = userInfoService.findByUsername(username);
         Account user_account = userInfo.getAccount();
-        List<Role> roles = user_account.getRoles();
-        List<String> user_roles = new ArrayList<>();
-        for (Role role : roles) {
-            user_roles.add(role.getRoleName());
-        }
+        Role user_role = user_account.getRole();
         Department user_department = userInfo.getDepartment();
         return userInfo == null ? ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST) :
                 ResultTool.success(new ResultUser(
                         userInfo.getId(),
                         userInfo.getUsername(),
                         user_department.getDeptName(),
-                        user_roles
+                        user_role.getRoleName()
                         )
                 );
     }
@@ -71,7 +67,7 @@ public class UserController {
         account.setUserInfo(userInfo);
         userInfo.setId(user.getId());
         userInfo.setUsername(user.getUsername());
-        userInfo.setDepartment(departmentRepository.getByDeptName(user.getDepartment()));
+        userInfo.setDepartment(departmentRepository.findByDeptName(user.getDepartment()));
         userInfo.setAccount(account);
         //save account, save userInfo
         if(accountService.save(account) && userInfoService.save(userInfo)) {

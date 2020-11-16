@@ -10,6 +10,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #      ddl-auto: update
     show-sql: true
+#    open-in-view: true
 server:
   port: 8080
   tomcat:

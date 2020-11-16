@@ -1,8 +1,12 @@
 package com.fishpound.accountservice.entity;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 与数据库对应的角色实体
@@ -18,12 +22,13 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
-    @ManyToMany
-    @JoinTable(name = "account_role_rel",
-            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "id")}
-            )
-    private List<Account> accounts = new ArrayList<>();
+    @OneToMany(targetEntity = Account.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Set<Account> accountSet = new HashSet<>();
+
+    @OneToMany(targetEntity = Menu.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "rid", referencedColumnName = "id")
+    private Set<Menu> menuSet = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -41,11 +46,19 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
+    public Set<Account> getAccountSet() {
+        return accountSet;
     }
 
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    public void setAccountSet(Set<Account> accountSet) {
+        this.accountSet = accountSet;
+    }
+
+    public Set<Menu> getMenuSet() {
+        return menuSet;
+    }
+
+    public void setMenuSet(Set<Menu> menuSet) {
+        this.menuSet = menuSet;
     }
 }

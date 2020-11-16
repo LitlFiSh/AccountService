@@ -2,8 +2,12 @@ package com.fishpound.accountservice.security.jwt;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fishpound.accountservice.entity.Menu;
+import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,15 +24,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * 登录请求过滤器，当接收到登录请求时进入这里
  * 验证用户名、密码，生成 token 并返回结果
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+    @Autowired
+    RoleService roleService;
 
     public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
@@ -39,32 +43,26 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String username = "";
         String password = "";
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "192.168.50.20");
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
-        httpServletResponse.setHeader("Access-Control-Max-Age", "86400");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
-        if(httpServletRequest.getMethod().equals("OPTIONS")){
-            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-            return null;
-        }
-        if(httpServletRequest.getParameter("username") == ""){
-            try {
-                BufferedReader streamReader = new BufferedReader( new InputStreamReader(httpServletRequest.getInputStream(), "UTF-8"));
-                StringBuilder responseStrBuilder = new StringBuilder();
-                String inputStr;
-                while ((inputStr = streamReader.readLine()) != null) {
-                    responseStrBuilder.append(inputStr);
-                }
-                JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
-                username = jsonObject.getString("username");
-                password = jsonObject.getString("password");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else{
-            username = httpServletRequest.getParameter("username");
-            password = httpServletRequest.getParameter("password");
-        }
+//        if(httpServletRequest.getMethod().equals("OPTIONS")){
+//            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+//            return null;
+//        }
+//        try {
+//            BufferedReader streamReader = new BufferedReader( new InputStreamReader(httpServletRequest.getInputStream(), "UTF-8"));
+//            StringBuilder responseStrBuilder = new StringBuilder();
+//            String inputStr;
+//            while ((inputStr = streamReader.readLine()) != null) {
+//                responseStrBuilder.append(inputStr);
+//            }
+//            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
+//            username = jsonObject.getString("username");
+//            password = jsonObject.getString("password");
+//            System.out.println(username);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        username = httpServletRequest.getParameter("username");
+        password = httpServletRequest.getParameter("password");
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         return getAuthenticationManager().authenticate(token);
     }
@@ -88,12 +86,17 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
         PrintWriter printWriter = response.getWriter();
-        Collection<? extends GrantedAuthority> authorities = jwtUser.getAuthorities();
-        List<String> list = new ArrayList<>();
-        for(GrantedAuthority authority : authorities){
-            list.add(authority.getAuthority());
-        }
-        printWriter.write(JSON.toJSONString(ResultTool.success(list)));
+//        //todo 返回菜单列表
+//        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
+//        Set<Menu> menuSet = new HashSet<>();
+//        for(GrantedAuthority authority : authorities){
+//            Role role = roleService.findByRoleName(authority.getAuthority().replace("ROLE_", ""));
+//            System.out.println(role.getRoleName());
+//            menuSet.addAll(role.getMenuSet());
+//        }
+        printWriter.write(JSON.toJSONString(ResultTool.success()));
+        printWriter.flush();
+        printWriter.close();
     }
 
     /**

@@ -25,8 +25,9 @@ public class Account {
     @Column(name = "openid")
     private String openID;
 
-    @ManyToMany(mappedBy = "accounts", fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    @ManyToOne(targetEntity = Role.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 
     @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private UserInfo userInfo;
@@ -63,12 +64,12 @@ public class Account {
         this.openID = openID;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public UserInfo getUserInfo() {

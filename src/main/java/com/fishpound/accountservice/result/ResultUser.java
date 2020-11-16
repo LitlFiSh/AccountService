@@ -10,16 +10,24 @@ public class ResultUser {
     private String username;
     private String department;
     private String password;
-    private List<String> roles;
+    private String role;
 
     public ResultUser() {
     }
 
-    public ResultUser(Integer id, String username, String department, List<String> roles) {
+    public ResultUser(Integer id, String username, String department, String role) {
         this.id = id;
         this.username = username;
         this.department = department;
-        this.roles = roles;
+        this.role = role;
+    }
+
+    public ResultUser(Integer id, String username, String department, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.department = department;
+        this.password = password;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -46,12 +54,12 @@ public class ResultUser {
         this.department = department;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPassword() {
