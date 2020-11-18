@@ -1,7 +1,5 @@
 package com.fishpound.accountservice.result;
 
-import java.util.List;
-
 /**
  * 用于用户信息的返回以及添加用户时前端传入参数的对应
  */

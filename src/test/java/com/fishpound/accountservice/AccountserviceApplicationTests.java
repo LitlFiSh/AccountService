@@ -5,6 +5,7 @@ import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.repository.DepartmentRepository;
 import com.fishpound.accountservice.repository.MenuRepository;
 import com.fishpound.accountservice.repository.RoleRepository;
+import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.AccountService;
 import com.fishpound.accountservice.service.RoleService;
@@ -151,9 +152,10 @@ class AccountserviceApplicationTests {
     void findMenuByRole(){
         Role role = roleRepository.findByRoleName("USER");
         Set<Menu> menuSet = role.getMenuSet();
+        Set<ResultMenu> resultMenuSet = new HashSet<>();
         for(Menu menu : menuSet){
-            System.out.println(menu.getName());
-            System.out.println(JSON.toJSONString(menu));
+            resultMenuSet.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
         }
+        System.out.println(resultMenuSet);
     }
 }

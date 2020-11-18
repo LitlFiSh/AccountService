@@ -43,7 +43,7 @@ public class JWTFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(JWTTokenUtils.TOKEN_HEADER);
         if("".equals(token) || token == null || !token.startsWith(JWTTokenUtils.TOKEN_PREFIX)){
             printWriter = response.getWriter();
-            JsonResult result = ResultTool.fail(ResultCode.PARAM_NOT_COMPLETE);
+            JsonResult result = ResultTool.fail(ResultCode.TOKEN_IS_NULL);
             printWriter.write(JSON.toJSONString(result));
             printWriter.flush();
             printWriter.close();
@@ -59,7 +59,7 @@ public class JWTFilter extends BasicAuthenticationFilter {
                     .getBody();
         } catch(JwtException e){
             printWriter = response.getWriter();
-            JsonResult result = ResultTool.fail(ResultCode.PARAM_NOT_VALID);
+            JsonResult result = ResultTool.fail(ResultCode.TOKEN_NOT_VALID);
             printWriter.write(JSON.toJSONString(result));
             printWriter.flush();
             printWriter.close();

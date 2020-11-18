@@ -1,18 +1,20 @@
 package com.fishpound.accountservice.security.jwt;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.fishpound.accountservice.entity.Menu;
 import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.result.ResultCode;
+import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -20,9 +22,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -31,11 +31,19 @@ import java.util.*;
  * 验证用户名、密码，生成 token 并返回结果
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
-    @Autowired
-    RoleService roleService;
+    private RoleService roleService;
 
-    public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
+    /**
+     * 用 setter 注入 Service
+     * @param roleService
+     */
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
+    public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager, RoleService roleService) {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
+        setRoleService(roleService);
         setAuthenticationManager(authenticationManager);
     }
 
@@ -43,6 +51,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String username = "";
         String password = "";
+        username = httpServletRequest.getParameter("username");
+        password = httpServletRequest.getParameter("password");
 //        if(httpServletRequest.getMethod().equals("OPTIONS")){
 //            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 //            return null;
@@ -61,8 +71,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        username = httpServletRequest.getParameter("username");
-        password = httpServletRequest.getParameter("password");
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         return getAuthenticationManager().authenticate(token);
     }
@@ -86,15 +94,19 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
         PrintWriter printWriter = response.getWriter();
-//        //todo 返回菜单列表
-//        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-//        Set<Menu> menuSet = new HashSet<>();
-//        for(GrantedAuthority authority : authorities){
-//            Role role = roleService.findByRoleName(authority.getAuthority().replace("ROLE_", ""));
-//            System.out.println(role.getRoleName());
-//            menuSet.addAll(role.getMenuSet());
-//        }
-        printWriter.write(JSON.toJSONString(ResultTool.success()));
+        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
+        Set<Menu> menuSet = new HashSet<>();
+        Role role;
+        for(GrantedAuthority authority : authorities){
+            String roleName = authority.getAuthority().replace("ROLE_", "");
+            role = roleService.findByRoleName(roleName);
+            menuSet.addAll(role.getMenuSet());
+        }
+        Set<ResultMenu> resultMenuSet = new HashSet<>();
+        for(Menu menu : menuSet){
+            resultMenuSet.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
+        }
+        printWriter.write(JSON.toJSONString(ResultTool.success(resultMenuSet)));
         printWriter.flush();
         printWriter.close();
     }
@@ -112,7 +124,15 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_CREDENTIALS_ERROR)));
+        if(failed instanceof DisabledException){
+            printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_ACCOUNT_DISABLE)));
+            System.out.println("LoginFilter: disable");
+        } else if(failed instanceof BadCredentialsException){
+            printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_CREDENTIALS_ERROR)));
+            System.out.println("LoginFilter: password error");
+        } else{
+            printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.FAIL)));
+        }
         printWriter.flush();
         printWriter.close();
     }

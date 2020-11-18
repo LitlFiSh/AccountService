@@ -7,11 +7,9 @@ public enum ResultCode {
     SUCCESS(1, "成功"),
     FAIL(0, "失败"),
 
-    /*参数错误*/
-    PARAM_NOT_VALID(11, "参数无效"),
-    PARAM_IS_NULL(12, "参数为空"),
-    PARAM_TYPE_ERROR(13, "参数类型错误"),
-    PARAM_NOT_COMPLETE(14, "参数缺失"),
+    /*token错误*/
+    TOKEN_NOT_VALID(11, "token失效"),
+    TOKEN_IS_NULL(12, "token为空"),
 
     /*用户错误*/
     USER_NOT_LOGIN(21, "用户未登录"),

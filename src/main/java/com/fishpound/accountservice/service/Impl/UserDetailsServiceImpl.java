@@ -9,7 +9,6 @@ import com.fishpound.accountservice.security.jwt.JWTUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,12 +24,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if(username == null || "".equals(username)){
-            throw new RuntimeException("用户名不能为空");
-        }
         UserInfo user = userInfoRepository.findByUsername(username);
         if(user == null){
-            throw new RuntimeException("用户不存在");
+            System.out.println("not found");
+            throw new UsernameNotFoundException("找不到该用户");
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         Account account = user.getAccount();

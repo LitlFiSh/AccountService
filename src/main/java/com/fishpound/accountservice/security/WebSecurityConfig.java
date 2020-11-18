@@ -2,12 +2,13 @@ package com.fishpound.accountservice.security;
 
 //import com.fishpound.accountservice.security.handler.LoginFailureHandler;
 //import com.fishpound.accountservice.security.handler.LoginSuccessHandler;
+//import com.fishpound.accountservice.security.handler.CustomizeAuthenticationEntryPoint;
 import com.fishpound.accountservice.security.handler.CustomizeAccessDeniedHandler;
-import com.fishpound.accountservice.security.handler.CustomizeAuthenticationEntryPoint;
 import com.fishpound.accountservice.security.handler.LogoutSuccessHandler;
 import com.fishpound.accountservice.security.jwt.JWTFilter;
 import com.fishpound.accountservice.security.jwt.JWTLoginFilter;
 import com.fishpound.accountservice.service.Impl.UserDetailsServiceImpl;
+import com.fishpound.accountservice.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("userDetailsServiceImpl")
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private RoleService roleService;
+
 //    @Autowired   //登陆成功处理逻辑
 //            LoginSuccessHandler loginSuccessHandler;
 //
@@ -41,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired   //权限不足处理逻辑
             CustomizeAccessDeniedHandler accessDeniedHandler;
 
-    @Autowired   //匿名用户访问无权限资源处理逻辑
-    CustomizeAuthenticationEntryPoint authenticationEntryPoint;
+//    @Autowired   //匿名用户访问无权限资源处理逻辑
+//    CustomizeAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -66,10 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                //登录拦截器，在这里拦下登录请求，判断登陆是否成功，生成token
-                .addFilterBefore(new JWTLoginFilter("/user/login",
-                        authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-                //权限拦截器，拦截每条需要验证的请求，判断携带的token是否存在或有效
+                //登录过滤器，在这里拦下登录请求，判断登陆是否成功，生成token
+                .addFilterBefore(new JWTLoginFilter(
+                        "/user/login",
+                        authenticationManager(), roleService
+                        ),
+                        UsernamePasswordAuthenticationFilter.class)
+                //权限过滤器，拦截每条需要验证的请求，判断携带的token是否存在或有效
 //                .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JWTFilter(authenticationManager()))
                 //登出处理
@@ -87,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(authenticationEntryPoint);
+                .accessDeniedHandler(accessDeniedHandler);
+//                .authenticationEntryPoint(authenticationEntryPoint);
     }
 }

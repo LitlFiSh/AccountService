@@ -1,12 +1,3 @@
-create table account(
-    id int primary key not null,
-    password varchar(64) not null comment '用户密码',
-    is_active tinyint(1) default 1 null comment '账号是否可用',
-    role_id int null comment '角色id',
-    openid varchar(64) null comment 'openID',
-    foreign key (`role_id`) references role(`id`) on delete set null
-) engine=innodb comment '账户表';
-
 create table role(
     id int primary key not null auto_increment,
     role_name varchar(32) not null comment '角色名'
@@ -16,6 +7,15 @@ create table department(
     id int primary key not null auto_increment,
     dept_name varchar(32) not null comment '部门名称'
 ) engine=innodb auto_increment=1 comment '部门表';
+
+create table account(
+    id int primary key not null,
+    password varchar(64) not null comment '用户密码',
+    is_active tinyint(1) default 1 null comment '账号是否可用',
+    role_id int null comment '角色id',
+    openid varchar(64) null comment 'openID',
+    foreign key (`role_id`) references role(`id`) on delete set null
+) engine=innodb comment '账户表';
 
 create table userinfo(
     id int primary key not null,
