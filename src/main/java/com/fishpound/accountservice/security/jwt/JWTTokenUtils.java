@@ -2,9 +2,11 @@ package com.fishpound.accountservice.security.jwt;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Date;
 
@@ -43,13 +45,13 @@ public class JWTTokenUtils {
                 .setSubject(username)
                 .setExpiration(new Date(nowMillis + EXPIRATION * 1000))
                 .setIssuedAt(now)
-                .signWith(SignatureAlgorithm.HS256, TOKEN);
+                .signWith(generateKey());
         return builder.compact();
     }
 
-//    private static SecretKey generateKey(){
-//        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(TOKEN));
-//    }
+    private static SecretKey generateKey(){
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(TOKEN));
+    }
 
 //    public static Claims getTokenBody(String token){
 //        token = token.replace(TOKEN_PREFIX, "");

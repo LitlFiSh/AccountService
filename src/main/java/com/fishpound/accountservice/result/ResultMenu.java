@@ -2,12 +2,13 @@ package com.fishpound.accountservice.result;
 
 import com.fishpound.accountservice.entity.Menu;
 
+import java.util.List;
 import java.util.Set;
 
 public class ResultMenu {
     private String name;
     private String path;
-    private Set<Menu> children;
+    private List<Menu> children;
 
     public ResultMenu() {
     }
@@ -17,7 +18,7 @@ public class ResultMenu {
         this.path = path;
     }
 
-    public ResultMenu(String name, String path, Set<Menu> children) {
+    public ResultMenu(String name, String path, List<Menu> children) {
         this.name = name;
         this.path = path;
         this.children = children;
@@ -39,11 +40,11 @@ public class ResultMenu {
         this.path = path;
     }
 
-    public Set<Menu> getChildren() {
+    public List<Menu> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Menu> children) {
+    public void setChildren(List<Menu> children) {
         this.children = children;
     }
 }

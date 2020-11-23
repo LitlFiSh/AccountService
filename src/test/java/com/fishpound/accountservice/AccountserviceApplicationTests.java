@@ -151,11 +151,11 @@ class AccountserviceApplicationTests {
     @Test
     void findMenuByRole(){
         Role role = roleRepository.findByRoleName("USER");
-        Set<Menu> menuSet = role.getMenuSet();
-        Set<ResultMenu> resultMenuSet = new HashSet<>();
-        for(Menu menu : menuSet){
-            resultMenuSet.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
+        List<Menu> menus = role.getMenus();
+        List<ResultMenu> resultMenus = new ArrayList<>();
+        for(Menu menu : menus){
+            resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
         }
-        System.out.println(resultMenuSet);
+        System.out.println(resultMenus);
     }
 }

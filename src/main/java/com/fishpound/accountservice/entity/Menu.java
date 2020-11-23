@@ -1,7 +1,9 @@
 package com.fishpound.accountservice.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,7 +27,7 @@ public class Menu {
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = Menu.class, fetch = FetchType.EAGER, mappedBy = "pid")
-    private Set<Menu> children = new HashSet<>();
+    private List<Menu> children = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -67,11 +69,11 @@ public class Menu {
         this.role = role;
     }
 
-    public Set<Menu> getChildren() {
+    public List<Menu> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Menu> children) {
+    public void setChildren(List<Menu> children) {
         this.children = children;
     }
 }

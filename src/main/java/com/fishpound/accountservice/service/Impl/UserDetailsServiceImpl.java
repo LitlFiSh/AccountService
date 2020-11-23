@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo user = userInfoRepository.findByUsername(username);
         if(user == null){
-            System.out.println("not found");
+//            System.out.println("not found");
             throw new UsernameNotFoundException("找不到该用户");
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

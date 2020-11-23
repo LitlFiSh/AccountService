@@ -95,18 +95,18 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
         PrintWriter printWriter = response.getWriter();
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-        Set<Menu> menuSet = new HashSet<>();
+        List<Menu> menus = new ArrayList<>();
         Role role;
         for(GrantedAuthority authority : authorities){
             String roleName = authority.getAuthority().replace("ROLE_", "");
             role = roleService.findByRoleName(roleName);
-            menuSet.addAll(role.getMenuSet());
+            menus.addAll(role.getMenus());
         }
-        Set<ResultMenu> resultMenuSet = new HashSet<>();
-        for(Menu menu : menuSet){
-            resultMenuSet.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
+        List<ResultMenu> resultMenus = new ArrayList<>();
+        for(Menu menu : menus){
+            resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
         }
-        printWriter.write(JSON.toJSONString(ResultTool.success(resultMenuSet)));
+        printWriter.write(JSON.toJSONString(ResultTool.success(resultMenus)));
         printWriter.flush();
         printWriter.close();
     }
@@ -126,10 +126,10 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         PrintWriter printWriter = response.getWriter();
         if(failed instanceof DisabledException){
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_ACCOUNT_DISABLE)));
-            System.out.println("LoginFilter: disable");
+//            System.out.println("LoginFilter: disable");
         } else if(failed instanceof BadCredentialsException){
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_CREDENTIALS_ERROR)));
-            System.out.println("LoginFilter: password error");
+//            System.out.println("LoginFilter: password error");
         } else{
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.FAIL)));
         }

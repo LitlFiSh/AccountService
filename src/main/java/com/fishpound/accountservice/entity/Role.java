@@ -1,7 +1,9 @@
 package com.fishpound.accountservice.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +26,7 @@ public class Role {
 
     @OneToMany(targetEntity = Menu.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "rid", referencedColumnName = "id")
-    private Set<Menu> menuSet = new HashSet<>();
+    private List<Menu> menus = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -50,11 +52,11 @@ public class Role {
         this.accountSet = accountSet;
     }
 
-    public Set<Menu> getMenuSet() {
-        return menuSet;
+    public List<Menu> getMenus() {
+        return menus;
     }
 
-    public void setMenuSet(Set<Menu> menuSet) {
-        this.menuSet = menuSet;
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus;
     }
 }
