@@ -40,7 +40,7 @@ public class OrderApply {
     @Column(name = "status")
     private Integer status;
 
-    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL})
+    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private List<OrderList> orderLists;
 
@@ -130,5 +130,13 @@ public class OrderApply {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<OrderList> getOrderLists() {
+        return orderLists;
+    }
+
+    public void setOrderLists(List<OrderList> orderLists) {
+        this.orderLists = orderLists;
     }
 }

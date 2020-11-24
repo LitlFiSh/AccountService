@@ -17,6 +17,9 @@ public class OrderList {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "configuration")
+    private String configuration;
+
     @Column(name = "unit")
     private String unit;
 
@@ -75,6 +78,14 @@ public class OrderList {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(String configuration) {
+        this.configuration = configuration;
     }
 
     public String getUnit() {
