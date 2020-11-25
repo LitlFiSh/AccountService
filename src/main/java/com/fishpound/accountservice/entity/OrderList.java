@@ -6,10 +6,11 @@ import javax.persistence.*;
 @Table(name = "orderlist")
 public class OrderList {
     @Id
-    private Integer id;
+    @Column(name = "id")
+    private String id;
 
     @Column(name = "no")
-    private Integer no;
+    private String no;
 
     @Column(name = "name")
     private String name;
@@ -20,26 +21,20 @@ public class OrderList {
     @Column(name = "configuration")
     private String configuration;
 
-    @Column(name = "unit")
-    private String unit;
-
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "budget_unit_price")
-    private Integer budgetUnitPrice;
+    private Double budgetUnitPrice;
 
     @Column(name = "budget_total_price")
-    private Integer budgetTotalPrice;
+    private Double budgetTotalPrice;
 
     @Column(name = "reason")
     private String reason;
 
     @Column(name = "new_user")
     private String newUser;
-
-    @Column(name = "old")
-    private String old;
 
     @ManyToOne(targetEntity = OrderApply.class, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
@@ -48,19 +43,19 @@ public class OrderList {
     @Column(name = "status")
     private Integer status;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Integer getNo() {
+    public String getNo() {
         return no;
     }
 
-    public void setNo(Integer no) {
+    public void setNo(String no) {
         this.no = no;
     }
 
@@ -88,14 +83,6 @@ public class OrderList {
         this.configuration = configuration;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -104,19 +91,19 @@ public class OrderList {
         this.quantity = quantity;
     }
 
-    public Integer getBudgetUnitPrice() {
+    public Double getBudgetUnitPrice() {
         return budgetUnitPrice;
     }
 
-    public void setBudgetUnitPrice(Integer budgetUnitPrice) {
+    public void setBudgetUnitPrice(Double budgetUnitPrice) {
         this.budgetUnitPrice = budgetUnitPrice;
     }
 
-    public Integer getBudgetTotalPrice() {
+    public Double getBudgetTotalPrice() {
         return budgetTotalPrice;
     }
 
-    public void setBudgetTotalPrice(Integer budgetTotalPrice) {
+    public void setBudgetTotalPrice(Double budgetTotalPrice) {
         this.budgetTotalPrice = budgetTotalPrice;
     }
 
@@ -134,14 +121,6 @@ public class OrderList {
 
     public void setNewUser(String newUser) {
         this.newUser = newUser;
-    }
-
-    public String getOld() {
-        return old;
-    }
-
-    public void setOld(String old) {
-        this.old = old;
     }
 
     public OrderApply getOrderApply() {

@@ -25,6 +25,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static String[] base = {"ROLE_APPLYUSER", "ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
+    private static String[] leader = {"ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
+    private static String[] admin = {"ROLE_ADMIN"};
 
     @Autowired
     @Qualifier("userDetailsServiceImpl")
@@ -66,8 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //只开放登录接口，其他访问路径都需要身份验证
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .antMatchers("/user/**").hasAuthority("ROLE_USER")
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/user/**").hasAnyAuthority(base)
+                .antMatchers("/order/**").hasAnyAuthority(base)
+                .antMatchers("/admin/**").hasAnyAuthority(admin)
                 .anyRequest().authenticated()
                 .and()
                 //登录过滤器，在这里拦下登录请求，判断登陆是否成功，生成token

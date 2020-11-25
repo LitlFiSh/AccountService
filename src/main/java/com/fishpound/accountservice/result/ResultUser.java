@@ -4,23 +4,23 @@ package com.fishpound.accountservice.result;
  * 用于用户信息的返回以及添加用户时前端传入参数的对应
  */
 public class ResultUser {
-    private Integer id;
+    private String id;
     private String username;
     private String department;
     private String password;
-    private String role;
+    private Integer role;
 
     public ResultUser() {
     }
 
-    public ResultUser(Integer id, String username, String department, String role) {
+    public ResultUser(String id, String username, String department, Integer role) {
         this.id = id;
         this.username = username;
         this.department = department;
         this.role = role;
     }
 
-    public ResultUser(Integer id, String username, String department, String password, String role) {
+    public ResultUser(String id, String username, String department, String password, Integer role) {
         this.id = id;
         this.username = username;
         this.department = department;
@@ -28,11 +28,11 @@ public class ResultUser {
         this.role = role;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,11 +52,11 @@ public class ResultUser {
         this.department = department;
     }
 
-    public String getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
 

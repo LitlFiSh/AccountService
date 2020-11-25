@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class UserInfo {
     @Id
     @Column(name = "id")
-    private Integer id;
+    private String id;
 
     @Column(name = "username")
     private String username;
@@ -23,11 +23,11 @@ public class UserInfo {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -8,16 +8,17 @@ import java.util.List;
 @Table(name = "orderapply")
 public class OrderApply {
     @Id
-    private Integer id;
+    @Column(name = "id")
+    private String id;
 
     @Column(name = "apply_departemnt")
-    private Integer applyDepartment;
+    private String applyDepartment;
 
     @Column(name = "apply_user")
-    private Integer applyUser;
+    private String applyUser;
 
     @Column(name = "fund_code")
-    private Integer fundCode;
+    private String fundCode;
 
     @Column(name = "apply_date")
     private Date applyDate;
@@ -44,35 +45,35 @@ public class OrderApply {
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private List<OrderList> orderLists;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Integer getApplyDepartment() {
+    public String getApplyDepartment() {
         return applyDepartment;
     }
 
-    public void setApplyDepartment(Integer applyDepartment) {
+    public void setApplyDepartment(String applyDepartment) {
         this.applyDepartment = applyDepartment;
     }
 
-    public Integer getApplyUser() {
+    public String getApplyUser() {
         return applyUser;
     }
 
-    public void setApplyUser(Integer applyUser) {
+    public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
     }
 
-    public Integer getFundCode() {
+    public String getFundCode() {
         return fundCode;
     }
 
-    public void setFundCode(Integer fundCode) {
+    public void setFundCode(String fundCode) {
         this.fundCode = fundCode;
     }
 

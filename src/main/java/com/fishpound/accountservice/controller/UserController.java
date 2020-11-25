@@ -31,13 +31,13 @@ public class UserController {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
-     * 通过用户名查找用户信息并返回
-     * @param username
+     * 通过用户 id 查找用户信息并返回
+     * @param id
      * @return
      */
     @GetMapping("/info")
-    public JsonResult getUserInfo(@RequestParam String username){
-        UserInfo userInfo = userInfoService.findByUsername(username);
+    public JsonResult getUserInfo(@RequestParam String id){
+        UserInfo userInfo = userInfoService.findById(id);
         Account user_account = userInfo.getAccount();
         Role user_role = user_account.getRole();
         Department user_department = userInfo.getDepartment();
@@ -46,34 +46,8 @@ public class UserController {
                         userInfo.getId(),
                         userInfo.getUsername(),
                         user_department.getDeptName(),
-                        user_role.getRoleName()
+                        user_role.getId()
                         )
                 );
-    }
-
-    /**
-     * 添加用户，之后放到管理员控制器中
-     * @param user
-     * @return
-     */
-    @PostMapping("/signup")
-    public JsonResult signup(@RequestParam ResultUser user){
-        Account account = new Account();
-        UserInfo userInfo = new UserInfo();
-        account.setActive(true);
-        account.setId(user.getId());
-        account.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        account.setRole(roleService.findByRoleName(user.getRole()));
-        account.setUserInfo(userInfo);
-        userInfo.setId(user.getId());
-        userInfo.setUsername(user.getUsername());
-        userInfo.setDepartment(departmentService.findByDeptName(user.getDepartment()));
-        userInfo.setAccount(account);
-        //save userInfo
-        if(userInfoService.save(userInfo)) {
-            return ResultTool.success();
-        } else{
-            return ResultTool.fail();
-        }
     }
 }

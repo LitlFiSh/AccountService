@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Account {
     @Id
     @Column(name = "id")
-    private Integer id;
+    private String id;
 
     @Column(name = "password")
     private String password;
@@ -30,11 +30,11 @@ public class Account {
     @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

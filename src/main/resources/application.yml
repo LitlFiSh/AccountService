@@ -8,6 +8,8 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  application:
+    name: ManageSystem
 #      ddl-auto: update
 #    show-sql: true
 #    open-in-view: true

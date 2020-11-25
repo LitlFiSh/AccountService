@@ -12,23 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
-public class OrderApplyController {
+public class OrderController {
     @Autowired
     OrderApplyService orderApplyService;
     @Autowired
     UserInfoService userInfoService;
 
     @GetMapping()
-    public JsonResult getOneOrder(@RequestParam(value = "id") Integer id){
+    public JsonResult getOneOrder(@RequestParam(value = "id") String id){
         return ResultTool.success(orderApplyService.findOne(id));
-    }
-
-    @GetMapping("/all")
-    public JsonResult getAllOrder(@RequestParam(value = "username") String username,
-                                  @RequestParam(value = "page") Integer page)
-    {
-        Page<OrderApply> orderApplies = orderApplyService.findAll(username, page);
-        return ResultTool.success(orderApplies);
     }
 
     @PostMapping()
@@ -44,7 +36,7 @@ public class OrderApplyController {
     }
 
     @DeleteMapping("/{id}")
-    public JsonResult deleteOrder(@PathVariable(value = "id") Integer id){
+    public JsonResult deleteOrder(@PathVariable(value = "id") String id){
         orderApplyService.deleteOrder(id);
         return ResultTool.success();
     }

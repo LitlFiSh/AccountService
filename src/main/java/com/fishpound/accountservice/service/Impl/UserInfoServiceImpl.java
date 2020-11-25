@@ -17,6 +17,11 @@ public class UserInfoServiceImpl implements UserInfoService{
     }
 
     @Override
+    public UserInfo findById(String id) {
+        return userInfoRepository.getOne(id);
+    }
+
+    @Override
     public boolean save(UserInfo userInfo) {
         userInfoRepository.save(userInfo);
         return true;

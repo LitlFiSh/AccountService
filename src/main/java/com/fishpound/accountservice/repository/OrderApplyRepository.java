@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderApplyRepository extends JpaRepository<OrderApply, Integer> {
-    Page<OrderApply> findAllByApplyUser(Integer id, Pageable pageable);
+import java.util.List;
+
+public interface OrderApplyRepository extends JpaRepository<OrderApply, String> {
+    Page<OrderApply> findAllByApplyUser(Integer userId, Pageable pageable);
 }

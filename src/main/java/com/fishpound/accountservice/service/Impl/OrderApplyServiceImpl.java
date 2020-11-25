@@ -1,6 +1,7 @@
 package com.fishpound.accountservice.service.Impl;
 
 import com.fishpound.accountservice.entity.OrderApply;
+import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.repository.OrderApplyRepository;
 import com.fishpound.accountservice.repository.UserInfoRepository;
@@ -12,6 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class OrderApplyServiceImpl implements OrderApplyService {
     @Autowired
@@ -19,34 +25,75 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Autowired
     UserInfoRepository userInfoRepository;
 
+    /**
+     * 新增申请单
+     * @param orderApply
+     */
     @Override
     public void addOrder(OrderApply orderApply) {
+        String id = "";
+        //todo 申请单编号的生成
+
+        orderApply.setId(id);
+
         orderApplyRepository.save(orderApply);
     }
 
+    /**
+     * 更新申请单
+     * @param orderApply
+     */
     @Override
     public void updateOrder(OrderApply orderApply) {
         orderApplyRepository.save(orderApply);
     }
 
+    /**
+     * 删除申请单
+     * 删除：将申请单状态设置为已删除（-1）
+     * @param id
+     */
     @Override
-    public void deleteOrder(Integer id) {
-        orderApplyRepository.deleteById(id);
+    public void deleteOrder(String id) {
+//        orderApplyRepository.deleteById(id);
+        OrderApply orderApply = orderApplyRepository.getOne(id);
+        //获取该申请单包含的申请列表，并将申请列表的状态设置为已删除（-1）
+        List<OrderList> orderLists = orderApply.getOrderLists();
+        for(OrderList orderList : orderLists){
+            orderList.setStatus(-1);
+        }
+        orderApply.setOrderLists(orderLists);
+        orderApply.setStatus(-1);
+        orderApplyRepository.save(orderApply);
     }
 
+    /**
+     * 查找编号为 id 的申请单
+     * @param id
+     * @return
+     */
     @Override
-    public OrderApply findOne(Integer id) {
+    public OrderApply findOne(String id) {
         return orderApplyRepository.getOne(id);
     }
 
+    /**
+     * 查询月份为 month 的用户的所有申请单
+     * @param month
+     * @return
+     */
     @Override
-    public Page<OrderApply> findAll(String username, Integer page) {
-        if(page == null){
-            page = 1;
-        }
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable pageable = PageRequest.of(page-1, 10, sort);
-        UserInfo user = userInfoRepository.findByUsername(username);
-        return orderApplyRepository.findAllByApplyUser(user.getId(), pageable);
+    public List<OrderApply> findAllByMonth(String month) {
+        return null;
+    }
+
+    /**
+     * 查询部门编号为 department 的申请单
+     * @param department
+     * @return
+     */
+    @Override
+    public List<OrderApply> findAllByDepartment(String department) {
+        return null;
     }
 }

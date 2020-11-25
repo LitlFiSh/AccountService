@@ -4,4 +4,5 @@ import com.fishpound.accountservice.entity.Role;
 
 public interface RoleService {
     Role findByRoleName(String roleName);
+    Role findById(Integer id);
 }

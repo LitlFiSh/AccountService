@@ -44,7 +44,7 @@ class AccountserviceApplicationTests {
 
     @Test
     void passwordEncoded(){
-        System.out.println(bCryptPasswordEncoder.encode("111111"));
+        System.out.println(bCryptPasswordEncoder.encode("123456"));
     }
 
 //    @Test
@@ -148,14 +148,14 @@ class AccountserviceApplicationTests {
 //        System.out.println(JSON.toJSONString(menu.getChildren()));
 //    }
 
-    @Test
-    void findMenuByRole(){
-        Role role = roleRepository.findByRoleName("USER");
-        List<Menu> menus = role.getMenus();
-        List<ResultMenu> resultMenus = new ArrayList<>();
-        for(Menu menu : menus){
-            resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
-        }
-        System.out.println(resultMenus);
-    }
+//    @Test
+//    void findMenuByRole(){
+//        Role role = roleRepository.findByRoleName("USER");
+//        List<Menu> menus = role.getMenus();
+//        List<ResultMenu> resultMenus = new ArrayList<>();
+//        for(Menu menu : menus){
+//            resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
+//        }
+//        System.out.println(resultMenus);
+//    }
 }

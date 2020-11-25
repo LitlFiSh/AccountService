@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class JWTUser implements UserDetails {
-    private Integer id;
+    private String id;
     private String username;
     private String password;
     private Boolean isActive;
@@ -15,7 +15,7 @@ public class JWTUser implements UserDetails {
     public JWTUser() {
     }
 
-    public JWTUser(Integer id, String username, String password, Boolean isActive, Collection<? extends GrantedAuthority> authorities) {
+    public JWTUser(String id, String username, String password, Boolean isActive, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
