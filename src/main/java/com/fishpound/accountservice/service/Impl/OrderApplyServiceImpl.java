@@ -33,6 +33,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public void addOrder(OrderApply orderApply) {
         String id = "";
         //todo 申请单编号的生成
+        //id 生成策略：年份(4) 月份(2) 部门编号(2)
 
         orderApply.setId(id);
 
@@ -45,6 +46,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public void updateOrder(OrderApply orderApply) {
+
         orderApplyRepository.save(orderApply);
     }
 
@@ -56,7 +58,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public void deleteOrder(String id) {
 //        orderApplyRepository.deleteById(id);
-        OrderApply orderApply = orderApplyRepository.getOne(id);
+        OrderApply orderApply = orderApplyRepository.getById(id);
         //获取该申请单包含的申请列表，并将申请列表的状态设置为已删除（-1）
         List<OrderList> orderLists = orderApply.getOrderLists();
         for(OrderList orderList : orderLists){
@@ -77,6 +79,14 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         return orderApplyRepository.getOne(id);
     }
 
+    @Override
+    public OrderApply findByDepartmentAndMonth(String department, String month) {
+//        Calendar now = Calendar.getInstance();
+//        String year = String.valueOf(now.get(Calendar.YEAR));
+//        OrderApply orderApply = orderApplyRepository.findByApplyDepartmentAndIdLike(department, year + month + "%");
+        return null;
+    }
+
     /**
      * 查询月份为 month 的用户的所有申请单
      * @param month
@@ -95,5 +105,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public List<OrderApply> findAllByDepartment(String department) {
         return null;
+    }
+
+    @Override
+    public void generateFile(int type) {
+        switch(type){
+            case 1:
+            case 2:
+            default:
+                break;
+        }
     }
 }

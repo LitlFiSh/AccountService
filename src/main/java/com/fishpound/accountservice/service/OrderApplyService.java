@@ -9,6 +9,8 @@ public interface OrderApplyService {
     void updateOrder(OrderApply orderApply);
     void deleteOrder(String id);
     OrderApply findOne(String id);
+    OrderApply findByDepartmentAndMonth(String department, String month);
     List<OrderApply> findAllByMonth(String month);
     List<OrderApply> findAllByDepartment(String department);
+    void generateFile(int type);
 }

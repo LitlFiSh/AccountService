@@ -40,6 +40,9 @@ public class OrderList {
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private OrderApply orderApply;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @Column(name = "status")
     private Integer status;
 
@@ -129,6 +132,14 @@ public class OrderList {
 
     public void setOrderApply(OrderApply orderApply) {
         this.orderApply = orderApply;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Integer getStatus() {

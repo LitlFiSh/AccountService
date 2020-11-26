@@ -18,6 +18,6 @@ public class DepartmentImpl implements DepartmentService {
 
     @Override
     public Department findById(String id) {
-        return departmentRepository.getOne(id);
+        return departmentRepository.getById(id);
     }
 }

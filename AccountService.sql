@@ -36,8 +36,8 @@ create table menu(
 ) engine=innodb comment '菜单表';
 
 insert into role (id, role_name) values (1, "ADMIN");
-insert into role (id, role_name) values (2, "DEPTLEAD");
-insert into role (id, role_name) values (3, "INSTLEAD");
+insert into role (id, role_name) values (2, "INSTLEAD");
+insert into role (id, role_name) values (3, "DEPTLEAD");
 insert into role (id, role_name) values (4, "APPLYUSER");
 
 insert into department (id, dept_name) values ("01", "办公室");
@@ -51,11 +51,11 @@ insert into department (id, dept_name) values ("08", "资源部");
 insert into department (id, dept_name) values ("09", "技术部");
 insert into department (id, dept_name) values ("10", "培训中心");
 
-insert into account (id, password, role_id) values ("12345678910", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 1);
-insert into account (id, password, role_id) values ("12345678911", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4);
-insert into account (id, password, role_id) values ("12345678912", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4);
-insert into account (id, password, role_id) values ("12345678913", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4);
-insert into account (id, password, role_id) values ("12345678914", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 3);
+insert into account (id, password, role_id, is_active) values ("12345678910", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 1, 1);
+insert into account (id, password, role_id, is_active) values ("12345678911", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+insert into account (id, password, role_id, is_active) values ("12345678912", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+insert into account (id, password, role_id, is_active) values ("12345678913", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+insert into account (id, password, role_id, is_active) values ("12345678914", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 3, 1);
 
 insert into userinfo (id, username, account_id, department_id) values ("12345678910", "TestAdmin", "12345678910", "01");
 insert into userinfo (id, username, account_id, department_id) values ("12345678911", "办公室用户1", "12345678911", "01");
@@ -66,7 +66,7 @@ insert into userinfo (id, username, account_id, department_id) values ("12345678
 insert into menu (id, name, rid) values (1, "用户", 4);
 insert into menu (id, path, name, pid) values (11, "/info", "用户信息", 1);
 insert into menu (id, name, rid) values (2, "申请单", 4);
-insert into menu (id, path, name, pid) values (21, "/orderapply", "新建申请", 2);
-insert into menu (id, path, name, pid) values (22, "/lists", "我的申请", 2);
+insert into menu (id, path, name, pid) values (21, "/addOrder", "新建申请", 2);
+insert into menu (id, path, name, pid) values (22, "/listOrder", "查看申请", 2);
 insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/adduser", "添加用户", 3);

@@ -100,7 +100,24 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         for(GrantedAuthority authority : authorities){
             String roleName = authority.getAuthority().replace("ROLE_", "");
             role = roleService.findByRoleName(roleName);
-            menus.addAll(role.getMenus());
+            switch(role.getId()){
+                case 1:
+                    Role r1 = roleService.findById(1);
+                    menus.addAll(r1.getMenus());
+                case 2:
+                    Role r2 = roleService.findById(2);
+                    menus.addAll(r2.getMenus());
+                case 3:
+                    Role r3 = roleService.findById(3);
+                    menus.addAll(r3.getMenus());
+                case 4:
+                    Role r4 = roleService.findById(4);
+                    menus.addAll(r4.getMenus());
+                    break;
+                default:
+                    break;
+            }
+//            menus.addAll(role.getMenus());
         }
         List<ResultMenu> resultMenus = new ArrayList<>();
         for(Menu menu : menus){
