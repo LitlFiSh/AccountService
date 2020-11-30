@@ -1,6 +1,7 @@
 package com.fishpound.accountservice.security.jwt;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fishpound.accountservice.entity.Menu;
 import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.result.ResultCode;
@@ -22,7 +23,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -51,26 +54,25 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String username = "";
         String password = "";
-        username = httpServletRequest.getParameter("username");
-        password = httpServletRequest.getParameter("password");
-//        if(httpServletRequest.getMethod().equals("OPTIONS")){
-//            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-//            return null;
-//        }
-//        try {
-//            BufferedReader streamReader = new BufferedReader( new InputStreamReader(httpServletRequest.getInputStream(), "UTF-8"));
-//            StringBuilder responseStrBuilder = new StringBuilder();
-//            String inputStr;
-//            while ((inputStr = streamReader.readLine()) != null) {
-//                responseStrBuilder.append(inputStr);
-//            }
-//            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
-//            username = jsonObject.getString("username");
-//            password = jsonObject.getString("password");
-//            System.out.println(username);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+//        username = httpServletRequest.getParameter("username");
+//        password = httpServletRequest.getParameter("password");
+        if(httpServletRequest.getMethod().equals("OPTIONS")){
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            return null;
+        }
+        try {
+            BufferedReader streamReader = new BufferedReader( new InputStreamReader(httpServletRequest.getInputStream(), "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
+            String inputStr;
+            while ((inputStr = streamReader.readLine()) != null) {
+                responseStrBuilder.append(inputStr);
+            }
+            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
+            username = jsonObject.getString("username");
+            password = jsonObject.getString("password");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         return getAuthenticationManager().authenticate(token);
     }

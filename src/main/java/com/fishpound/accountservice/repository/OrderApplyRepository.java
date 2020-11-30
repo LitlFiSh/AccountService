@@ -9,7 +9,4 @@ import java.util.List;
 
 public interface OrderApplyRepository extends JpaRepository<OrderApply, String> {
     OrderApply getById(String id);
-    OrderApply findByIdLike(String id);
-    OrderApply findByApplyDepartmentAndIdStartsWith(String department, String preId);
-    Page<OrderApply> findAllByApplyUser(Integer userId, Pageable pageable);
 }

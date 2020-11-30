@@ -32,11 +32,11 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public void addOrder(OrderApply orderApply) {
         String id = "";
-        //todo 申请单编号的生成
         //id 生成策略：年份(4) 月份(2) 部门编号(2)
+        Calendar now = Calendar.getInstance();
+        id = String.valueOf(now.get(Calendar.YEAR)) + String.valueOf(now.get(Calendar.MONTH) + 1) + orderApply.getApplyDepartment();
 
         orderApply.setId(id);
-
         orderApplyRepository.save(orderApply);
     }
 
@@ -46,7 +46,6 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public void updateOrder(OrderApply orderApply) {
-
         orderApplyRepository.save(orderApply);
     }
 
@@ -76,15 +75,14 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public OrderApply findOne(String id) {
-        return orderApplyRepository.getOne(id);
+        return orderApplyRepository.getById(id);
     }
 
     @Override
     public OrderApply findByDepartmentAndMonth(String department, String month) {
-//        Calendar now = Calendar.getInstance();
-//        String year = String.valueOf(now.get(Calendar.YEAR));
-//        OrderApply orderApply = orderApplyRepository.findByApplyDepartmentAndIdLike(department, year + month + "%");
-        return null;
+        Calendar calendar = Calendar.getInstance();
+        String id = calendar.get(Calendar.YEAR) + month + department;
+        return orderApplyRepository.getById(id);
     }
 
     /**
