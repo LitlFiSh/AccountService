@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrderListRepository extends JpaRepository<OrderList, String> {
     OrderList getById(String id);
-    List<OrderList> findAllByUserId(String id);
+    List<OrderList> findAllByUserIdAndStatusNotLike(String id, Integer status);
 }

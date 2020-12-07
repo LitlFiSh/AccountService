@@ -56,4 +56,9 @@ public class OrderController {
         orderApplyService.deleteOrder(id);
         return ResultTool.success();
     }
+
+    @GetMapping("/orders")
+    public JsonResult getOrderByUser(@RequestParam(value = "id") String id){
+        return ResultTool.success(orderApplyService.findAllByUser(id));
+    }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OrderListService {
     List<OrderList> findAllByUserId(String id);
+    boolean deleteOrderList(String id);
+    boolean addOrderList(OrderList orderList);
 }

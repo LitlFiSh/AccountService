@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface OrderApplyRepository extends JpaRepository<OrderApply, String> {
     OrderApply getById(String id);
+    List<OrderApply> findAllByStatusIsNot(Integer status);
+    List<OrderApply> findAllByApplyUserAndStatusNotLike(String username, Integer status);
 }

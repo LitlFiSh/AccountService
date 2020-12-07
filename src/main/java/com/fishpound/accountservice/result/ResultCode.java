@@ -4,12 +4,15 @@ package com.fishpound.accountservice.result;
  * 返回结果枚举类型
  */
 public enum ResultCode {
-    SUCCESS(1, "成功"),
     FAIL(0, "失败"),
-
+    SUCCESS(1, "成功"),
     /*token错误*/
-    TOKEN_NOT_VALID(11, "token失效"),
-    TOKEN_IS_NULL(12, "token为空"),
+    TOKEN_NOT_VALID(2, "token失效"),
+    TOKEN_IS_NULL(3, "token为空"),
+
+    /*参数错误*/
+    PARAM_IS_NULL(11, "参数缺失"),
+    PARAM_NOT_VALID(12, "参数错误"),
 
     /*用户错误*/
     USER_NOT_LOGIN(21, "用户未登录"),

@@ -22,8 +22,6 @@ import java.util.List;
 public class OrderApplyServiceImpl implements OrderApplyService {
     @Autowired
     OrderApplyRepository orderApplyRepository;
-    @Autowired
-    UserInfoRepository userInfoRepository;
 
     /**
      * 新增申请单
@@ -34,7 +32,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         String id = "";
         //id 生成策略：年份(4) 月份(2) 部门编号(2)
         Calendar now = Calendar.getInstance();
-        id = String.valueOf(now.get(Calendar.YEAR)) + String.valueOf(now.get(Calendar.MONTH) + 1) + orderApply.getApplyDepartment();
+        id = "" + now.get(Calendar.YEAR) + now.get(Calendar.MONTH) + 1 + orderApply.getApplyDepartment();
 
         orderApply.setId(id);
         orderApplyRepository.save(orderApply);
@@ -83,6 +81,11 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         Calendar calendar = Calendar.getInstance();
         String id = calendar.get(Calendar.YEAR) + month + department;
         return orderApplyRepository.getById(id);
+    }
+
+    @Override
+    public List<OrderApply> findAllByUser(String id) {
+        return orderApplyRepository.findAllByApplyUserAndStatusNotLike(id, -1);
     }
 
     /**

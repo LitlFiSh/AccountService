@@ -4,18 +4,23 @@ import com.alibaba.fastjson.JSON;
 import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.repository.DepartmentRepository;
 import com.fishpound.accountservice.repository.MenuRepository;
+import com.fishpound.accountservice.repository.OrderApplyRepository;
 import com.fishpound.accountservice.repository.RoleRepository;
 import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.AccountService;
+import com.fishpound.accountservice.service.FileGenerator;
 import com.fishpound.accountservice.service.RoleService;
 import com.fishpound.accountservice.service.UserInfoService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.*;
 
 @SpringBootTest
@@ -37,6 +42,9 @@ class AccountserviceApplicationTests {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    OrderApplyRepository orderApplyRepository;
 
     @Test
     void contextLoads() {
@@ -158,4 +166,21 @@ class AccountserviceApplicationTests {
 //        }
 //        System.out.println(resultMenus);
 //    }
+
+    @Test
+    void fileTest() throws FileNotFoundException {
+        try{
+            OrderApply orderApply = orderApplyRepository.getById("20201101");
+            System.out.println(orderApply.getApplyDepartment());
+            System.out.println(orderApply.getOrderLists());
+            System.out.println(orderApply.getId());
+            System.out.println(orderApply.getApplyDate());
+            FileOutputStream stream = new FileOutputStream("G:\\作业\\作业\\四\\项目\\new.xls");
+            HSSFWorkbook workbook = FileGenerator.generateExcel(orderApply, true);
+            workbook.write(stream);
+            stream.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,7 @@ public class OrderApply {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "apply_departemnt")
+    @Column(name = "apply_department")
     private String applyDepartment;
 
     @Column(name = "apply_user")
@@ -21,6 +23,7 @@ public class OrderApply {
     private String fundCode;
 
     @Column(name = "apply_date")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date applyDate;
 
     @Column(name = "total")
@@ -30,12 +33,14 @@ public class OrderApply {
     private boolean deptLeaderSign;
 
     @Column(name = "dept_leader_sign_date")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date deptLeaderSignDate;
 
     @Column(name = "inst_leader_sign")
     private boolean instLeaderSign;
 
     @Column(name = "inst_leader_sign_date")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date instLeaderSignDate;
 
     @Column(name = "status")
@@ -44,6 +49,9 @@ public class OrderApply {
     @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private List<OrderList> orderLists;
+
+    @Column(name = "file")
+    private Byte[] file;
 
     public String getId() {
         return id;
@@ -139,5 +147,13 @@ public class OrderApply {
 
     public void setOrderLists(List<OrderList> orderLists) {
         this.orderLists = orderLists;
+    }
+
+    public Byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(Byte[] file) {
+        this.file = file;
     }
 }

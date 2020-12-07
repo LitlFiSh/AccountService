@@ -6,9 +6,9 @@ create table orderapply(
     apply_date datetime not null comment '申请日期',
     total double(16, 2) comment '采购总金额',
     dept_leader_sign tinyint(1) default 0 null comment '部门领导签名状态',
-    dept_leader_sign_date datetime not null comment '部门领导签名日期',
+    dept_leader_sign_date datetime null comment '部门领导签名日期',
     inst_leader_sign tinyint(1) default 0 null comment '主管院领导签名状态',
-    inst_leader_sign_date datetime not null comment '主管院领导签名日期',
+    inst_leader_sign_date datetime null comment '主管院领导签名日期',
     status tinyint(2) default 0 comment '申请单状态',
     file blob null comment '签名文件'
 ) engine=innodb comment '申请单表';
