@@ -1,10 +1,11 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "menu")
@@ -19,9 +20,11 @@ public class Menu {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @Column(name = "pid")
     private Integer pid;
 
+    @JsonBackReference
     @ManyToOne(targetEntity = Role.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "rid", referencedColumnName = "id")
     private Role role;

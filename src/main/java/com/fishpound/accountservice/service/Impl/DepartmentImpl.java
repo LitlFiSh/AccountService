@@ -6,6 +6,8 @@ import com.fishpound.accountservice.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DepartmentImpl implements DepartmentService {
     @Autowired
@@ -19,5 +21,10 @@ public class DepartmentImpl implements DepartmentService {
     @Override
     public Department findById(String id) {
         return departmentRepository.getById(id);
+    }
+
+    @Override
+    public List<Department> findAll() {
+        return departmentRepository.findAll();
     }
 }

@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,10 +22,12 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
+    @JsonIgnore
     @OneToMany(targetEntity = Account.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Set<Account> accountSet = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(targetEntity = Menu.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "rid", referencedColumnName = "id")
     private List<Menu> menus = new ArrayList<>();

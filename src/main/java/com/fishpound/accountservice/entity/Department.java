@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class Department {
     @Column(name = "dept_name")
     private String deptName;
 
+    @JsonIgnore
     @OneToMany(targetEntity = UserInfo.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Set<UserInfo> userInfoSet = new HashSet<>();

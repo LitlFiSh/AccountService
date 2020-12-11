@@ -1,5 +1,8 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +24,9 @@ public class OrderList {
     @Column(name = "configuration")
     private String configuration;
 
+    @Column(name = "unit")
+    private String unit;
+
     @Column(name = "quantity")
     private Integer quantity;
 
@@ -36,13 +42,12 @@ public class OrderList {
     @Column(name = "new_user")
     private String newUser;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = OrderApply.class, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private OrderApply orderApply;
 
-    @Column(name = "user_id")
-    private String userId;
-
+    @JsonIgnore
     @Column(name = "status")
     private Integer status;
 
@@ -76,6 +81,14 @@ public class OrderList {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getConfiguration() {
@@ -132,14 +145,6 @@ public class OrderList {
 
     public void setOrderApply(OrderApply orderApply) {
         this.orderApply = orderApply;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public Integer getStatus() {

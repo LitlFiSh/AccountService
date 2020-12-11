@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -27,6 +29,7 @@ public class Account {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
@@ -37,6 +40,8 @@ public class Account {
     public void setId(String id) {
         this.id = id;
     }
+
+
 
     public String getPassword() {
         return password;

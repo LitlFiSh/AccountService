@@ -13,6 +13,9 @@ spring:
 #        enable_lazy_load_no_trans: true
   application:
     name: ManageSystem
+  jackson:
+    date-format: yyyy年MM月dd日
+    time-zone: GMT+8
 #      ddl-auto: update
 #    show-sql: true
 #    open-in-view: true

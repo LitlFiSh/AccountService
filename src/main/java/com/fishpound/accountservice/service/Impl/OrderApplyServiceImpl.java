@@ -3,9 +3,11 @@ package com.fishpound.accountservice.service.Impl;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.UserInfo;
+import com.fishpound.accountservice.repository.DepartmentRepository;
 import com.fishpound.accountservice.repository.OrderApplyRepository;
 import com.fishpound.accountservice.repository.UserInfoRepository;
 import com.fishpound.accountservice.service.OrderApplyService;
+import com.fishpound.accountservice.service.tools.PageTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +26,8 @@ import java.util.List;
 public class OrderApplyServiceImpl implements OrderApplyService {
     @Autowired
     OrderApplyRepository orderApplyRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     /**
      * 新增申请单
@@ -29,12 +35,20 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public void addOrder(OrderApply orderApply) {
-        String id = "";
-        //id 生成策略：年份(4) 月份(2) 部门编号(2)
+        String idPrefix = "", id;
+        //id 生成策略：年份(4) 部门编号(2) 部门该年第 n 份申请(2)
         Calendar now = Calendar.getInstance();
-        id = "" + now.get(Calendar.YEAR) + now.get(Calendar.MONTH) + 1 + orderApply.getApplyDepartment();
-
+        idPrefix = "" + now.get(Calendar.YEAR) + orderApply.getApplyDepartment();
+        id = idPrefix + new DecimalFormat("00").format(orderApplyRepository.countByIdStartsWith(idPrefix) + 1);
+//        System.out.println(id);
         orderApply.setId(id);
+        List<OrderList> orderLists = orderApply.getOrderLists();
+        for(OrderList orderList : orderLists){
+            orderList.setId(id + orderList.getNo());
+            orderList.setOrderApply(orderApply);
+        }
+        orderApply.setOrderLists(orderLists);
+        orderApply.setStatus(1);
         orderApplyRepository.save(orderApply);
     }
 
@@ -84,12 +98,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     }
 
     @Override
-    public List<OrderApply> findAllByUser(String id) {
-        return orderApplyRepository.findAllByApplyUserAndStatusNotLike(id, -1);
+    public Page<OrderApply> findAllByUser(String id, Integer page) {
+//        Sort sort = Sort.by(Sort.Direction.DESC, "applyDate");
+//        Pageable pageable = PageRequest.of(page -1, 10, sort);
+        PageTools pageTools = new PageTools("applyDate", Sort.Direction.DESC, page);
+        return orderApplyRepository.findAllByUidAndStatusNot(id, -1, pageTools.sortSingle());
     }
 
     /**
-     * 查询月份为 month 的用户的所有申请单
+     * 查询月份为 month 的所有申请单
      * @param month
      * @return
      */

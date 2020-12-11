@@ -31,6 +31,12 @@ public class AdminController {
     @Autowired
     DepartmentService departmentService;
 
+    /**
+     * 添加用户
+     * todo 测试可用性
+     * @param resultUser
+     * @return
+     */
     @PostMapping("/user")
     public JsonResult adduser(@Validated @RequestBody ResultUser resultUser){
         if(userInfoService.findById(resultUser.getId()) != null){

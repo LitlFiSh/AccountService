@@ -18,16 +18,17 @@ public class OrderListServiceImpl implements OrderListService {
 
     @Override
     public List<OrderList> findAllByUserId(String id) {
-        List<OrderList> orderLists = orderListRepository.findAllByUserIdAndStatusNotLike(id, -1);
-        return orderLists;
+//        List<OrderList> orderLists = orderListRepository.findAllByUserIdAndStatusNotLike(id, -1);
+//        return orderLists;
+        return null;
     }
 
     @Override
     public boolean deleteOrderList(String id) {
 //        orderListRepository.deleteById(id);
-        OrderList orderList = orderListRepository.getById(id);
-        orderList.setStatus(-1);
-        orderListRepository.save(orderList);
+//        OrderList orderList = orderListRepository.getById(id);
+//        orderList.setStatus(-1);
+//        orderListRepository.save(orderList);
         return true;
     }
 

@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -29,27 +31,36 @@ public class OrderApply {
     @Column(name = "total")
     private Double total;
 
+    @JsonIgnore
     @Column(name = "dept_leader_sign")
     private boolean deptLeaderSign;
 
+    @JsonIgnore
     @Column(name = "dept_leader_sign_date")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date deptLeaderSignDate;
 
+    @JsonIgnore
     @Column(name = "inst_leader_sign")
     private boolean instLeaderSign;
 
+    @JsonIgnore
     @Column(name = "inst_leader_sign_date")
-    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date instLeaderSignDate;
 
+    @JsonIgnore
     @Column(name = "status")
     private Integer status;
 
-    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private List<OrderList> orderLists;
 
+    @JsonIgnore
+    @Column(name = "uid")
+    private String uid;
+
+    @JsonIgnore
     @Column(name = "file")
     private Byte[] file;
 
@@ -147,6 +158,14 @@ public class OrderApply {
 
     public void setOrderLists(List<OrderList> orderLists) {
         this.orderLists = orderLists;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public Byte[] getFile() {
