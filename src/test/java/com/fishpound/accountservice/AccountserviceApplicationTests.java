@@ -161,20 +161,20 @@ class AccountserviceApplicationTests {
 //        System.out.println(resultMenus);
 //    }
 
-    @Test
-    void fileTest() throws FileNotFoundException {
-        try{
-            OrderApply orderApply = orderApplyRepository.getById("20201101");
-            System.out.println(orderApply.getApplyDepartment());
-            System.out.println(orderApply.getOrderLists());
-            System.out.println(orderApply.getId());
-            System.out.println(orderApply.getApplyDate());
-            FileOutputStream stream = new FileOutputStream("G:\\作业\\作业\\四\\项目\\new.xls");
-            HSSFWorkbook workbook = FileGenerator.generateExcel(orderApply, true);
-            workbook.write(stream);
-            stream.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    void fileTest() throws FileNotFoundException {
+//        try{
+//            OrderApply orderApply = orderApplyRepository.getById("20201101");
+//            System.out.println(orderApply.getApplyDepartment());
+//            System.out.println(orderApply.getOrderLists());
+//            System.out.println(orderApply.getId());
+//            System.out.println(orderApply.getApplyDate());
+//            FileOutputStream stream = new FileOutputStream("G:\\作业\\作业\\四\\项目\\new.xls");
+//            HSSFWorkbook workbook = FileGenerator.generateExcel(orderApply, true);
+//            workbook.write(stream);
+//            stream.flush();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 }

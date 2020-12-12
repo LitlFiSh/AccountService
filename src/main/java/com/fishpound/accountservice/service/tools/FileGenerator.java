@@ -10,13 +10,19 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.omg.CORBA.portable.OutputStream;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class FileGenerator {
-    public static HSSFWorkbook generateExcel(OrderApply orderApply, Boolean createSignPath){
+    public static void generateExcel(HttpServletResponse response, OrderApply orderApply, Boolean createSignPath)
+            throws IOException
+    {
         int n = 0, no = 1;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(orderApply.getApplyDate());
@@ -185,7 +191,15 @@ public class FileGenerator {
         sheet.setColumnWidth(8, 40*256);
         sheet.setColumnWidth(9, 8*256);
 
-        return workbook;
+        response.setContentType("application/octet-stream");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=申请单.xls");
+        response.flushBuffer();
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(response.getOutputStream());
+        workbook.close();
+        outputStream.flush();
+        outputStream.close();
     }
 
     /**

@@ -5,10 +5,14 @@ import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.tools.FileGenerator;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 
 @RestController
@@ -80,5 +84,19 @@ public class OrderController {
                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
         return ResultTool.success(orderApplyService.findAllByUser(id, page));
+    }
+
+    @GetMapping("/file")
+    public void generateFile(HttpServletResponse response,
+                                   @RequestParam(value = "id") String id)
+    {
+        OrderApply orderApply = orderApplyService.findOne(id);
+        try {
+            FileGenerator.generateExcel(response, orderApply, true);
+        }catch(IOException e){
+//            return ResultTool.fail();
+            System.out.println(e.getMessage());
+        }
+//        return ResultTool.success();
     }
 }
