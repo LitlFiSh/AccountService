@@ -16,6 +16,10 @@ public class ResultTool {
         return new JsonResult(false);
     }
 
+    public static JsonResult fail(String msg){
+        return new JsonResult(false, msg);
+    }
+
     public static JsonResult fail(ResultCode res){
         return new JsonResult(false, res);
     }

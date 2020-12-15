@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -90,29 +91,59 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         return orderApplyRepository.getById(id);
     }
 
+    /**
+     * 查询某部门某月的所有申请单
+     * @param department
+     * @param date
+     * @param page
+     * @return
+     */
     @Override
-    public OrderApply findByDepartmentAndMonth(String department, String month) {
+    public Page<OrderApply> findByDepartmentAndMonth(String department, Date date, Integer page) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
-        String id = calendar.get(Calendar.YEAR) + month + department;
-        return orderApplyRepository.getById(id);
+        calendar.setTime(date);
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        int month = calendar.get(Calendar.MONTH) + 1;
+        try {
+            Date last = format.parse(year + "-" + (month - 1) + "-" + "31");
+            Date next = format.parse(year + "-" + (month + 1) + "-" + "00");
+            PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+            return orderApplyRepository.findAllByApplyDepartmentAndApplyDateBetweenAndStatusNot(
+                    department, last, next, -1, pageTools.sortSingle());
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Page<OrderApply> findAllByUser(String id, Integer page) {
-//        Sort sort = Sort.by(Sort.Direction.DESC, "applyDate");
-//        Pageable pageable = PageRequest.of(page -1, 10, sort);
         PageTools pageTools = new PageTools("applyDate", Sort.Direction.DESC, page);
         return orderApplyRepository.findAllByUidAndStatusNot(id, -1, pageTools.sortSingle());
     }
 
     /**
      * 查询月份为 month 的所有申请单
-     * @param month
+     * @param date
      * @return
      */
     @Override
-    public List<OrderApply> findAllByMonth(String month) {
-        return null;
+    public Page<OrderApply> findAllByMonth(Date date, Integer page) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        int month = calendar.get(Calendar.MONTH) + 1;
+        try {
+            Date last = format.parse(year + "-" + (month - 1) + "-" + "31");
+            Date next = format.parse(year + "-" + (month + 1) + "-" + "00");
+            PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+            return orderApplyRepository.findAllByApplyDateBetweenAndStatusNot(last, next, -1, pageTools.sortSingle());
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -121,7 +152,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      * @return
      */
     @Override
-    public List<OrderApply> findAllByDepartment(String department) {
+    public Page<OrderApply> findAllByDepartment(String department, Integer page) {
         return null;
     }
 

@@ -1,6 +1,8 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -27,10 +29,11 @@ public class Account {
 
     @ManyToOne(targetEntity = Role.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Role role;
 
-    @JsonIgnore
     @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
     private UserInfo userInfo;
 
     public String getId() {

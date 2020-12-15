@@ -2,6 +2,7 @@ package com.fishpound.accountservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -48,12 +49,12 @@ public class OrderApply {
     @Column(name = "inst_leader_sign_date")
     private Date instLeaderSignDate;
 
-    @JsonIgnore
     @Column(name = "status")
     private Integer status;
 
     @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
+    @JsonManagedReference
     private List<OrderList> orderLists;
 
     @JsonIgnore

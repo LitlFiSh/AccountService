@@ -28,6 +28,12 @@ public class JsonResult<T> implements Serializable {
         this.data = data;
     }
 
+    public JsonResult(Boolean success, String msg) {
+        this.success = success;
+        this.code = success ? ResultCode.SUCCESS.getCode() : ResultCode.FAIL.getCode();
+        this.msg = msg;
+    }
+
     public JsonResult(Boolean success, ResultCode res){
         this.success = success;
         this.code = success ? ResultCode.SUCCESS.getCode() :

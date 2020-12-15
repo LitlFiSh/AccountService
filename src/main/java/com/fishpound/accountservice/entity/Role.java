@@ -1,5 +1,6 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -22,9 +23,9 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
-    @JsonIgnore
     @OneToMany(targetEntity = Account.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JsonBackReference
     private Set<Account> accountSet = new HashSet<>();
 
     @JsonIgnore

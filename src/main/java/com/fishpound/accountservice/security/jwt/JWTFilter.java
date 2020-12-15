@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,14 @@ public class JWTFilter extends BasicAuthenticationFilter {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+            Date now = new Date();
+            if((claims.getExpiration().getTime() - now.getTime()) < 10*60*1000){
+                String authoritiesStr = (String) claims.get("authorities");
+                List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesStr);
+                String tokenNew = JWTTokenUtils.createToken(claims.getSubject(), authorities);
+                response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
+                response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + tokenNew);
+            }
         } catch(JwtException e){
             printWriter = response.getWriter();
             JsonResult result = ResultTool.fail(ResultCode.TOKEN_NOT_VALID);

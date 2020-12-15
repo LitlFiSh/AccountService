@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 class AccountserviceApplicationTests {
@@ -177,4 +180,24 @@ class AccountserviceApplicationTests {
 //            e.printStackTrace();
 //        }
 //    }
+
+    @Test
+    void dateTest(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        String dateStr = "2020-12-11";
+        String dayLast = "2020-11-31", dayNext = "2021-01-00";
+        try {
+//            Date date = format.parse(dateStr);
+            Date date1 = format.parse(dayLast);
+            Date date2 = format.parse(dayNext);
+            List<OrderApply> orderApplyList =
+                    orderApplyRepository.findAllByApplyDepartmentAndApplyDateBetween("办公室", date1, date2);
+            for(OrderApply orderApply : orderApplyList){
+                System.out.println("id: " + orderApply.getId());
+                System.out.println("---");
+            }
+        }catch(Exception e){
+            System.out.println("time error");
+        }
+    }
 }

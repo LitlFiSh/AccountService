@@ -53,11 +53,11 @@ public class FileGenerator {
         HSSFRow row1 = sheet.createRow(n++);
         row1.setHeightInPoints(21);
         HSSFCell cell1 = row1.createCell(0);
-        cell1.setCellValue("编号： " + orderApply.getId() +
-                "            申请部门： " + orderApply.getApplyDepartment() +
-                "            申请人： " + orderApply.getApplyUser() +
-                "            采购经费代码： " + orderApply.getFundCode() +
-                "            申请日期： " + dateFormat.format(orderApply.getApplyDate()));
+        cell1.setCellValue("编号：" + orderApply.getId() +
+                "       申请部门：" + orderApply.getApplyDepartment() +
+                "       申请人：" + orderApply.getApplyUser() +
+                "       采购经费代码：" + orderApply.getFundCode() +
+                "       申请日期：" + dateFormat.format(orderApply.getApplyDate()));
         sheet.addMergedRegion(new CellRangeAddress(n-1, n-1, 0, 9));
         cell1.setCellStyle(styleClb);
         //第三行
@@ -119,10 +119,10 @@ public class FileGenerator {
             cell.setCellValue(orderList.getQuantity());
             cell.setCellStyle(styleCcc);
             cell = rowList.createCell(l++);
-            cell.setCellValue(new DecimalFormat("￥#,###.00").format(orderList.getBudgetUnitPrice()));
+            cell.setCellValue(new DecimalFormat("¥#,###.00").format(orderList.getBudgetUnitPrice()));
             cell.setCellStyle(styleCcc);
             cell = rowList.createCell(l++);
-            cell.setCellValue(new DecimalFormat("￥#,###.00").format(orderList.getBudgetTotalPrice()));
+            cell.setCellValue(new DecimalFormat("¥#,###.00").format(orderList.getBudgetTotalPrice()));
             cell.setCellStyle(styleCcc);
             cell = rowList.createCell(l++);
             cell.setCellValue(orderList.getReason());
@@ -134,7 +134,7 @@ public class FileGenerator {
         //汇总
         HSSFRow rowSum = sheet.createRow(n++);
         rowSum.setHeightInPoints(20);
-        HSSFCell cellSum;
+        HSSFCell cellSum, cellBorder;
         cellSum = rowSum.createCell(0);
         cellSum.setCellValue("采购总金额");
         cellSum.setCellStyle(styleCcc);
@@ -142,8 +142,10 @@ public class FileGenerator {
         sheet.addMergedRegion(cra);
         setBorder(BorderStyle.THIN, cra, sheet);
         cellSum = rowSum.createCell(7);
-        cellSum.setCellValue(new DecimalFormat("￥#,###.00").format(orderApply.getTotal()));
+        cellSum.setCellValue(new DecimalFormat("¥#,###.00").format(orderApply.getTotal()));
         cellSum.setCellStyle(styleCcc);
+        cellBorder = rowSum.createCell(9);
+        cellBorder.setCellStyle(styleCcc);
         //签名
         if(createSignPath){
             HSSFRow rowDept = sheet.createRow(n++);
@@ -191,15 +193,14 @@ public class FileGenerator {
         sheet.setColumnWidth(8, 40*256);
         sheet.setColumnWidth(9, 8*256);
 
-        response.setContentType("application/octet-stream");
-        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=申请单.xls");
         response.flushBuffer();
-        ServletOutputStream outputStream = response.getOutputStream();
+//        ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(response.getOutputStream());
         workbook.close();
-        outputStream.flush();
-        outputStream.close();
+//        outputStream.flush();
+//        outputStream.close();
     }
 
     /**

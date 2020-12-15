@@ -32,7 +32,7 @@ public class UserController {
 
     /**
      * 通过用户 id 查找用户信息并返回
-     * @param id
+     * @param id 用户id
      * @return
      */
     @GetMapping("/info")

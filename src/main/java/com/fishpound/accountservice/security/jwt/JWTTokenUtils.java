@@ -21,10 +21,10 @@ public class JWTTokenUtils {
     //token 生成秘钥
     public static final String TOKEN = "AERTRY+DtghvjhHGUhcg=jkUIYjhbkijoulUKYHbkhuygfg";
     public static final String ROLE_CLAIMS ="ROLE_" ;
-    // 过期时间是3600秒，既是1个小时
-    private static final long EXPIRATION = 3600L;
+    // 过期时间是3600秒(3600 * 1000毫秒)，即1个小时
+    private static final long EXPIRATION = 3600000L;
     // 选择了记住我之后的过期时间为7天
-    private static final long EXPIRATION_REMEMBER = 604800L;
+    private static final long EXPIRATION_REMEMBER = 604800000L;
 
     /**
      * token 生成函数
@@ -43,7 +43,7 @@ public class JWTTokenUtils {
         JwtBuilder builder = Jwts.builder()
                 .claim("authorities", roles)
                 .setSubject(username)
-                .setExpiration(new Date(nowMillis + EXPIRATION * 1000))
+                .setExpiration(new Date(nowMillis + EXPIRATION))
                 .setIssuedAt(now)
                 .signWith(generateKey());
         return builder.compact();

@@ -1,5 +1,7 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 /**
@@ -17,6 +19,7 @@ public class UserInfo {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Account account;
 
     @ManyToOne(targetEntity = Department.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})

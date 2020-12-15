@@ -42,9 +42,9 @@ public class OrderList {
     @Column(name = "new_user")
     private String newUser;
 
-    @JsonIgnore
     @ManyToOne(targetEntity = OrderApply.class, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
+    @JsonBackReference
     private OrderApply orderApply;
 
     @JsonIgnore
