@@ -1,5 +1,6 @@
 package com.fishpound.accountservice.service.Impl;
 
+import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.UserInfo;
@@ -118,8 +119,8 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     }
 
     @Override
-    public Page<OrderApply> findAllByUser(String id, Integer page) {
-        PageTools pageTools = new PageTools("applyDate", Sort.Direction.DESC, page);
+    public Page<OrderApply> findByUser(String id, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return orderApplyRepository.findAllByUidAndStatusNot(id, -1, pageTools.sortSingle());
     }
 
@@ -129,7 +130,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      * @return
      */
     @Override
-    public Page<OrderApply> findAllByMonth(Date date, Integer page) {
+    public Page<OrderApply> findByMonth(Date date, Integer page) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -152,17 +153,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      * @return
      */
     @Override
-    public Page<OrderApply> findAllByDepartment(String department, Integer page) {
-        return null;
+    public Page<OrderApply> findByDepartment(String department, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findAlllByApplyDepartmentAndStatusNot(department, -1, pageTools.sortSingle());
     }
 
     @Override
-    public void generateFile(int type) {
-        switch(type){
-            case 1:
-            case 2:
-            default:
-                break;
-        }
+    public void uploadFile(String id, byte[] data) {
+        OrderApply orderApply = orderApplyRepository.getById(id);
+        orderApply.setFile(data);
+        orderApplyRepository.save(orderApply);
     }
 }

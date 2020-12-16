@@ -61,9 +61,8 @@ public class OrderApply {
     @Column(name = "uid")
     private String uid;
 
-    @JsonIgnore
     @Column(name = "file")
-    private Byte[] file;
+    private byte[] file;
 
     public String getId() {
         return id;
@@ -169,11 +168,11 @@ public class OrderApply {
         this.uid = uid;
     }
 
-    public Byte[] getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(Byte[] file) {
+    public void setFile(byte[] file) {
         this.file = file;
     }
 }

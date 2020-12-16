@@ -7,12 +7,12 @@ import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import com.fishpound.accountservice.service.tools.FileGenerator;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -89,7 +89,7 @@ public class OrderController {
         if(id == null){
             return ResultTool.fail(ResultCode.PARAM_IS_NULL);
         }
-        return ResultTool.success(orderApplyService.findAllByUser(id, page));
+        return ResultTool.success(orderApplyService.findByUser(id, page));
     }
 
     /**
@@ -101,9 +101,6 @@ public class OrderController {
     public void generateFile(HttpServletResponse response,
                              @RequestParam(value = "id") String id)
     {
-        if(id == null){
-            throw new RuntimeException("文件生成错误：参数为空");
-        }
         OrderApply orderApply = orderApplyService.findOne(id);
         try {
             FileGenerator.generateExcel(response, orderApply, true);
@@ -116,13 +113,16 @@ public class OrderController {
 //        return ResultTool.success();
     }
 
-    @RequestMapping("/download")
+    /**
+     * 下载可行性报告文件
+     * @param response
+     */
+    @GetMapping("/download")
     public void downloadFile(HttpServletResponse response){
         response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         response.setHeader("Content-Disposition", "attachment;filename=test.docx");
         try {
-            Resource resource = new ClassPathResource("templates/test.docx");
-            File file = resource.getFile();
+            Resource resource = new ClassPathResource("templates/test.docx");   //静态文件位置
             InputStream stream = resource.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
@@ -134,6 +134,26 @@ public class OrderController {
         }catch(Exception e){
             e.printStackTrace();
             response.setStatus(404);
+        }
+    }
+
+    /**
+     * 上传签名文件
+     * @param file
+     * @param id
+     * @return
+     */
+    @PostMapping("/file")
+    public JsonResult uploadFile(@RequestParam(value = "file") MultipartFile file,
+                           @RequestParam(value = "id") String id)
+    {
+        try {
+            byte[] data = file.getBytes();
+            orderApplyService.uploadFile(id, data);
+            return ResultTool.success();
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResultTool.fail("读取上传文件失败");
         }
     }
 }

@@ -19,7 +19,7 @@ public class DeptController {
     OrderApplyService orderApplyService;
 
     @GetMapping("/month")
-    public JsonResult getAllMonth(@RequestParam(value = "department")String dept,
+    public JsonResult getDeptMonth(@RequestParam(value = "department")String dept,
                                   @RequestParam(value = "date")String date,
                                   @RequestParam(value = "page", defaultValue = "1")Integer page)
     {
@@ -29,7 +29,7 @@ public class DeptController {
             return ResultTool.success(orderApplyService.findByDepartmentAndMonth(dept, tragetMonth, page));
         }catch(Exception e){
             e.printStackTrace();
-            return ResultTool.fail("日期参数格式错误");
+            return ResultTool.fail("日期格式错误");
         }
     }
 }

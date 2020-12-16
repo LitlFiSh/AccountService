@@ -15,6 +15,7 @@ public interface OrderApplyRepository extends JpaRepository<OrderApply, String> 
     Page<OrderApply> findAllByApplyDateBetweenAndStatusNot(Date date1, Date date2, Integer status, Pageable pageable);
     Page<OrderApply> findAllByApplyDepartmentAndApplyDateBetweenAndStatusNot(
             String department, Date date1, Date date2, Integer status, Pageable pageable);
+    Page<OrderApply> findAlllByApplyDepartmentAndStatusNot(String department, Integer status, Pageable pageable);
 
     List<OrderApply> findAllByApplyDate(Date date);
     List<OrderApply> findAllByApplyDateBefore(Date date);
