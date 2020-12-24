@@ -13,6 +13,8 @@ import org.apache.poi.ss.util.RegionUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -192,13 +194,14 @@ public class FileGenerator {
         sheet.setColumnWidth(9, 8*256);
 
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=申请单.xls");
+        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode("申请单", "UTF-8") + ".xls");
+        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
         response.flushBuffer();
-//        ServletOutputStream outputStream = response.getOutputStream();
+        OutputStream outputStream = response.getOutputStream();
         workbook.write(response.getOutputStream());
         workbook.close();
-//        outputStream.flush();
-//        outputStream.close();
+        outputStream.flush();
+        outputStream.close();
     }
 
     /**

@@ -39,14 +39,18 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public void addOrder(OrderApply orderApply) {
         String idPrefix = "", id;
         //id 生成策略：年份(4) 部门编号(2) 部门该年第 n 份申请(2)
+        System.out.println(orderApply.getApplyDepartment());
+        Department department = departmentRepository.findByDeptName(orderApply.getApplyDepartment());
+        System.out.println(department.getId());
         Calendar now = Calendar.getInstance();
-        idPrefix = "" + now.get(Calendar.YEAR) + orderApply.getApplyDepartment();
+        idPrefix = "" + now.get(Calendar.YEAR) + department.getId();
         id = idPrefix + new DecimalFormat("00").format(orderApplyRepository.countByIdStartsWith(idPrefix) + 1);
-//        System.out.println(id);
+        System.out.println(id);
         orderApply.setId(id);
         List<OrderList> orderLists = orderApply.getOrderLists();
         for(OrderList orderList : orderLists){
             orderList.setId(id + orderList.getNo());
+            orderList.setStatus(1);
             orderList.setOrderApply(orderApply);
         }
         orderApply.setOrderLists(orderLists);

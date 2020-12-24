@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -198,6 +199,22 @@ class AccountserviceApplicationTests {
 //            }
 //        }catch(Exception e){
 //            System.out.println("time error");
+//        }
+//    }
+    
+//    @Test
+//    void fileTest(){
+//        try {
+//            String id = "20200104";
+//            OrderApply orderApply = orderApplyRepository.getById(id);
+//            byte[] bytes = orderApply.getFile();
+//            File file = new File("G:\\作业\\作业\\四\\项目\\web", "test.jpg");
+//            FileOutputStream stream = new FileOutputStream(file.getAbsoluteFile());
+//            stream.write(bytes);
+//            stream.flush();
+//            stream.close();
+//        }catch (Exception e){
+//            e.printStackTrace();
 //        }
 //    }
 }

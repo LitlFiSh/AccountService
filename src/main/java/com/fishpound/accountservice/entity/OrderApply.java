@@ -61,6 +61,7 @@ public class OrderApply {
     @Column(name = "uid")
     private String uid;
 
+    @JsonIgnore
     @Column(name = "file")
     private byte[] file;
 

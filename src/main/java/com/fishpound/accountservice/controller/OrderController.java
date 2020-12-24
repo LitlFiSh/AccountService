@@ -14,7 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Date;
 
@@ -121,6 +123,7 @@ public class OrderController {
     public void downloadFile(HttpServletResponse response){
         response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         response.setHeader("Content-Disposition", "attachment;filename=test.docx");
+        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
         try {
             Resource resource = new ClassPathResource("templates/test.docx");   //静态文件位置
             InputStream stream = resource.getInputStream();
@@ -145,7 +148,7 @@ public class OrderController {
      */
     @PostMapping("/file")
     public JsonResult uploadFile(@RequestParam(value = "file") MultipartFile file,
-                           @RequestParam(value = "id") String id)
+                                 @RequestParam(value = "id") String id)
     {
         try {
             byte[] data = file.getBytes();
@@ -154,6 +157,23 @@ public class OrderController {
         }catch(Exception e){
             e.printStackTrace();
             return ResultTool.fail("读取上传文件失败");
+        }
+    }
+
+    @GetMapping("/file/download")
+    public void download(HttpServletResponse response, @RequestParam(value = "id") String id)throws IOException
+    {
+        OrderApply orderApply = orderApplyService.findOne(id);
+        response.setContentType("image/jpg");
+        response.setHeader("Content-Disposition", "attachment;filename=download.jpg");
+        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
+        OutputStream outputStream = response.getOutputStream();
+        try{
+            outputStream.write(orderApply.getFile());
+            outputStream.flush();
+            outputStream.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }
