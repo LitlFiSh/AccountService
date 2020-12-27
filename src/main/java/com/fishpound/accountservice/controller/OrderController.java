@@ -88,9 +88,6 @@ public class OrderController {
     public JsonResult getOrderByUser(@RequestParam(value = "id") String id,
                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        if(id == null){
-            return ResultTool.fail(ResultCode.PARAM_IS_NULL);
-        }
         return ResultTool.success(orderApplyService.findByUser(id, page));
     }
 

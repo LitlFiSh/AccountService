@@ -39,13 +39,13 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public void addOrder(OrderApply orderApply) {
         String idPrefix = "", id;
         //id 生成策略：年份(4) 部门编号(2) 部门该年第 n 份申请(2)
-        System.out.println(orderApply.getApplyDepartment());
+//        System.out.println(orderApply.getApplyDepartment());
         Department department = departmentRepository.findByDeptName(orderApply.getApplyDepartment());
-        System.out.println(department.getId());
+//        System.out.println(department.getId());
         Calendar now = Calendar.getInstance();
         idPrefix = "" + now.get(Calendar.YEAR) + department.getId();
         id = idPrefix + new DecimalFormat("00").format(orderApplyRepository.countByIdStartsWith(idPrefix) + 1);
-        System.out.println(id);
+//        System.out.println(id);
         orderApply.setId(id);
         List<OrderList> orderLists = orderApply.getOrderLists();
         for(OrderList orderList : orderLists){
@@ -56,6 +56,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         orderApply.setOrderLists(orderLists);
         orderApply.setStatus(1);
         orderApplyRepository.save(orderApply);
+        //todo 添加申请单时的消息提醒
     }
 
     /**
@@ -65,6 +66,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public void updateOrder(OrderApply orderApply) {
         orderApplyRepository.save(orderApply);
+        //todo 更新申请单的消息提醒
     }
 
     /**

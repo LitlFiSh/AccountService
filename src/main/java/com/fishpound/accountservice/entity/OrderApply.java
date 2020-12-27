@@ -57,7 +57,6 @@ public class OrderApply {
     @JsonManagedReference
     private List<OrderList> orderLists;
 
-    @JsonIgnore
     @Column(name = "uid")
     private String uid;
 
