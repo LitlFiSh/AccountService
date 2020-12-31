@@ -52,7 +52,7 @@ public class OrderApply {
     @Column(name = "status")
     private Integer status;
 
-    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL})
+    @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     @JsonManagedReference
     private List<OrderList> orderLists;

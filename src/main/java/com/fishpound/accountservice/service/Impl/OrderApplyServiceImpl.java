@@ -6,6 +6,7 @@ import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.repository.DepartmentRepository;
 import com.fishpound.accountservice.repository.OrderApplyRepository;
+import com.fishpound.accountservice.repository.OrderListRepository;
 import com.fishpound.accountservice.repository.UserInfoRepository;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.tools.PageTools;
@@ -30,6 +31,8 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     OrderApplyRepository orderApplyRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    OrderListRepository orderListRepository;
 
     /**
      * 新增申请单
@@ -48,9 +51,9 @@ public class OrderApplyServiceImpl implements OrderApplyService {
 //        System.out.println(id);
         orderApply.setId(id);
         List<OrderList> orderLists = orderApply.getOrderLists();
+        int no = 0;
         for(OrderList orderList : orderLists){
-            orderList.setId(id + orderList.getNo());
-            orderList.setStatus(1);
+            orderList.setId(id + new DecimalFormat("00").format(no++));
             orderList.setOrderApply(orderApply);
         }
         orderApply.setOrderLists(orderLists);
@@ -83,7 +86,6 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         for(OrderList orderList : orderLists){
             orderList.setStatus(-1);
         }
-        orderApply.setOrderLists(orderLists);
         orderApply.setStatus(-1);
         orderApplyRepository.save(orderApply);
     }
@@ -95,7 +97,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public OrderApply findOne(String id) {
-        return orderApplyRepository.getById(id);
+        OrderApply orderApply = orderApplyRepository.getById(id);
+        List<OrderList> lists = new ArrayList<>();
+        for(OrderList orderList : orderApply.getOrderLists()){
+            if(orderList.getStatus() == 1){
+                lists.add(orderList);
+            }
+        }
+        orderApply.setOrderLists(lists);
+        return orderApply;
     }
 
     /**

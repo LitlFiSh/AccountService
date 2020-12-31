@@ -47,7 +47,6 @@ public class OrderList {
     @JsonBackReference
     private OrderApply orderApply;
 
-    @JsonIgnore
     @Column(name = "status")
     private Integer status;
 

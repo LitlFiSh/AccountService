@@ -20,18 +20,6 @@ import java.util.List;
 public class OrderListController {
     @Autowired
     OrderListService orderListService;
-    @Autowired
-    UserInfoService userInfoService;
-
-    @GetMapping()
-    public JsonResult getOrderLists(@RequestParam(value = "id") String id){
-        if(id != null){
-            List<OrderList> orderLists = orderListService.findAllByUserId(id);
-            return ResultTool.success(orderLists);
-        } else{
-            return ResultTool.fail(ResultCode.PARAM_IS_NULL);
-        }
-    }
 
     @DeleteMapping("/{id}")
     public JsonResult deleteOrderList(@PathVariable(value = "id") String id){
@@ -40,12 +28,5 @@ public class OrderListController {
         } else{
             return ResultTool.fail();
         }
-    }
-
-    @PostMapping()
-    public JsonResult addOrderList(@RequestBody OrderList orderList){
-        //通过提交人员所在部门及提交时间查找对应部门的申请单，如果当月该部门还没有申请单，则新建申请单
-        UserInfo user = userInfoService.findById(orderList.getId());
-        return null;
     }
 }

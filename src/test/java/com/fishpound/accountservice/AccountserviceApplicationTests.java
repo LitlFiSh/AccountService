@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -216,5 +217,16 @@ class AccountserviceApplicationTests {
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+//    }
+
+//    @Test
+//    void updateOrder(){
+//        OrderApply orderApply = orderApplyRepository.getById("20200105");
+//        List<OrderList> orderLists = orderApply.getOrderLists();
+//        for(OrderList orderList : orderLists){
+//            orderList.setName("b");
+//            orderList.setType("b");
+//        }
+//        orderApplyRepository.save(orderApply);
 //    }
 }
