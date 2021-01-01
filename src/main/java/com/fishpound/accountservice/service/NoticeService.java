@@ -9,5 +9,4 @@ public interface NoticeService {
     void updateNotice(Notice notice);
     int findNoticeUnread(String uid);
     Notice getOne(Integer id);
-    Page<Notice> findByUser(String uid, Integer page);
 }

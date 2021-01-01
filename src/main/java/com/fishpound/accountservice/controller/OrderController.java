@@ -4,6 +4,7 @@ import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.AsyncService;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import com.fishpound.accountservice.service.tools.FileGenerator;
@@ -27,6 +28,8 @@ public class OrderController {
     OrderApplyService orderApplyService;
     @Autowired
     UserInfoService userInfoService;
+    @Autowired
+    AsyncService asyncService;
 
     /**
      * 通过申请单id获取申请单内容
@@ -50,17 +53,20 @@ public class OrderController {
         Date date = new Date();
         orderApply.setApplyDate(date);
         orderApplyService.addOrder(orderApply);
+        asyncService.createNoticeToDeptLead(orderApply.getUid(),
+                "新的申请单提交通知",
+                "申请人"+orderApply.getApplyUser()+"提交了一份申请单。");
         return ResultTool.success();
     }
 
     /**
      * 更新申请单
-     * todo 申请单中删除或增加申请列表时对应数据的增加和删除
      * @param orderApply 对应申请单实体
      * @return
      */
     @PutMapping()
     public JsonResult updateOrder(@Validated @RequestBody OrderApply orderApply){
+        //todo 更新申请单的通知
         Date date = new Date();
         orderApply.setApplyDate(date);
         orderApplyService.updateOrder(orderApply);

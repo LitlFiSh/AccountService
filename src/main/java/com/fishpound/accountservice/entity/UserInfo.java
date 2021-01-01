@@ -1,8 +1,13 @@
 package com.fishpound.accountservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 与数据库对应的用户信息实体
@@ -25,6 +30,11 @@ public class UserInfo {
     @ManyToOne(targetEntity = Department.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
+
+    @OneToMany(targetEntity = Notice.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "uid", referencedColumnName = "id")
+    @JsonManagedReference
+    private Set<Notice> noticeList = new HashSet<>();
 
     public String getId() {
         return id;

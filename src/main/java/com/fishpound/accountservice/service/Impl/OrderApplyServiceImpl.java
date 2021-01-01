@@ -59,7 +59,6 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         orderApply.setOrderLists(orderLists);
         orderApply.setStatus(1);
         orderApplyRepository.save(orderApply);
-        //todo 添加申请单时的消息提醒
     }
 
     /**
@@ -69,7 +68,6 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public void updateOrder(OrderApply orderApply) {
         orderApplyRepository.save(orderApply);
-        //todo 更新申请单的消息提醒
     }
 
     /**

@@ -27,10 +27,9 @@ public class NoticeController {
      * @param id
      * @return
      */
-    @DeleteMapping("/{id}")
-    public JsonResult deleteNotice(@PathVariable(value = "id") Integer id){
-        noticeService.deleteNotice(id);
-        return ResultTool.success();
+    @GetMapping()
+    public JsonResult deleteNotice(@RequestParam(value = "id") Integer id){
+        return ResultTool.success(noticeService.getOne(id));
     }
 
     /**
@@ -41,7 +40,8 @@ public class NoticeController {
      */
     @GetMapping("/notices")
     public JsonResult getAllByUser(@RequestParam(value = "uid") String uid,
-                                   @RequestParam(value = "page", defaultValue = "1") Integer page){
-        return ResultTool.success(noticeService.findByUser(uid, page));
+                                   @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        return null;
     }
 }

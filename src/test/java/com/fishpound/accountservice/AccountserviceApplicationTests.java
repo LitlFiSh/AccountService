@@ -1,10 +1,7 @@
 package com.fishpound.accountservice;
 
 import com.fishpound.accountservice.entity.*;
-import com.fishpound.accountservice.repository.DepartmentRepository;
-import com.fishpound.accountservice.repository.MenuRepository;
-import com.fishpound.accountservice.repository.OrderApplyRepository;
-import com.fishpound.accountservice.repository.RoleRepository;
+import com.fishpound.accountservice.repository.*;
 import com.fishpound.accountservice.service.AccountService;
 import com.fishpound.accountservice.service.tools.FileGenerator;
 import com.fishpound.accountservice.service.UserInfoService;
@@ -44,6 +41,12 @@ class AccountserviceApplicationTests {
 
     @Autowired
     OrderApplyRepository orderApplyRepository;
+
+    @Autowired
+    NoticeRepository noticeRepository;
+
+    @Autowired
+    UserInfoRepository userInfoRepository;
 
     @Test
     void contextLoads() {
@@ -228,5 +231,19 @@ class AccountserviceApplicationTests {
 //            orderList.setType("b");
 //        }
 //        orderApplyRepository.save(orderApply);
+//    }
+
+//    @Test
+//    void count(){
+//        System.out.println(noticeRepository.countByUserInfo_IdAndStateIsTrue("12345678911"));
+//    }
+
+//    @Test
+//    void findLeader(){
+//        List<UserInfo> list = userInfoRepository.findByAccount_Role_IdAndDepartment_DeptName(3, "办公室");
+//        for(UserInfo userInfo : list){
+//            System.out.println(userInfo.getUsername());
+//            System.out.println("---");
+//        }
 //    }
 }

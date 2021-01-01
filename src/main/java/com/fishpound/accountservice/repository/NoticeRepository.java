@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
-    int countByUidAndStateIsTrue(String uid);
+    int countByUserInfo_IdAndStateIsTrue(String uid);
     Notice getByid(Integer id);
-    Page<Notice> findAllByUid(String uid, Pageable pageable);
+    Notice findAllByUserInfo_Id(String id);
 }

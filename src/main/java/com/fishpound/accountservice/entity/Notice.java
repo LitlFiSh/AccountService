@@ -1,6 +1,6 @@
 package com.fishpound.accountservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,9 +25,10 @@ public class Notice {
     @Column(name = "time")
     private Date time;
 
-    @JsonIgnore
-    @Column(name = "uid")
-    private String uid;
+    @ManyToOne(targetEntity = UserInfo.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinColumn(name = "uid", referencedColumnName = "id")
+    @JsonBackReference
+    private UserInfo userInfo;
 
     public Integer getId() {
         return id;
@@ -69,11 +70,11 @@ public class Notice {
         this.time = time;
     }
 
-    public String getUid() {
-        return uid;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }
