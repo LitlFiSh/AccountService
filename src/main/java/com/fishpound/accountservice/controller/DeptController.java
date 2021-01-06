@@ -18,6 +18,13 @@ public class DeptController {
     @Autowired
     OrderApplyService orderApplyService;
 
+    /**
+     * 通过部门名称和月份查找部门该月所有申请单
+     * @param dept 部门名称
+     * @param date 精确到月份的日期，格式yyyy年MM月
+     * @param page 查找的页数
+     * @return
+     */
     @GetMapping("/month")
     public JsonResult getDeptMonth(@RequestParam(value = "department")String dept,
                                   @RequestParam(value = "date")String date,

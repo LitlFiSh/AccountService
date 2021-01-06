@@ -28,7 +28,7 @@ public class NoticeController {
      * @return
      */
     @GetMapping()
-    public JsonResult deleteNotice(@RequestParam(value = "id") Integer id){
+    public JsonResult getNotice(@RequestParam(value = "id") Integer id){
         return ResultTool.success(noticeService.getOne(id));
     }
 

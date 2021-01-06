@@ -162,8 +162,8 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     }
 
     /**
-     * 查询部门编号为 department 的申请单
-     * @param department
+     * 查询对应部门的申请单
+     * @param department 部门名称
      * @return
      */
     @Override
@@ -172,6 +172,22 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         return orderApplyRepository.findAlllByApplyDepartmentAndStatusNot(department, -1, pageTools.sortSingle());
     }
 
+    /**
+     * 查找所有已删除申请单
+     * @param page
+     * @return
+     */
+    @Override
+    public Page<OrderApply> findDeleted(Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findAllByStatus(-1, pageTools.sortSingle());
+    }
+
+    /**
+     * 上传签名后的申请单扫描文件
+     * @param id 对应申请单 id
+     * @param data 文件流
+     */
     @Override
     public void uploadFile(String id, byte[] data) {
         OrderApply orderApply = orderApplyRepository.getById(id);

@@ -23,6 +23,12 @@ public class AsyncServiceImpl implements AsyncService {
     @Autowired
     NoticeRepository noticeRepository;
 
+    /**
+     * 异步发送通知到部门领导账号中
+     * @param uid 申请人id
+     * @param title 消息标题
+     * @param content 消息内容
+     */
     @Async
     @Override
     public void createNoticeToDeptLead(String uid, String title, String content) {
