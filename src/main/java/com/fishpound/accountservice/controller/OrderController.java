@@ -1,6 +1,7 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderApply;
+import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")

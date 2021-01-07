@@ -67,6 +67,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      */
     @Override
     public void updateOrder(OrderApply orderApply) {
+        List<OrderList> lists = orderApply.getOrderLists();
+        //更新之前先检查设备列表是否有新增加（设备列表 OrderList.id 为空）
+        //  如有则设置 id 为 申请单id(8) + 设备列表序号(2)
+        for(int i = 0; i < lists.size(); i++){
+            OrderList orderList = lists.get(i);
+            if(orderList.getId() == null || "".equals(orderList.getId())){
+                orderList.setId(orderApply.getId() + "0" + (i + 1));
+            }
+        }
         orderApplyRepository.save(orderApply);
     }
 
