@@ -21,12 +21,12 @@ public class OrderListController {
     @Autowired
     OrderListService orderListService;
 
-    @DeleteMapping("/{id}")
-    public JsonResult deleteOrderList(@PathVariable(value = "id") String id){
-        if(orderListService.deleteOrderList(id)){
-            return ResultTool.success();
-        } else{
-            return ResultTool.fail();
-        }
-    }
+//    @DeleteMapping("/{id}")
+//    public JsonResult deleteOrderList(@PathVariable(value = "id") String id){
+//        if(orderListService.deleteOrderList(id)){
+//            return ResultTool.success();
+//        } else{
+//            return ResultTool.fail();
+//        }
+//    }
 }

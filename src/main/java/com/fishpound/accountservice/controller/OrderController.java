@@ -165,6 +165,12 @@ public class OrderController {
         }
     }
 
+    /**
+     * 下载签名文件
+     * @param response
+     * @param id
+     * @throws IOException
+     */
     @GetMapping("/file/download")
     public void download(HttpServletResponse response, @RequestParam(value = "id") String id)throws IOException
     {

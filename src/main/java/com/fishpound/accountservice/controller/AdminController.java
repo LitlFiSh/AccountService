@@ -41,7 +41,7 @@ public class AdminController {
         }
         UserInfo userInfo = new UserInfo();
         Account account = new Account();
-        Department department = departmentService.findById(resultUser.getDepartment());
+        Department department = departmentService.findByDeptName(resultUser.getDepartment());
         Role role = roleService.findById(resultUser.getRole());
 
         account.setId(resultUser.getId());

@@ -1,5 +1,6 @@
 package com.fishpound.accountservice.service.Impl;
 
+import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.repository.OrderApplyRepository;
 import com.fishpound.accountservice.repository.OrderListRepository;
@@ -25,10 +26,14 @@ public class OrderListServiceImpl implements OrderListService {
 
     @Override
     public boolean deleteOrderList(String id) {
+        //todo 重写 OrderList 表结构 删除 status 字段
 //        orderListRepository.deleteById(id);
-//        OrderList orderList = orderListRepository.getById(id);
-//        orderList.setStatus(-1);
-//        orderListRepository.save(orderList);
+        OrderList orderList = orderListRepository.getById(id);
+        OrderApply orderApply = orderApplyRepository.getById(orderList.getOrderApply().getId());
+        orderApply.setTotal(orderApply.getTotal() - orderList.getBudgetTotalPrice());
+        orderApplyRepository.save(orderApply);
+        orderList.setStatus(-1);
+        orderListRepository.save(orderList);
         return false;
     }
 
