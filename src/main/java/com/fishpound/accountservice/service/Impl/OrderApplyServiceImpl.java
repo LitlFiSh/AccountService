@@ -84,17 +84,16 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     /**
      * 删除申请单
      * 删除：将申请单状态设置为已删除（-1）
-     * @param id
+     * @param orderApply
      */
     @Override
-    public void deleteOrder(String id) {
+    public void deleteOrder(OrderApply orderApply) {
 //        orderApplyRepository.deleteById(id);
-        OrderApply orderApply = orderApplyRepository.getById(id);
         //获取该申请单包含的申请列表，并将申请列表的状态设置为已删除（-1）
         List<OrderList> orderLists = orderApply.getOrderLists();
-        for(OrderList orderList : orderLists){
-            orderList.setStatus(-1);
-        }
+//        for(OrderList orderList : orderLists){
+//            orderList.setStatus(-1);
+//        }
         orderApply.setStatus(-1);
         orderApplyRepository.save(orderApply);
     }
@@ -107,13 +106,13 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public OrderApply findOne(String id) {
         OrderApply orderApply = orderApplyRepository.getById(id);
-        List<OrderList> lists = new ArrayList<>();
-        for(OrderList orderList : orderApply.getOrderLists()){
-            if(orderList.getStatus() == 1){
-                lists.add(orderList);
-            }
-        }
-        orderApply.setOrderLists(lists);
+//        List<OrderList> lists = new ArrayList<>();
+//        for(OrderList orderList : orderApply.getOrderLists()){
+//            if(orderList.getStatus() == 1){
+//                lists.add(orderList);
+//            }
+//        }
+//        orderApply.setOrderLists(lists);
         return orderApply;
     }
 

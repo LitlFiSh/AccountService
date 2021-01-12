@@ -30,4 +30,10 @@ public class GlobalExceptionHandler {
         System.out.println("ExceptionHandler: " + e.getMessage());
         return ResultTool.fail(ResultCode.PARAM_IS_NULL);
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public JsonResult handlerNullPointerException(Exception e){
+        System.out.println("ExceptionHandler: " + e.getMessage());
+        return ResultTool.fail(ResultCode.PARAM_IS_NULL);
+    }
 }

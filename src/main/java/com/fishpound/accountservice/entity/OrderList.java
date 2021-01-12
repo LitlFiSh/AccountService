@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "orderlist")
@@ -12,33 +13,42 @@ public class OrderList {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "no")
-    private String no;
+    /*@Column(name = "no")
+    private String no;*/
 
+    @NotNull(message = "物资名称不能为空")
     @Column(name = "name")
     private String name;
 
+    @NotNull(message = "品牌型号不能为空")
     @Column(name = "type")
     private String type;
 
+    @NotNull(message = "配置或技术参数不能为空")
     @Column(name = "configuration")
     private String configuration;
 
+    @NotNull(message = "单位不能为空")
     @Column(name = "unit")
     private String unit;
 
+    @NotNull(message = "数量不能为空")
     @Column(name = "quantity")
     private Integer quantity;
 
+    @NotNull(message = "预算单价不能为空")
     @Column(name = "budget_unit_price")
     private Double budgetUnitPrice;
 
+    @NotNull(message = "预算总价不能为空")
     @Column(name = "budget_total_price")
     private Double budgetTotalPrice;
 
+    @NotNull(message = "申请原因不能为空")
     @Column(name = "reason")
     private String reason;
 
+    @NotNull(message = "新设备使用人不能为空")
     @Column(name = "new_user")
     private String newUser;
 
@@ -47,8 +57,8 @@ public class OrderList {
     @JsonBackReference
     private OrderApply orderApply;
 
-    @Column(name = "status")
-    private Integer status;
+//    @Column(name = "status")
+//    private Integer status;
 
     public String getId() {
         return id;
@@ -58,13 +68,13 @@ public class OrderList {
         this.id = id;
     }
 
-    public String getNo() {
-        return no;
-    }
-
-    public void setNo(String no) {
-        this.no = no;
-    }
+//    public String getNo() {
+//        return no;
+//    }
+//
+//    public void setNo(String no) {
+//        this.no = no;
+//    }
 
     public String getName() {
         return name;
@@ -146,11 +156,11 @@ public class OrderList {
         this.orderApply = orderApply;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+//    public Integer getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(Integer status) {
+//        this.status = status;
+//    }
 }

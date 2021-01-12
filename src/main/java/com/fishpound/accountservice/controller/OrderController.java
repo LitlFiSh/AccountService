@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -39,8 +40,12 @@ public class OrderController {
      * @return
      */
     @GetMapping()
-    public JsonResult getOneOrder(@RequestParam(value = "id") String id){
+    public JsonResult getOneOrder(@RequestParam(value = "id") String id,
+                                  HttpServletRequest request){
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(!equal(request, orderApply.getUid())){
+            return ResultTool.fail(ResultCode.NO_PERMISSION);
+        }
         return ResultTool.success(orderApply);
     }
 
@@ -67,7 +72,11 @@ public class OrderController {
      * @return
      */
     @PutMapping()
-    public JsonResult updateOrder(@Validated @RequestBody OrderApply orderApply){
+    public JsonResult updateOrder(@Validated @RequestBody OrderApply orderApply,
+                                  HttpServletRequest request){
+        if(!equal(request, orderApply.getUid())){
+            return ResultTool.fail(ResultCode.NO_PERMISSION);
+        }
         //todo 更新申请单的通知
         Date date = new Date();
         orderApply.setApplyDate(date);
@@ -81,8 +90,13 @@ public class OrderController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public JsonResult deleteOrder(@PathVariable(value = "id") String id){
-        orderApplyService.deleteOrder(id);
+    public JsonResult deleteOrder(@PathVariable(value = "id") String id,
+                                  HttpServletRequest request){
+        OrderApply orderApply = orderApplyService.findOne(id);
+        if(!equal(request, orderApply.getUid())){
+            return ResultTool.fail(ResultCode.NO_PERMISSION);
+        }
+        orderApplyService.deleteOrder(orderApply);
         return ResultTool.success();
     }
 
@@ -172,9 +186,15 @@ public class OrderController {
      * @throws IOException
      */
     @GetMapping("/file/download")
-    public void download(HttpServletResponse response, @RequestParam(value = "id") String id)throws IOException
+    public void download(HttpServletRequest request,
+                         HttpServletResponse response,
+                         @RequestParam(value = "id") String id)throws IOException
     {
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(!equal(request, orderApply.getUid())){
+            response.setStatus(403);
+            return;
+        }
         response.setContentType("image/jpg");
         response.setHeader("Content-Disposition", "attachment;filename=download.jpg");
         response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
@@ -186,5 +206,9 @@ public class OrderController {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private boolean equal(HttpServletRequest request, String uid){
+        return request.getAttribute("user").toString().equals(uid) ? true : false;
     }
 }

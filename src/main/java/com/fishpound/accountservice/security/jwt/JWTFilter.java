@@ -83,6 +83,7 @@ public class JWTFilter extends BasicAuthenticationFilter {
 //            return ;
 //        }
         String username = claims.getSubject();
+        request.setAttribute("user", username);
         String authoritiesStr = (String) claims.get("authorities");
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesStr);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);

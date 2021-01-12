@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderApplyService {
     void addOrder(OrderApply orderApply);
     void updateOrder(OrderApply orderApply);
-    void deleteOrder(String id);
+    void deleteOrder(OrderApply orderApply);
     OrderApply findOne(String id);
     Page<OrderApply> findByDepartmentAndMonth(String department, Date date, Integer page);
     Page<OrderApply> findByUser(String id, Integer page);

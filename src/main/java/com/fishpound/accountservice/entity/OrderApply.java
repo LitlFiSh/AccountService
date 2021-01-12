@@ -4,24 +4,36 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orderapply")
+@Valid
 public class OrderApply {
     @Id
     @Column(name = "id")
     private String id;
 
+    @NotNull(message = "申请部门不能为空")
+    @Max(value = 16)
     @Column(name = "apply_department")
     private String applyDepartment;
 
+    @NotNull(message = "申请人不能为空")
+    @Max(value = 32, message = "申请人名称过长")
     @Column(name = "apply_user")
     private String applyUser;
 
+    @NotNull(message = "采购经费代码不能为空")
+    @Size(max = 6, min = 6, message = "采购经费代码长度只能为6位")
     @Column(name = "fund_code")
     private String fundCode;
 
@@ -29,6 +41,7 @@ public class OrderApply {
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date applyDate;
 
+    @NotNull(message = "总金额不能为空")
     @Column(name = "total")
     private Double total;
 
@@ -49,14 +62,18 @@ public class OrderApply {
     @Column(name = "inst_leader_sign_date")
     private Date instLeaderSignDate;
 
+    @NotNull(message = "申请单状态不能为空")
     @Column(name = "status")
     private Integer status;
 
+    @Valid
+    @NotNull(message = "申请设备列表不能为空")
     @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     @JsonManagedReference
     private List<OrderList> orderLists;
 
+    @NotNull(message = "申请单对应用户id不能为空")
     @Column(name = "uid")
     private String uid;
 
