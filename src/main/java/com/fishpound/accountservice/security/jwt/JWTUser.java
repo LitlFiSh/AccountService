@@ -57,4 +57,12 @@ public class JWTUser implements UserDetails {
     public boolean isEnabled() {
         return isActive;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

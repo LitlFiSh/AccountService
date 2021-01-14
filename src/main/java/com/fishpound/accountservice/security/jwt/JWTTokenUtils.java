@@ -29,11 +29,11 @@ public class JWTTokenUtils {
     /**
      * token 生成函数
      * 注：生成的 token 有效时间为1小时
-     * @param username
+     * @param id
      * @param authorities
      * @return
      */
-    public static String createToken(String username, Collection<? extends GrantedAuthority> authorities){
+    public static String createToken(String id, Collection<? extends GrantedAuthority> authorities){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         StringBuffer roles = new StringBuffer();
@@ -42,7 +42,7 @@ public class JWTTokenUtils {
         }
         JwtBuilder builder = Jwts.builder()
                 .claim("authorities", roles)
-                .setSubject(username)
+                .setSubject(id)
                 .setExpiration(new Date(nowMillis + EXPIRATION))
                 .setIssuedAt(now)
                 .signWith(generateKey());

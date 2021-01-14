@@ -93,7 +93,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         JWTUser jwtUser = (JWTUser) authResult.getPrincipal();
-        String token = JWTTokenUtils.createToken(jwtUser.getUsername(), jwtUser.getAuthorities());
+        String token = JWTTokenUtils.createToken(jwtUser.getId(), jwtUser.getAuthorities());
         response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
         PrintWriter printWriter = response.getWriter();
