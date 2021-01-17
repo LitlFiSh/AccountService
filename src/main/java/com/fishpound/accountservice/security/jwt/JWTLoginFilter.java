@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -94,8 +95,10 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setCharacterEncoding("UTF-8");
         JWTUser jwtUser = (JWTUser) authResult.getPrincipal();
         String token = JWTTokenUtils.createToken(jwtUser.getId(), jwtUser.getAuthorities());
-        response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
+        String exposeHeaders = JWTTokenUtils.TOKEN_HEADER + "," + JWTTokenUtils.USER_HEADER;
+        response.setHeader("Access-Control-Expose-Headers", exposeHeaders);
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
+        response.setHeader(JWTTokenUtils.USER_HEADER, URLEncoder.encode(jwtUser.getUsername(), "UTF-8"));
         PrintWriter printWriter = response.getWriter();
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         List<Menu> menus = new ArrayList<>();

@@ -16,6 +16,8 @@ import java.util.Date;
 public class JWTTokenUtils {
     //头部字段名
     public static final String TOKEN_HEADER = "Authorization";
+    //头部用户名字段
+    public static final String USER_HEADER = "Loginname";
     //token 前缀
     public static final String TOKEN_PREFIX = "Bearer ";
     //token 生成秘钥
