@@ -6,6 +6,8 @@ import com.fishpound.accountservice.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserInfoServiceImpl implements UserInfoService{
     @Autowired
@@ -31,6 +33,11 @@ public class UserInfoServiceImpl implements UserInfoService{
     public boolean delete(UserInfo userInfo) {
         userInfoRepository.delete(userInfo);
         return true;
+    }
+
+    @Override
+    public List<UserInfo> findByRoleAndDepartment(Integer rid, String deptName) {
+        return userInfoRepository.findAllByAccount_Role_IdAndDepartment_DeptName(rid, deptName);
     }
 
 

@@ -12,6 +12,9 @@ create table orderapply(
     status tinyint(2) default 0 comment '申请单状态',
     file blob null comment '签名文件',
     uid char(11) not null comment '申请人id',
+    withdrawal_reason text null comment '撤回原因',
+    create_time timestamp null default CURRENT_TIMESTAMP comment '创建时间（自动维护）',
+    update_time timestamp null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间（自动维护）'
 ) engine=innodb comment '申请单表';
 
 create table orderlist(

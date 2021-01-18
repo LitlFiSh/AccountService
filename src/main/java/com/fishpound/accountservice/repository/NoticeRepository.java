@@ -10,5 +10,5 @@ import java.util.List;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     int countByUserInfo_IdAndStateIsTrue(String uid);
     Notice getByid(Integer id);
-    Notice findAllByUserInfo_Id(String id);
+    Page<Notice> findAllByUserInfo_Id(String uid, Pageable pageable);
 }

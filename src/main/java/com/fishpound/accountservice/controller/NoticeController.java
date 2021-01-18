@@ -42,6 +42,6 @@ public class NoticeController {
     public JsonResult getAllByUser(@RequestParam(value = "uid") String uid,
                                    @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        return null;
+        return ResultTool.success(noticeService.findAllByUser(uid, page));
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
     UserInfo getById(String id);
     UserInfo findByUsername(String username);
-    List<UserInfo> findByAccount_Role_IdAndDepartment_DeptName(Integer rid, String deptName);
+    List<UserInfo> findAllByAccount_Role_IdAndDepartment_DeptName(Integer rid, String deptName);
 }

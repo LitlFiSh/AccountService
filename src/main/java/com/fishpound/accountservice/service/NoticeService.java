@@ -8,5 +8,6 @@ public interface NoticeService {
     void deleteNotice(Integer id);
     void updateNotice(Notice notice);
     int findNoticeUnread(String uid);
+    Page<Notice> findAllByUser(String uid, Integer page);
     Notice getOne(Integer id);
 }

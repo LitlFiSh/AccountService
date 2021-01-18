@@ -77,6 +77,9 @@ public class OrderApply {
     @Column(name = "uid")
     private String uid;
 
+    @Column(name = "withdrawal_reason")
+    private String withdrawalReason;
+
     @JsonIgnore
     @Column(name = "file")
     private byte[] file;
@@ -183,6 +186,14 @@ public class OrderApply {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getWithdrawalReason() {
+        return withdrawalReason;
+    }
+
+    public void setWithdrawalReason(String withdrawalReason) {
+        this.withdrawalReason = withdrawalReason;
     }
 
     public byte[] getFile() {

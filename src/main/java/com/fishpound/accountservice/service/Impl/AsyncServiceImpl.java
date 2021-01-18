@@ -33,7 +33,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Override
     public void createNoticeToDeptLead(String uid, String title, String content) {
         Department department = userInfoRepository.getById(uid).getDepartment();
-        List<UserInfo> list = userInfoRepository.findByAccount_Role_IdAndDepartment_DeptName(3, department.getDeptName());
+        List<UserInfo> list = userInfoRepository.findAllByAccount_Role_IdAndDepartment_DeptName(3, department.getDeptName());
         Notice notice = new Notice();
         notice.setTime(new Date());
         notice.setState(true);

@@ -1,7 +1,6 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderApply;
-import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
@@ -16,13 +15,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -40,8 +36,9 @@ public class OrderController {
      * @return
      */
     @GetMapping()
-    public JsonResult getOneOrder(@RequestParam(value = "id") String id,
-                                  HttpServletRequest request){
+    public JsonResult getOneOrder(HttpServletRequest request,
+                                  @RequestParam(value = "id") String id)
+    {
         OrderApply orderApply = orderApplyService.findOne(id);
         if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
@@ -72,8 +69,9 @@ public class OrderController {
      * @return
      */
     @PutMapping()
-    public JsonResult updateOrder(@Validated @RequestBody OrderApply orderApply,
-                                  HttpServletRequest request){
+    public JsonResult updateOrder(HttpServletRequest request,
+                                  @Validated @RequestBody OrderApply orderApply)
+    {
         if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
         }
@@ -90,8 +88,9 @@ public class OrderController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public JsonResult deleteOrder(@PathVariable(value = "id") String id,
-                                  HttpServletRequest request){
+    public JsonResult deleteOrder(HttpServletRequest request,
+                                  @PathVariable(value = "id") String id)
+    {
         OrderApply orderApply = orderApplyService.findOne(id);
         if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
@@ -144,7 +143,7 @@ public class OrderController {
         response.setHeader("Content-Disposition", "attachment;filename=test.docx");
         response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
         try {
-            Resource resource = new ClassPathResource("templates/test.docx");   //静态文件位置
+            Resource resource = new ClassPathResource("docs/test.docx");   //静态文件位置
             InputStream stream = resource.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
