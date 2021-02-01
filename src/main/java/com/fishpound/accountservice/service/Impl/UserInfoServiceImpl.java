@@ -102,7 +102,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                 account = new Account(id, bCryptPasswordEncoder.encode("123456"), role);
                 userInfo = new UserInfo(id, username, account, department);
                 userInfoRepository.save(userInfo);
-                itemMap.put("success", "成功");
+                itemMap.put("message", "成功");
                 n++;
             }
             resultList.add(itemMap);
