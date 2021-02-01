@@ -49,6 +49,15 @@ public class DeptController {
         }
     }
 
+    @GetMapping("/list")
+    public JsonResult getList(HttpServletRequest request,
+                              @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        String uid = request.getAttribute("user").toString();
+        UserInfo user = userInfoService.findById(uid);
+        return ResultTool.success(orderApplyService.findByDepartmentAndStatus(user.getDepartment().getDeptName(), 1, page));
+    }
+
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
                                    @RequestParam(value = "id") String id)
@@ -58,7 +67,12 @@ public class DeptController {
         }
         if(checkAuthentication(request, id)){
             OrderApply orderApply = orderApplyService.findOne(id);
+            if(orderApply.getStatus() != 1){
+                return ResultTool.fail("不可以对申请单做此操作");
+            }
             orderApply.setStatus(2);
+            orderApply.setDeptLeaderSign(true);
+            orderApply.setDeptLeaderSignDate(new Date());
             orderApplyService.updateOrder(orderApply);
             return ResultTool.success();
         } else {
@@ -73,6 +87,9 @@ public class DeptController {
     {
         if(checkAuthentication(request, id)){
             OrderApply orderApply = orderApplyService.findOne(id);
+            if(orderApply.getStatus() != 1){
+                return ResultTool.fail("不可以对申请单做此操作");
+            }
             orderApply.setStatus(0);
             orderApply.setWithdrawalReason(reason);
             orderApplyService.updateOrder(orderApply);

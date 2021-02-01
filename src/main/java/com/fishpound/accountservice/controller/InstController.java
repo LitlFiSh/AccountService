@@ -1,6 +1,5 @@
 package com.fishpound.accountservice.controller;
 
-import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/inst")
@@ -38,6 +36,15 @@ public class InstController {
         }
     }
 
+    @GetMapping("/list")
+    public JsonResult getList(HttpServletRequest request,
+                              @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        String uid = request.getAttribute("user").toString();
+        UserInfo user = userInfoService.findById(uid);
+        return ResultTool.success(orderApplyService.findByDepartmentAndStatus("*", 2, page));
+    }
+
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
                                    @RequestParam(value = "id") String id)
@@ -46,6 +53,9 @@ public class InstController {
             return ResultTool.fail(ResultCode.PARAM_IS_NULL);
         }
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply.getStatus() != 2){
+            return ResultTool.fail("不可以申请单做此操作");
+        }
         orderApply.setStatus(2);
         orderApplyService.updateOrder(orderApply);
         return ResultTool.success();
@@ -57,6 +67,9 @@ public class InstController {
                                 @RequestParam(value = "reason") String reason)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply.getStatus() != 2){
+            return ResultTool.fail("不可以申请单做此操作");
+        }
         orderApply.setStatus(0);
         orderApply.setWithdrawalReason(reason);
         orderApplyService.updateOrder(orderApply);

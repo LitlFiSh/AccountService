@@ -1,7 +1,6 @@
 package com.fishpound.accountservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -44,8 +43,6 @@ public class Account {
         this.id = id;
     }
 
-
-
     public String getPassword() {
         return password;
     }
@@ -84,5 +81,15 @@ public class Account {
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public Account() {
+    }
+
+    public Account(String id, String password, Role role) {
+        this.id = id;
+        this.password = password;
+        this.role = role;
+        this.isActive = true;
     }
 }

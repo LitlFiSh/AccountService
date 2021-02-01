@@ -7,7 +7,7 @@ import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.AsyncService;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
-import com.fishpound.accountservice.service.tools.FileGenerator;
+import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -36,13 +36,9 @@ public class OrderController {
      * @return
      */
     @GetMapping()
-    public JsonResult getOneOrder(HttpServletRequest request,
-                                  @RequestParam(value = "id") String id)
+    public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
-        if(!equal(request, orderApply.getUid())){
-            return ResultTool.fail(ResultCode.NO_PERMISSION);
-        }
         return ResultTool.success(orderApply);
     }
 
@@ -56,8 +52,8 @@ public class OrderController {
     public JsonResult addOrder(@Validated @RequestBody OrderApply orderApply){
         Date date = new Date();
         orderApply.setApplyDate(date);
-        orderApplyService.addOrder(orderApply);
-        asyncService.createNoticeToDeptLead(orderApply.getUid(),
+        String oid = orderApplyService.addOrder(orderApply);
+        asyncService.createNoticeToDeptLead(orderApply.getUid(), oid,
                 "新的申请单提交通知",
                 "申请人"+orderApply.getApplyUser()+"提交了一份申请单。");
         return ResultTool.success();
@@ -82,12 +78,26 @@ public class OrderController {
         return ResultTool.success();
     }
 
+    @PutMapping("/recall")
+    public JsonResult recallOrder(HttpServletRequest request,
+                                  @RequestParam(value = "id") String id)
+    {
+        OrderApply orderApply = orderApplyService.findOne(id);
+        if(!equal(request, orderApply.getId())){
+            return ResultTool.fail(ResultCode.NO_PERMISSION);
+        }
+        orderApply.setStatus(0);
+        orderApplyService.updateOrder(orderApply);
+        return ResultTool.success();
+    }
+
     /**
      * 删除对应id的申请单（将该申请单状态 status 设置为-1）
      * @param id 申请单id
      * @return
      */
-    @DeleteMapping("/{id}")
+    // 取消，只有管理员才能删除申请单
+    /*@DeleteMapping("/{id}")
     public JsonResult deleteOrder(HttpServletRequest request,
                                   @PathVariable(value = "id") String id)
     {
@@ -97,7 +107,7 @@ public class OrderController {
         }
         orderApplyService.deleteOrder(orderApply);
         return ResultTool.success();
-    }
+    }*/
 
     /**
      * 通过用户id获取该用户所有申请单（不包括已删除申请单）
@@ -123,7 +133,7 @@ public class OrderController {
     {
         OrderApply orderApply = orderApplyService.findOne(id);
         try {
-            FileGenerator.generateExcel(response, orderApply, true);
+            FileTools.generateExcel(response, orderApply, true);
         }
         catch(IOException e){
 //            return ResultTool.fail();

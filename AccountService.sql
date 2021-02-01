@@ -1,6 +1,7 @@
 create table role(
     id int primary key not null auto_increment,
-    role_name varchar(32) not null comment '角色名'
+    role_name varchar(32) not null comment '角色名',
+    role_description varchar(32) not null comment '角色描述'
 ) engine=innodb auto_increment=1 comment '角色表';
 
 create table department(
@@ -35,10 +36,10 @@ create table menu(
     foreign key (`rid`) references role(`id`) on delete set null
 ) engine=innodb comment '菜单表';
 
-insert into role (id, role_name) values (1, "ADMIN");
-insert into role (id, role_name) values (2, "INSTLEAD");
-insert into role (id, role_name) values (3, "DEPTLEAD");
-insert into role (id, role_name) values (4, "APPLYUSER");
+insert into role (id, role_name) values (1, "ADMIN", "管理员");
+insert into role (id, role_name) values (2, "INSTLEAD", "主管院领导");
+insert into role (id, role_name) values (3, "DEPTLEAD", "部门领导");
+insert into role (id, role_name) values (4, "APPLYUSER", "普通用户");
 
 insert into department (id, dept_name) values ("01", "办公室");
 insert into department (id, dept_name) values ("02", "财务部");
@@ -65,8 +66,13 @@ insert into userinfo (id, username, account_id, department_id) values ("12345678
 
 insert into menu (id, name, rid) values (1, "用户", 4);
 insert into menu (id, path, name, pid) values (11, "/info", "用户信息", 1);
+
 insert into menu (id, name, rid) values (2, "申请单", 4);
 insert into menu (id, path, name, pid) values (21, "/addOrder", "新建申请", 2);
 insert into menu (id, path, name, pid) values (22, "/listOrder", "查看申请", 2);
+
 insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/adduser", "添加用户", 3);
+
+insert into menu (id, name, rid) values (4, "审批", 3);
+insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);

@@ -3,24 +3,18 @@ package com.fishpound.accountservice.service.Impl;
 import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.OrderList;
-import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.repository.DepartmentRepository;
 import com.fishpound.accountservice.repository.OrderApplyRepository;
 import com.fishpound.accountservice.repository.OrderListRepository;
-import com.fishpound.accountservice.repository.UserInfoRepository;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.tools.PageTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +33,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
      * @param orderApply
      */
     @Override
-    public void addOrder(OrderApply orderApply) {
+    public String addOrder(OrderApply orderApply) {
         String idPrefix = "", id;
         //id 生成策略：年份(4) 部门编号(2) 部门该年第 n 份申请(2)
 //        System.out.println(orderApply.getApplyDepartment());
@@ -59,6 +53,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         orderApply.setOrderLists(orderLists);
         orderApply.setStatus(1);
         orderApplyRepository.save(orderApply);
+        return id;
     }
 
     /**
@@ -180,6 +175,12 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public Page<OrderApply> findByDepartment(String department, Integer page) {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return orderApplyRepository.findAlllByApplyDepartmentAndStatusNot(department, -1, pageTools.sortSingle());
+    }
+
+    @Override
+    public Page<OrderApply> findByDepartmentAndStatus(String department, Integer status, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findAllByApplyDepartmentAndStatus(department, status, pageTools.sortSingle());
     }
 
     /**

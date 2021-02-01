@@ -26,18 +26,20 @@ public class AsyncServiceImpl implements AsyncService {
     /**
      * 异步发送通知到部门领导账号中
      * @param uid 申请人id
+     * @param oid 申请单id
      * @param title 消息标题
      * @param content 消息内容
      */
     @Async
     @Override
-    public void createNoticeToDeptLead(String uid, String title, String content) {
+    public void createNoticeToDeptLead(String uid, String oid, String title, String content) {
         Department department = userInfoRepository.getById(uid).getDepartment();
         List<UserInfo> list = userInfoRepository.findAllByAccount_Role_IdAndDepartment_DeptName(3, department.getDeptName());
         Notice notice = new Notice();
         notice.setTime(new Date());
         notice.setState(true);
         notice.setTitle(title);
+        notice.setOid(oid);
         notice.setContent(content);
         for(UserInfo userInfo : list){
             notice.setUserInfo(userInfo);

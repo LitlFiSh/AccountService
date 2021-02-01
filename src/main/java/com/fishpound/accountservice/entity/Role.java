@@ -23,6 +23,9 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
+    @Column(name = "role_description")
+    private String roleDescription;
+
     @OneToMany(targetEntity = Account.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @JsonBackReference
@@ -47,6 +50,14 @@ public class Role {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getRoleDescription() {
+        return roleDescription;
+    }
+
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
     }
 
     public Set<Account> getAccountSet() {

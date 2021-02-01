@@ -4,24 +4,31 @@ import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.OrderList;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.*;
 
-public class FileGenerator {
-    public static void generateExcel(HttpServletResponse response, OrderApply orderApply, Boolean createSignPath)
-            throws IOException
+public class FileTools {
+
+    /**
+     * Excel文件生成
+     * @param response
+     * @param orderApply
+     * @param createSignPath
+     * @throws IOException
+     */
+    public static void generateExcel(HttpServletResponse response, OrderApply orderApply, Boolean createSignPath) throws IOException
     {
         int n = 0, no = 1;
         Calendar calendar = Calendar.getInstance();
@@ -204,6 +211,36 @@ public class FileGenerator {
         outputStream.close();
     }
 
+    public static List<Map> importExcel(MultipartFile file){
+        Workbook workbook = getWorkBook(file);
+        List<Map> list = new ArrayList<>();
+        if(workbook != null){
+            for(int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++){
+                Sheet sheet = workbook.getSheetAt(sheetNum);
+                if(sheet == null){
+                    continue;
+                }
+                //获取sheet开始行
+                int firstRowNum = sheet.getFirstRowNum();
+                //获取sheet结束行
+                int lastRowNum = sheet.getLastRowNum();
+                for(int rowNum = firstRowNum + 1; rowNum <= lastRowNum; rowNum++){
+                    Row row = sheet.getRow(rowNum);
+                    if(row == null){
+                        continue;
+                    }
+                    Map<String, String> map = new HashMap<>();
+                    map.put("uid", getCellValue(row.getCell(0)));
+                    map.put("username", getCellValue(row.getCell(1)));
+                    map.put("role", getCellValue(row.getCell(2)));
+                    map.put("department", getCellValue(row.getCell(3)));
+                    list.add(map);
+                }
+            }
+        }
+        return list;
+    }
+
     /**
      * Excel样式生成
      * @param workbook HSSFWorkBook对象
@@ -253,5 +290,43 @@ public class FileGenerator {
         RegionUtil.setBorderBottom(borderStyle, cellRangeAddress, sheet);
         RegionUtil.setBorderLeft(borderStyle, cellRangeAddress, sheet);
         RegionUtil.setBorderRight(borderStyle, cellRangeAddress, sheet);
+    }
+
+    /**
+     * 根据文件后缀获取不同WorkBook对象
+     * @param file
+     * @return
+     */
+    private static Workbook getWorkBook(MultipartFile file){
+        String fileName = file.getOriginalFilename();
+        Workbook workbook = null;
+        try{
+            InputStream input = file.getInputStream();
+            if(fileName.endsWith("xls")){
+                workbook = new HSSFWorkbook(input);
+            } else if(fileName.endsWith("xlsx")){
+                workbook = new XSSFWorkbook(input);
+            } else {
+                return null;
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return workbook;
+    }
+
+    /**
+     * 获取单元格内的值
+     * @param cell
+     * @return
+     */
+    private static String getCellValue(Cell cell){
+        String value = "";
+        if(cell == null){
+            return value;
+        }
+        cell.setCellType(CellType.STRING);
+        value = cell.getStringCellValue();
+        return value;
     }
 }

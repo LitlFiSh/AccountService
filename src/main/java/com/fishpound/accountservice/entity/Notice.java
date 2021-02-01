@@ -25,6 +25,9 @@ public class Notice {
     @Column(name = "time")
     private Date time;
 
+    @Column(name = "oid")
+    private String oid;
+
     @ManyToOne(targetEntity = UserInfo.class, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "uid", referencedColumnName = "id")
     @JsonBackReference
@@ -68,6 +71,14 @@ public class Notice {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public UserInfo getUserInfo() {

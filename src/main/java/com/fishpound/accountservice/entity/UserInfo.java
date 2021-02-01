@@ -1,12 +1,9 @@
 package com.fishpound.accountservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -65,6 +62,16 @@ public class UserInfo {
     }
 
     public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public UserInfo() {
+    }
+
+    public UserInfo(String id, String username, Account account, Department department) {
+        this.id = id;
+        this.username = username;
+        this.account = account;
         this.department = department;
     }
 }

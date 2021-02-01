@@ -3,13 +3,12 @@ package com.fishpound.accountservice.security.handler;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import java.io.IOException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,5 +34,11 @@ public class GlobalExceptionHandler {
     public JsonResult handlerNullPointerException(Exception e){
         System.out.println("ExceptionHandler: " + e.getMessage());
         return ResultTool.fail(ResultCode.PARAM_IS_NULL);
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public JsonResult handlerObjectOptimisticLockingFailureException(Exception e){
+        System.out.println("ExceptionHandler: " + e.getMessage());
+        return ResultTool.fail("申请单状态已被更新");
     }
 }

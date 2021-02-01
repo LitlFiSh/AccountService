@@ -9,10 +9,21 @@ import com.fishpound.accountservice.service.DepartmentService;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.RoleService;
 import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -59,6 +70,12 @@ public class AdminController {
         return ResultTool.success();
     }
 
+    @PostMapping("/batchAdd")
+    public JsonResult batchAdduser(@RequestParam(value = "file") MultipartFile file){
+        List<Map> userList = FileTools.importExcel(file);
+        return ResultTool.success(userInfoService.batchAddUser(userList));
+    }
+
     @GetMapping("/deleted")
     public JsonResult getDeletedOrder(@RequestParam(value = "page", defaultValue = "1") Integer page){
         return ResultTool.success(orderApplyService.findDeleted(page));
@@ -70,5 +87,26 @@ public class AdminController {
         orderApply.setStatus(1);
         orderApplyService.updateOrder(orderApply);
         return ResultTool.success();
+    }
+
+    @GetMapping("/template")
+    public void downloadTemplate(HttpServletResponse response){
+        response.setContentType("application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment;filename=用户导入模板.xlsx");
+        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
+        try {
+            Resource resource = new ClassPathResource("docs/用户导入模板.xlsx");   //静态文件位置
+            InputStream stream = resource.getInputStream();
+            byte[] buffer = new byte[stream.available()];
+            stream.read(buffer);
+            stream.close();
+            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+            outputStream.write(buffer);
+            outputStream.flush();
+            outputStream.close();
+        }catch(Exception e){
+            e.printStackTrace();
+            response.setStatus(404);
+        }
     }
 }
