@@ -255,7 +255,8 @@ public class FileTools {
     private static HSSFCellStyle createStyle(HSSFWorkbook workbook, short height, short color, boolean bold,
                                              org.apache.poi.ss.usermodel.HorizontalAlignment hAlign,
                                              org.apache.poi.ss.usermodel.VerticalAlignment vAlign,
-                                             boolean border){
+                                             boolean border)
+    {
         HSSFCellStyle style = workbook.createCellStyle();
         //字体
         HSSFFont font = workbook.createFont();
@@ -294,7 +295,7 @@ public class FileTools {
 
     /**
      * 根据文件后缀获取不同WorkBook对象
-     * @param file
+     * @param file 文件对象
      * @return
      */
     private static Workbook getWorkBook(MultipartFile file){
@@ -316,8 +317,8 @@ public class FileTools {
     }
 
     /**
-     * 获取单元格内的值
-     * @param cell
+     * 获取单元格内的值，统一将单元格内的值设置为String类型并取出
+     * @param cell 单元格对象
      * @return
      */
     private static String getCellValue(Cell cell){

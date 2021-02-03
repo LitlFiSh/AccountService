@@ -9,6 +9,7 @@ import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +37,10 @@ public class OrderController {
      * @return
      */
     @GetMapping()
+    @Cacheable(cacheNames = "order")
     public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
+        System.out.println("searching...");
         OrderApply orderApply = orderApplyService.findOne(id);
         return ResultTool.success(orderApply);
     }

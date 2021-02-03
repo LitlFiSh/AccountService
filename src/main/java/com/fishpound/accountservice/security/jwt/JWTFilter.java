@@ -1,15 +1,14 @@
 package com.fishpound.accountservice.security.jwt;
 
 import com.alibaba.fastjson.JSON;
-import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
-import com.fishpound.accountservice.service.UserInfoService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +30,7 @@ import java.util.List;
  * 验证 token 的合法性
  */
 public class JWTFilter extends BasicAuthenticationFilter {
+    private final static Logger logger = LoggerFactory.getLogger(JWTFilter.class);
 
     public JWTFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -42,6 +42,7 @@ public class JWTFilter extends BasicAuthenticationFilter {
 //            response.setStatus(HttpServletResponse.SC_OK);
 //            return ;
 //        }
+//        logger.info("filter start.");
         PrintWriter printWriter;
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

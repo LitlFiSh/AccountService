@@ -19,7 +19,6 @@ create table orderapply(
 
 create table orderlist(
     id char(10) primary key not null,
---     no char(2) not null comment '序号',
     name varchar(255) not null comment '物资名称',
     type varchar(255) not null comment '品牌型号',
     configuration text not null comment '配置或技术参数',
@@ -29,7 +28,6 @@ create table orderlist(
     budget_total_price double(14,2) not null comment '预算总价',
     reason text not null comment '申购原因及旧设备参数状态',
     new_user varchar(32) not null comment '新设备使用人',
---     status tinyint(2) default 1 comment '申请记录状态',
     from_id char(8) not null comment '对应申请单编号',
     foreign key (`from_id`) references orderapply(`id`) on delete cascade
 ) engine=innodb comment '申请记录表';

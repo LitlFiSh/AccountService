@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -70,17 +71,32 @@ public class AdminController {
         return ResultTool.success();
     }
 
+    /**
+     * 批量导入用户，通过传递下载的模板文件
+     * @param file
+     * @return
+     */
     @PostMapping("/batchAdd")
     public JsonResult batchAdduser(@RequestParam(value = "file") MultipartFile file){
         List<Map> userList = FileTools.importExcel(file);
         return ResultTool.success(userInfoService.batchAddUser(userList));
     }
 
+    /**
+     * 获取所有已删除的申请单（status = -1）
+     * @param page
+     * @return
+     */
     @GetMapping("/deleted")
     public JsonResult getDeletedOrder(@RequestParam(value = "page", defaultValue = "1") Integer page){
         return ResultTool.success(orderApplyService.findDeleted(page));
     }
 
+    /**
+     * 还原一个已删除的申请单
+     * @param id 申请单id
+     * @return
+     */
     @PutMapping("/reduct/{id}")
     public JsonResult reductOrder(@PathVariable(value = "id") String id){
         OrderApply orderApply = orderApplyService.findOne(id);
@@ -89,12 +105,17 @@ public class AdminController {
         return ResultTool.success();
     }
 
+    /**
+     * 下载用户导入模板文件
+     * @param response
+     */
     @GetMapping("/template")
-    public void downloadTemplate(HttpServletResponse response){
-        response.setContentType("application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment;filename=用户导入模板.xlsx");
-        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
+    public void downloadTemplate(HttpServletResponse response) {
         try {
+            response.setContentType("application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition",
+                    "attachment;filename=" + URLEncoder.encode("用户导入模板", "UTF-8") + ".xlsx");
+            response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
             Resource resource = new ClassPathResource("docs/用户导入模板.xlsx");   //静态文件位置
             InputStream stream = resource.getInputStream();
             byte[] buffer = new byte[stream.available()];

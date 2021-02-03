@@ -85,11 +85,9 @@ public class OrderApply {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Version
     @Column(name = "update_time")
     private Date updateTime;
-
-    @Version
-    private int version;
 
     public String getId() {
         return id;
@@ -225,13 +223,5 @@ public class OrderApply {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
     }
 }

@@ -8,6 +8,9 @@ import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.RoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -15,10 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,14 +31,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 登录请求过滤器，当接收到登录请求时进入这里
  * 验证用户名、密码，生成 token 并返回结果
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+    private final static Logger logger = LoggerFactory.getLogger(JWTLoginFilter.class);
     private RoleService roleService;
+    @Resource
+    private CacheManager cacheManager;
 
     /**
      * 用 setter 注入 Service
@@ -54,6 +62,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 //        System.out.println("login process...");
+        logger.info("login filter start");
         String username = "";
         String password = "";
 //        username = httpServletRequest.getParameter("username");
@@ -91,6 +100,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+//        logger.info("login success.");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         JWTUser jwtUser = (JWTUser) authResult.getPrincipal();
@@ -132,6 +142,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         printWriter.write(JSON.toJSONString(ResultTool.success(resultMenus)));
         printWriter.flush();
         printWriter.close();
+
+        //缓存处理
+        /*Cache cache = cacheManager.getCache("JWT");
+        cache.put(jwtUser.getId(), JWTTokenUtils.TOKEN_HEADER + token);
+        System.out.println(cache.get(jwtUser.getId()));*/
     }
 
     /**
@@ -149,12 +164,13 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         PrintWriter printWriter = response.getWriter();
         if(failed instanceof DisabledException){
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_ACCOUNT_DISABLE)));
-//            System.out.println("LoginFilter: disable");
+//            logger.info("login failed. reason: {}.", ResultCode.USER_ACCOUNT_DISABLE.getMessage());
         } else if(failed instanceof BadCredentialsException){
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.USER_CREDENTIALS_ERROR)));
-//            System.out.println("LoginFilter: password error");
+//            logger.info("login failed. reason: {}.", ResultCode.USER_CREDENTIALS_ERROR.getMessage());
         } else{
             printWriter.write(JSON.toJSONString(ResultTool.fail(ResultCode.FAIL)));
+//            logger.info("login failed. reason: unknown reason.");
         }
         printWriter.flush();
         printWriter.close();

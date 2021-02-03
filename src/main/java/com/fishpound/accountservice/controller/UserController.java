@@ -50,4 +50,20 @@ public class UserController {
                         )
                 );
     }
+
+    /**
+     * 修改密码
+     * @param uid 用户登录id
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return
+     */
+    @PutMapping("/pwd")
+    public JsonResult alteruserPassword(@RequestBody String uid,
+                                        @RequestBody String oldPassword,
+                                        @RequestBody String newPassword)
+    {
+        return accountService.alterPassword(uid, newPassword, oldPassword) ?
+                ResultTool.success() : ResultTool.fail();
+    }
 }
