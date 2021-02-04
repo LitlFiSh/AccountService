@@ -40,6 +40,11 @@ public class AdminController {
     @Autowired
     OrderApplyService orderApplyService;
 
+    /**
+     * 根据用户ID获取用户信息
+     * @param uid 用户ID
+     * @return
+     */
     @GetMapping("/user")
     public JsonResult getUser(@RequestParam(value = "uid") String uid){
         UserInfo userInfo = userInfoService.findById(uid);
@@ -52,7 +57,6 @@ public class AdminController {
 
     /**
      * 添加用户
-     * todo 测试可用性
      * @param resultUser
      * @return
      */
@@ -67,6 +71,11 @@ public class AdminController {
         }
     }
 
+    /**
+     * 更新用户信息
+     * @param resultUser
+     * @return
+     */
     @PutMapping("/user")
     public JsonResult updateUser(@Validated @RequestBody ResultUser resultUser){
         UserInfo userInfo = createUser(resultUser, false);
@@ -74,6 +83,12 @@ public class AdminController {
         return ResultTool.success();
     }
 
+    /**
+     * 获取除当前用户外的所有用户
+     * @param request
+     * @param page
+     * @return
+     */
     @GetMapping("/users")
     public JsonResult getAllUser(HttpServletRequest request,
                                  @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -148,7 +163,8 @@ public class AdminController {
      * @return 实体类UserInfo
      */
     private UserInfo createUser(ResultUser user, boolean b){
-        if(b && userInfoService.findById(user.getId()) != null) {
+        UserInfo u = userInfoService.findById(user.getId());
+        if(b && u != null) {
             return null;
         }
         UserInfo userInfo = new UserInfo();
@@ -159,6 +175,8 @@ public class AdminController {
         account.setId(user.getId());
         if(b || (user.getPassword() != null && "".equals(user.getPassword()))) {
             account.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        } else{
+            account.setPassword(u.getAccount().getPassword());
         }
         account.setActive(true);
         account.setRole(role);
