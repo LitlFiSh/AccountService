@@ -6,6 +6,7 @@ import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.AsyncService;
 import com.fishpound.accountservice.service.DepartmentService;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
@@ -26,6 +27,8 @@ public class DeptController {
     DepartmentService departmentService;
     @Autowired
     UserInfoService userInfoService;
+    @Autowired
+    AsyncService asyncService;
 
     /**
      * 通过部门名称和月份查找部门该月所有申请单
@@ -74,6 +77,9 @@ public class DeptController {
             orderApply.setDeptLeaderSign(true);
             orderApply.setDeptLeaderSignDate(new Date());
             orderApplyService.updateOrder(orderApply);
+            asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
+                    "申请单通过通知",
+                    "编号" + orderApply.getId() + "的申请单已经通过部门审核。");
             return ResultTool.success();
         } else {
             return ResultTool.fail(ResultCode.NO_PERMISSION);
@@ -93,6 +99,9 @@ public class DeptController {
             orderApply.setStatus(0);
             orderApply.setWithdrawalReason(reason);
             orderApplyService.updateOrder(orderApply);
+            asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
+                    "申请单打回通知",
+                    "编号" + orderApply.getId() + "的申请单已被打回；打回原因：" + orderApply.getWithdrawalReason());
             return ResultTool.success();
         } else {
             return ResultTool.fail(ResultCode.NO_PERMISSION);

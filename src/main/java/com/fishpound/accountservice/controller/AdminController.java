@@ -101,7 +101,7 @@ public class AdminController {
      * @param file
      * @return
      */
-    @PostMapping("/batchAdd")
+    @PostMapping("/user/batchAdd")
     public JsonResult batchAdduser(@RequestParam(value = "file") MultipartFile file){
         List<Map> userList = FileTools.importExcel(file);
         return ResultTool.success(userInfoService.batchAddUser(userList));
@@ -112,7 +112,7 @@ public class AdminController {
      * @param page
      * @return
      */
-    @GetMapping("/deleted")
+    @GetMapping("/order/deleted")
     public JsonResult getDeletedOrder(@RequestParam(value = "page", defaultValue = "1") Integer page){
         return ResultTool.success(orderApplyService.findDeleted(page));
     }
@@ -122,7 +122,7 @@ public class AdminController {
      * @param id 申请单id
      * @return
      */
-    @PutMapping("/reduct/{id}")
+    @PutMapping("/order/reduct/{id}")
     public JsonResult reductOrder(@PathVariable(value = "id") String id){
         OrderApply orderApply = orderApplyService.findOne(id);
         orderApply.setStatus(1);
@@ -134,7 +134,7 @@ public class AdminController {
      * 下载用户导入模板文件
      * @param response
      */
-    @GetMapping("/template")
+    @GetMapping("/user/template")
     public void downloadTemplate(HttpServletResponse response) {
         try {
             response.setContentType("application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

@@ -5,6 +5,7 @@ import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.AsyncService;
 import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class InstController {
     OrderApplyService orderApplyService;
     @Autowired
     UserInfoService userInfoService;
+    @Autowired
+    AsyncService asyncService;
 
     @GetMapping("/orders")
     public JsonResult getAllMonth(@RequestParam(value = "date")String date,
@@ -58,6 +61,9 @@ public class InstController {
         }
         orderApply.setStatus(2);
         orderApplyService.updateOrder(orderApply);
+        asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
+                "申请单通过通知",
+                "编号" + orderApply.getId() + "的申请单已经通过审核。");
         return ResultTool.success();
     }
 
@@ -73,6 +79,9 @@ public class InstController {
         orderApply.setStatus(0);
         orderApply.setWithdrawalReason(reason);
         orderApplyService.updateOrder(orderApply);
+        asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
+                "申请单打回通知",
+                "编号" + orderApply.getId() + "的申请单已被打回；打回原因：" + orderApply.getWithdrawalReason());
         return ResultTool.success();
     }
 }

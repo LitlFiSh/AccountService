@@ -20,10 +20,10 @@ public class Notice {
     private String content;
 
     @Column(name = "state")
-    private Boolean state;
+    private Boolean state = true;
 
     @Column(name = "time")
-    private Date time;
+    private Date time = new Date();
 
     @Column(name = "oid")
     private String oid;
@@ -86,6 +86,22 @@ public class Notice {
     }
 
     public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public Notice() {
+    }
+
+    public Notice(String title, String content, String oid) {
+        this.title = title;
+        this.content = content;
+        this.oid = oid;
+    }
+
+    public Notice(String title, String content, String oid, UserInfo userInfo) {
+        this.title = title;
+        this.content = content;
+        this.oid = oid;
         this.userInfo = userInfo;
     }
 }

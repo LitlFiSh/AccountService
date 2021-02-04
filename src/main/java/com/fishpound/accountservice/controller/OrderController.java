@@ -9,6 +9,7 @@ import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -40,7 +41,6 @@ public class OrderController {
     @Cacheable(cacheNames = "order")
     public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
-        System.out.println("searching...");
         OrderApply orderApply = orderApplyService.findOne(id);
         return ResultTool.success(orderApply);
     }
@@ -68,13 +68,24 @@ public class OrderController {
      * @return
      */
     @PutMapping()
+    @CachePut(cacheNames = "order")
     public JsonResult updateOrder(HttpServletRequest request,
                                   @Validated @RequestBody OrderApply orderApply)
     {
+        OrderApply o = orderApplyService.findOne(orderApply.getId());
+        if(o.getStatus() != 0){
+            return ResultTool.fail("申请单状态错误，不可修改");
+        }
         if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
         }
-        //todo 更新申请单的通知
+        if(o.getWithdrawalReason() != null || "".equals(o.getWithdrawalReason())){
+            //被打回的申请单重新提交
+            orderApply.setWithdrawalReason("");
+            asyncService.createNoticeToDeptLead(orderApply.getUid(), orderApply.getId(),
+                    "申请单重新提交通知",
+                    "申请人" + orderApply.getApplyUser() + "重新提交了申请单");
+        }
         Date date = new Date();
         orderApply.setApplyDate(date);
         orderApplyService.updateOrder(orderApply);
@@ -82,10 +93,14 @@ public class OrderController {
     }
 
     @PutMapping("/recall")
+    @CachePut(cacheNames = "order")
     public JsonResult recallOrder(HttpServletRequest request,
                                   @RequestParam(value = "id") String id)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply.getStatus() != 1){
+            return ResultTool.fail("申请单状态错误，撤回失败");
+        }
         if(!equal(request, orderApply.getId())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
         }
