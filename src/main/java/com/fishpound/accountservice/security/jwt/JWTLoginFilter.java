@@ -62,7 +62,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 //        System.out.println("login process...");
-        logger.info("login filter start");
+//        logger.info("login filter start");
         String username = "";
         String password = "";
 //        username = httpServletRequest.getParameter("username");

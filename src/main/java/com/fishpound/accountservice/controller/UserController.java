@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -53,16 +55,15 @@ public class UserController {
 
     /**
      * 修改密码
-     * @param uid 用户登录id
-     * @param oldPassword 旧密码
-     * @param newPassword 新密码
+     * @param formMap
      * @return
      */
     @PutMapping("/pwd")
-    public JsonResult alteruserPassword(@RequestBody String uid,
-                                        @RequestBody String oldPassword,
-                                        @RequestBody String newPassword)
+    public JsonResult alteruserPassword(@RequestBody Map<String, String> formMap)
     {
+        String uid = formMap.get("uid");
+        String newPassword = formMap.get("newPassword");
+        String oldPassword = formMap.get("oldPassword");
         return accountService.alterPassword(uid, newPassword, oldPassword) ?
                 ResultTool.success() : ResultTool.fail();
     }
