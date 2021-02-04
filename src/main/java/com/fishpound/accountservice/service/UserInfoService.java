@@ -10,6 +10,7 @@ public interface UserInfoService {
     UserInfo findById(String id);
     boolean save(UserInfo userInfo);
     boolean delete(UserInfo userInfo);
+    Map<String, Object> findAllExcept(String uid, Integer page);
     List<UserInfo> findByRoleAndDepartment(Integer rid, String deptName);
     Map<String, Object> batchAddUser(List<Map> userList);
 }

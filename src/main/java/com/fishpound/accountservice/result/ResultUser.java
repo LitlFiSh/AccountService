@@ -8,19 +8,19 @@ public class ResultUser {
     private String username;
     private String department;
     private String password;
-    private Integer role;
+    private String role;
 
     public ResultUser() {
     }
 
-    public ResultUser(String id, String username, String department, Integer role) {
+    public ResultUser(String id, String username, String department, String role) {
         this.id = id;
         this.username = username;
         this.department = department;
         this.role = role;
     }
 
-    public ResultUser(String id, String username, String department, String password, Integer role) {
+    public ResultUser(String id, String username, String department, String password, String role) {
         this.id = id;
         this.username = username;
         this.department = department;
@@ -52,11 +52,11 @@ public class ResultUser {
         this.department = department;
     }
 
-    public Integer getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

@@ -2,7 +2,6 @@ package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.result.JsonResult;
-import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.DepartmentService;
@@ -18,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
@@ -40,6 +40,16 @@ public class AdminController {
     @Autowired
     OrderApplyService orderApplyService;
 
+    @GetMapping("/user")
+    public JsonResult getUser(@RequestParam(value = "uid") String uid){
+        UserInfo userInfo = userInfoService.findById(uid);
+        ResultUser user = new ResultUser(userInfo.getId(),
+                userInfo.getUsername(),
+                userInfo.getDepartment().getDeptName(),
+                userInfo.getAccount().getRole().getRoleDescription());
+        return ResultTool.success(user);
+    }
+
     /**
      * 添加用户
      * todo 测试可用性
@@ -47,28 +57,28 @@ public class AdminController {
      * @return
      */
     @PostMapping("/user")
-    public JsonResult adduser(@Validated @RequestBody ResultUser resultUser){
-        if(userInfoService.findById(resultUser.getId()) != null){
-            return ResultTool.fail(ResultCode.USER_ACCOUNT_ALREADY_EXIST);
+    public JsonResult addUser(@Validated @RequestBody ResultUser resultUser){
+        UserInfo userInfo = createUser(resultUser, true);
+        if(userInfo != null){
+            userInfoService.save(userInfo);
+            return ResultTool.success();
+        } else{
+            return ResultTool.fail("用户ID已存在");
         }
-        UserInfo userInfo = new UserInfo();
-        Account account = new Account();
-        Department department = departmentService.findByDeptName(resultUser.getDepartment());
-        Role role = roleService.findById(resultUser.getRole());
+    }
 
-        account.setId(resultUser.getId());
-        account.setPassword(bCryptPasswordEncoder.encode(resultUser.getPassword()));
-        account.setActive(true);
-        account.setRole(role);
-
-        userInfo.setId(resultUser.getId());
-        userInfo.setUsername(resultUser.getUsername());
-        userInfo.setDepartment(department);
-        userInfo.setAccount(account);
-
+    @PutMapping("/user")
+    public JsonResult updateUser(@Validated @RequestBody ResultUser resultUser){
+        UserInfo userInfo = createUser(resultUser, false);
         userInfoService.save(userInfo);
-
         return ResultTool.success();
+    }
+
+    @GetMapping("/users")
+    public JsonResult getAllUser(HttpServletRequest request,
+                                 @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        return ResultTool.success(userInfoService.findAllExcept(request.getAttribute("user").toString(), page));
     }
 
     /**
@@ -129,5 +139,35 @@ public class AdminController {
             e.printStackTrace();
             response.setStatus(404);
         }
+    }
+
+    /**
+     * 通过 ResultUser 类生成实体类 UserInfo
+     * @param user ResultUser类
+     * @param b 是否新建用户
+     * @return 实体类UserInfo
+     */
+    private UserInfo createUser(ResultUser user, boolean b){
+        if(b && userInfoService.findById(user.getId()) != null) {
+            return null;
+        }
+        UserInfo userInfo = new UserInfo();
+        Account account = new Account();
+        Department department = departmentService.findByDeptName(user.getDepartment());
+        Role role = roleService.findByDescription(user.getRole());
+
+        account.setId(user.getId());
+        if(b || (user.getPassword() != null && "".equals(user.getPassword()))) {
+            account.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
+        account.setActive(true);
+        account.setRole(role);
+
+        userInfo.setId(user.getId());
+        userInfo.setUsername(user.getUsername());
+        userInfo.setDepartment(department);
+        userInfo.setAccount(account);
+
+        return userInfo;
     }
 }

@@ -46,7 +46,7 @@ public class UserController {
                         userInfo.getId(),
                         userInfo.getUsername(),
                         user_department.getDeptName(),
-                        user_role.getId()
+                        user_role.getRoleDescription()
                         )
                 );
     }

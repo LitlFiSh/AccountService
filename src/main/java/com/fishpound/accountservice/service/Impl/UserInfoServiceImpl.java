@@ -5,10 +5,14 @@ import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.repository.UserInfoRepository;
+import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.DepartmentService;
 import com.fishpound.accountservice.service.RoleService;
 import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.tools.PageTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +52,28 @@ public class UserInfoServiceImpl implements UserInfoService{
     public boolean delete(UserInfo userInfo) {
         userInfoRepository.delete(userInfo);
         return true;
+    }
+
+    @Override
+    public Map<String, Object> findAllExcept(String uid, Integer page) {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ResultUser> resultUserList = new ArrayList<>();
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        Page<UserInfo> users = userInfoRepository.findAllByIdNot(uid, pageTools.sortSingle());
+        List<UserInfo> userInfoList = users.getContent();
+        for(UserInfo user : userInfoList){
+            ResultUser resultUser = new ResultUser(user.getId(),
+                    user.getUsername(),
+                    user.getDepartment().getDeptName(),
+                    user.getAccount().getRole().getRoleDescription());
+            resultUserList.add(resultUser);
+        }
+        resultMap.put("totalPages", users.getTotalPages());
+        resultMap.put("totalElements", users.getTotalElements());
+        resultMap.put("size", users.getSize());
+        resultMap.put("number", users.getNumber());
+        resultMap.put("content", resultUserList);
+        return resultMap;
     }
 
     @Override
