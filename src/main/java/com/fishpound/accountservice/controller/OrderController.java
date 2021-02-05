@@ -101,7 +101,7 @@ public class OrderController {
         if(orderApply.getStatus() != 1){
             return ResultTool.fail("申请单状态错误，撤回失败");
         }
-        if(!equal(request, orderApply.getId())){
+        if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
         }
         orderApply.setStatus(0);
