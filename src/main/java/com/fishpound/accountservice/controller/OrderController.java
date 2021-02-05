@@ -19,8 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -95,8 +99,9 @@ public class OrderController {
     @PutMapping("/recall")
     @CachePut(cacheNames = "order")
     public JsonResult recallOrder(HttpServletRequest request,
-                                  @RequestParam(value = "id") String id)
+                                  @RequestBody Map<String, String> map)
     {
+        String id = map.get("id");
         OrderApply orderApply = orderApplyService.findOne(id);
         if(orderApply.getStatus() != 1){
             return ResultTool.fail("申请单状态错误，撤回失败");
