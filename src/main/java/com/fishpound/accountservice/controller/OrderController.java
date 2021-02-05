@@ -9,8 +9,6 @@ import com.fishpound.accountservice.service.OrderApplyService;
 import com.fishpound.accountservice.service.UserInfoService;
 import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -42,7 +40,6 @@ public class OrderController {
      * @return
      */
     @GetMapping()
-    @Cacheable(cacheNames = "order")
     public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
@@ -72,7 +69,6 @@ public class OrderController {
      * @return
      */
     @PutMapping()
-    @CachePut(cacheNames = "order")
     public JsonResult updateOrder(HttpServletRequest request,
                                   @Validated @RequestBody OrderApply orderApply)
     {
@@ -97,7 +93,6 @@ public class OrderController {
     }
 
     @PutMapping("/recall")
-    @CachePut(cacheNames = "order")
     public JsonResult recallOrder(HttpServletRequest request,
                                   @RequestBody Map<String, String> map)
     {
