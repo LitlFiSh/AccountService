@@ -8,14 +8,12 @@ import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.result.ResultUser;
-import com.fishpound.accountservice.service.AccountService;
-import com.fishpound.accountservice.service.DepartmentService;
-import com.fishpound.accountservice.service.RoleService;
-import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -31,6 +29,8 @@ public class UserController {
     RoleService roleService;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    CacheService cacheService;
 
     /**
      * 通过用户 id 查找用户信息并返回
@@ -53,6 +53,18 @@ public class UserController {
                 );
     }
 
+    @GetMapping("/logout")
+    public JsonResult logout(HttpServletRequest request,
+                             @RequestParam(value = "uid") String uid)
+    {
+        if(request.getAttribute("user").equals(uid)){
+            cacheService.invalidateCache("token", uid);
+            return ResultTool.success();
+        } else{
+            return ResultTool.fail("注销用户非当前登录用户");
+        }
+    }
+
     /**
      * 修改密码
      * @param formMap
@@ -64,7 +76,18 @@ public class UserController {
         String uid = formMap.get("uid");
         String newPassword = formMap.get("newPassword");
         String oldPassword = formMap.get("oldPassword");
-        return accountService.alterPassword(uid, newPassword, oldPassword) ?
-                ResultTool.success() : ResultTool.fail();
+        if(accountService.alterPassword(uid, newPassword, oldPassword)){
+            cacheService.invalidateCache("token", uid);
+            return ResultTool.success();
+        } else{
+            return ResultTool.fail();
+        }
+    }
+
+    @GetMapping("/invalidate")
+    public JsonResult invalidateToken(@RequestParam(value = "uid") String uid)
+    {
+        cacheService.setCacheValue("token", uid, "123");
+        return ResultTool.success();
     }
 }

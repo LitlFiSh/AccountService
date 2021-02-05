@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.CacheService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,9 +33,17 @@ import java.util.List;
  */
 public class JWTFilter extends BasicAuthenticationFilter {
     private final static Logger logger = LoggerFactory.getLogger(JWTFilter.class);
+    private CacheService cacheService;
 
-    public JWTFilter(AuthenticationManager authenticationManager) {
+    private void setCacheService(CacheService cacheService){
+        this.cacheService = cacheService;
+    }
+
+    public JWTFilter(AuthenticationManager authenticationManager,
+                     CacheService cacheService)
+    {
         super(authenticationManager);
+        setCacheService(cacheService);
     }
 
     @Override
@@ -55,14 +65,37 @@ public class JWTFilter extends BasicAuthenticationFilter {
             printWriter.close();
             return ;
         }
+        token = token.replace(JWTTokenUtils.TOKEN_PREFIX, "");
         Claims claims;
         try{
-            token = token.replace(JWTTokenUtils.TOKEN_PREFIX, "");
             claims = Jwts.parserBuilder()
                     .setSigningKey(JWTTokenUtils.TOKEN)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+            //缓存校验，检验缓存与传过来的token是否一致
+            Element element = cacheService.getCacheElement("token", claims.getSubject());
+            if(element != null){
+                if(!element.getObjectValue().equals(token)){
+                    //token不一致
+                    printWriter = response.getWriter();
+                    JsonResult result = ResultTool.fail(ResultCode.TOKEN_NOT_VALID);
+                    printWriter.write(JSON.toJSONString(result));
+                    printWriter.flush();
+                    printWriter.close();
+                    return ;
+                }
+            } else{
+                //缓存中找不到对应token
+                printWriter = response.getWriter();
+                JsonResult result = ResultTool.fail(ResultCode.TOKEN_NOT_VALID);
+                printWriter.write(JSON.toJSONString(result));
+                printWriter.flush();
+                printWriter.close();
+                return ;
+            }
+            //token过期时间验证，如果token过期时间小于 10分钟，则签发新token，在缓存中覆盖原有token
             Date now = new Date();
             if((claims.getExpiration().getTime() - now.getTime()) < 10*60*1000){
                 String authoritiesStr = (String) claims.get("authorities");
@@ -70,6 +103,7 @@ public class JWTFilter extends BasicAuthenticationFilter {
                 String tokenNew = JWTTokenUtils.createToken(claims.getSubject(), authorities);
                 response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
                 response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + tokenNew);
+                cacheService.setCacheValue("token", claims.getSubject(), tokenNew);
             }
         } catch(JwtException e){
             printWriter = response.getWriter();
@@ -79,19 +113,11 @@ public class JWTFilter extends BasicAuthenticationFilter {
             printWriter.close();
             return ;
         }
-//        Claims claims = JWTTokenUtils.getTokenBody(token);
-//        if(!claims.getExpiration().before(new Date())){
-//            JsonResult result = ResultTool.fail(ResultCode.USER_NOT_LOGIN);
-//            printWriter.write(JSON.toJSONString(result));
-//            printWriter.flush();
-//            printWriter.close();
-//            return ;
-//        }
-        String username = claims.getSubject();
-        request.setAttribute("user", username);
+        String uid = claims.getSubject();
+        request.setAttribute("user", uid);
         String authoritiesStr = (String) claims.get("authorities");
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesStr);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(uid, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         super.doFilterInternal(request, response, chain);
     }

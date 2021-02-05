@@ -7,10 +7,10 @@ import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.CacheService;
 import com.fishpound.accountservice.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -21,7 +21,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,21 +41,28 @@ import java.util.List;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     private final static Logger logger = LoggerFactory.getLogger(JWTLoginFilter.class);
     private RoleService roleService;
-    @Resource
-    private CacheManager cacheManager;
+    private CacheService cacheService;
 
     /**
      * 用 setter 注入 Service
      * @param roleService
      */
-    public void setRoleService(RoleService roleService) {
+    private void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
+    private void setCacheService(CacheService cacheService){
+        this.cacheService = cacheService;
+    }
 
-    public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager, RoleService roleService) {
+    public JWTLoginFilter(String defaultFilterProcessesUrl,
+                          AuthenticationManager authenticationManager,
+                          RoleService roleService,
+                          CacheService cacheService)
+    {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
         setRoleService(roleService);
         setAuthenticationManager(authenticationManager);
+        setCacheService(cacheService);
     }
 
     @Override
@@ -144,9 +150,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         printWriter.close();
 
         //缓存处理
-        /*Cache cache = cacheManager.getCache("JWT");
-        cache.put(jwtUser.getId(), JWTTokenUtils.TOKEN_HEADER + token);
-        System.out.println(cache.get(jwtUser.getId()));*/
+        cacheService.setCacheValue("token",jwtUser.getId(), token);
     }
 
     /**
