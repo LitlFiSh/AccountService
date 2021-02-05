@@ -30,9 +30,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * 登录请求过滤器，当接收到登录请求时进入这里
@@ -118,7 +116,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         PrintWriter printWriter = response.getWriter();
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         List<Menu> menus = new ArrayList<>();
-        Role role;
+        Map<String, Object> resultMap = new HashMap<>();
+        Role role = null;
         for(GrantedAuthority authority : authorities){
             String roleName = authority.getAuthority().replace("ROLE_", "");
             role = roleService.findByRoleName(roleName);
@@ -145,7 +144,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         for(Menu menu : menus){
             resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
         }
-        printWriter.write(JSON.toJSONString(ResultTool.success(resultMenus)));
+        resultMap.put("role", role);
+        resultMap.put("menu", resultMenus);
+        printWriter.write(JSON.toJSONString(ResultTool.success(resultMap)));
         printWriter.flush();
         printWriter.close();
 
