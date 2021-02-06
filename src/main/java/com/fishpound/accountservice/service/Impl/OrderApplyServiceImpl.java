@@ -45,13 +45,15 @@ public class OrderApplyServiceImpl implements OrderApplyService {
 //        System.out.println(id);
         orderApply.setId(id);
         List<OrderList> orderLists = orderApply.getOrderLists();
-        int no = 0;
+        int no = 1;
         for(OrderList orderList : orderLists){
             orderList.setId(id + new DecimalFormat("00").format(no++));
             orderList.setOrderApply(orderApply);
         }
         orderApply.setOrderLists(orderLists);
         orderApply.setStatus(1);
+        orderApply.setCreateTime(new Date());
+        orderApply.setUpdateTime(new Date());
         orderApplyRepository.save(orderApply);
         return id;
     }
@@ -69,10 +71,11 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         for(int i = 0; i < lists.size(); i++){
             OrderList orderList = lists.get(i);
             if(orderList.getId() == null || "".equals(orderList.getId())){
-                orderList.setId(orderApply.getId() + "0" + n++);
+                orderList.setId(orderApply.getId() + new DecimalFormat("00").format(n++));
                 orderList.setOrderApply(orderApply);
             }
         }
+        orderApply.setUpdateTime(new Date());
         orderApplyRepository.save(orderApply);
     }
 

@@ -36,7 +36,7 @@ public class OrderApply {
     private String fundCode;
 
     @Column(name = "apply_date")
-    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    @DateTimeFormat(pattern = "yyyy年MM月dd日")
     private Date applyDate;
 
     @NotNull(message = "总金额不能为空")
@@ -85,9 +85,12 @@ public class OrderApply {
     @Column(name = "create_time")
     private Date createTime;
 
-    @Version
     @Column(name = "update_time")
     private Date updateTime;
+
+    @Version
+    @Column(name = "version")
+    private Integer version;
 
     public String getId() {
         return id;
@@ -221,7 +224,15 @@ public class OrderApply {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+        public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

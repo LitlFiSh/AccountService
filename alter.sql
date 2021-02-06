@@ -9,3 +9,10 @@ UPDATE `demo`.`role` SET role_description = '主管院领导' WHERE id = 2;
 UPDATE `demo`.`role` SET role_description = '部门领导' WHERE id = 3;
 UPDATE `demo`.`role` SET role_description = '普通用户' WHERE id = 4;
 -- 2021/02/01
+-- -----
+ALTER TABLE `demo`.`orderapply`
+ADD COLUMN `version` bigint NOT NULL COMMENT '申请单版本（乐观锁）' AFTER `update_time`;
+ALTER TABLE `demo`.`orderapply`
+MODIFY COLUMN `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间（自动维护）' AFTER `withdrawal_reason`,
+MODIFY COLUMN `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间（自动维护）' AFTER `create_time`;
+-- 2021/02/06
