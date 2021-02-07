@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/inst")
@@ -50,8 +51,9 @@ public class InstController {
 
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
-                                   @RequestParam(value = "id") String id)
+                                   @RequestBody Map<String, String> map)
     {
+        String id = map.get("id");
         if(id == null && id.equals("")){
             return ResultTool.fail(ResultCode.PARAM_IS_NULL);
         }
@@ -69,9 +71,9 @@ public class InstController {
 
     @PutMapping("/deny")
     public JsonResult denyOrder(HttpServletRequest request,
-                                @RequestParam(value = "id") String id,
-                                @RequestParam(value = "reason") String reason)
+                                @RequestBody Map<String, String> map)
     {
+        String id = map.get("id"), reason = map.get("reason");
         OrderApply orderApply = orderApplyService.findOne(id);
         if(orderApply.getStatus() != 2){
             return ResultTool.fail("不可以申请单做此操作");

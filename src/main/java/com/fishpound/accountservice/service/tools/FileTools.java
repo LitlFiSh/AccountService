@@ -30,13 +30,22 @@ public class FileTools {
      */
     public static void generateExcel(HttpServletResponse response, OrderApply orderApply, Boolean createSignPath) throws IOException
     {
+        // n: 当前表格行数
         int n = 0, no = 1;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(orderApply.getApplyDate());
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("设备采购申请单");
 
-        //样式
+        /*样式
+         * T：标题样式
+         * C：内容样式
+         * c：居中
+         * l：左对齐
+         * r：右对齐
+         * b：底部对齐
+         * r：红色
+         */
         HSSFCellStyle styleT = createStyle(workbook, (short)18, HSSFColor.HSSFColorPredefined.BLACK.getIndex(), true,
                 HorizontalAlignment.CENTER, VerticalAlignment.CENTER, false);
         HSSFCellStyle styleClb = createStyle(workbook, (short)11, HSSFColor.HSSFColorPredefined.BLACK.getIndex(), false,
@@ -137,6 +146,23 @@ public class FileTools {
             cell = rowList.createCell(l++);
             cell.setCellValue(orderList.getNewUser());
             cell.setCellStyle(styleCcc);
+        }
+        //判断设备列表数量，添加空行。
+        switch(orderApply.getOrderLists().size()){
+            case 1:
+                setBlankRow(sheet.createRow(n++), styleCcc);
+            case 2:
+                setBlankRow(sheet.createRow(n++), styleCcc);
+            case 3:
+                setBlankRow(sheet.createRow(n++), styleCcc);
+            case 4:
+                setBlankRow(sheet.createRow(n++), styleCcc);
+            case 5:
+                setBlankRow(sheet.createRow(n++), styleCcc);
+            case 6:
+                break;
+            default:
+                break;
         }
         //汇总
         HSSFRow rowSum = sheet.createRow(n++);
@@ -276,7 +302,6 @@ public class FileTools {
         style.setAlignment(hAlign);
         style.setVerticalAlignment(vAlign);
         style.setWrapText(true);
-
         return style;
     }
 
@@ -291,6 +316,12 @@ public class FileTools {
         RegionUtil.setBorderBottom(borderStyle, cellRangeAddress, sheet);
         RegionUtil.setBorderLeft(borderStyle, cellRangeAddress, sheet);
         RegionUtil.setBorderRight(borderStyle, cellRangeAddress, sheet);
+    }
+
+    private static void setBlankRow(HSSFRow row, CellStyle style){
+        for(int i = 0; i < 10; i++){
+            row.createCell(i).setCellStyle(style);
+        }
     }
 
     /**

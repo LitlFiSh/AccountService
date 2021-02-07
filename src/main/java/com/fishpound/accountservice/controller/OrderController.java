@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
 
+@Validated
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -53,7 +55,7 @@ public class OrderController {
      * @return
      */
     @PostMapping()
-    public JsonResult addOrder(@Validated @RequestBody OrderApply orderApply){
+    public JsonResult addOrder(@Valid @RequestBody OrderApply orderApply){
         Date date = new Date();
         orderApply.setApplyDate(date);
         String oid = orderApplyService.addOrder(orderApply);
@@ -70,7 +72,7 @@ public class OrderController {
      */
     @PutMapping()
     public JsonResult updateOrder(HttpServletRequest request,
-                                  @Validated @RequestBody OrderApply orderApply)
+                                  @Valid @RequestBody OrderApply orderApply)
     {
         OrderApply o = orderApplyService.findOne(orderApply.getId());
         if(o.getStatus() != 0){

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dept")
@@ -63,8 +64,9 @@ public class DeptController {
 
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
-                                   @RequestParam(value = "id") String id)
+                                   @RequestBody Map<String, String> map)
     {
+        String id = map.get("id");
         if(id == null && id.equals("")){
             return ResultTool.fail(ResultCode.PARAM_IS_NULL);
         }
@@ -88,9 +90,9 @@ public class DeptController {
 
     @PutMapping("/deny")
     public JsonResult denyOrder(HttpServletRequest request,
-                                @RequestParam(value = "id") String id,
-                                @RequestParam(value = "reason") String reason)
+                                @RequestBody Map<String, String> map)
     {
+        String id = map.get("id"), reason = map.get("reason");
         if(checkAuthentication(request, id)){
             OrderApply orderApply = orderApplyService.findOne(id);
             if(orderApply.getStatus() != 1){
