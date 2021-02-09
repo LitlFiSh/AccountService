@@ -3,6 +3,7 @@ package com.fishpound.accountservice.controller;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
+import com.fishpound.accountservice.result.ResultOrder;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.AsyncService;
 import com.fishpound.accountservice.service.OrderApplyService;
@@ -45,7 +46,8 @@ public class OrderController {
     public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
-        return ResultTool.success(orderApply);
+        ResultOrder order = new ResultOrder(orderApply);
+        return ResultTool.success(order);
     }
 
     /**
