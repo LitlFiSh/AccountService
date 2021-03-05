@@ -74,6 +74,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public JsonResult handlerException(Exception e){
-        return ResultTool.fail();
+        return ResultTool.fail("未知错误");
     }
 }

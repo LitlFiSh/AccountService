@@ -40,11 +40,13 @@ public class UserController {
     @GetMapping("/info")
     public JsonResult getUserInfo(@RequestParam String id){
         UserInfo userInfo = userInfoService.findById(id);
+        if(userInfo == null){
+            return ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
+        }
         Account user_account = userInfo.getAccount();
         Role user_role = user_account.getRole();
         Department user_department = userInfo.getDepartment();
-        return userInfo == null ? ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST) :
-                ResultTool.success(new ResultUser(
+        return ResultTool.success(new ResultUser(
                         userInfo.getId(),
                         userInfo.getUsername(),
                         user_department.getDeptName(),
@@ -53,6 +55,12 @@ public class UserController {
                 );
     }
 
+    /**
+     * 退出登录，销毁缓存中的 token
+     * @param request
+     * @param uid
+     * @return
+     */
     @GetMapping("/logout")
     public JsonResult logout(HttpServletRequest request,
                              @RequestParam(value = "uid") String uid)

@@ -4,7 +4,6 @@ package com.fishpound.accountservice.security;
 //import com.fishpound.accountservice.security.handler.LoginSuccessHandler;
 //import com.fishpound.accountservice.security.handler.CustomizeAuthenticationEntryPoint;
 import com.fishpound.accountservice.security.handler.CustomizeAccessDeniedHandler;
-import com.fishpound.accountservice.security.handler.LogoutSuccessHandler;
 import com.fishpound.accountservice.security.jwt.JWTFilter;
 import com.fishpound.accountservice.security.jwt.JWTLoginFilter;
 import com.fishpound.accountservice.service.CacheService;
@@ -46,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    @Autowired   //登录失败处理逻辑
 //            LoginFailureHandler loginFailureHandler;
 //
-    @Autowired   //登出成功处理逻辑
-            LogoutSuccessHandler logoutSuccessHandler;
+//    @Autowired   //登出成功处理逻辑
+//            LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired   //权限不足处理逻辑
             CustomizeAccessDeniedHandler accessDeniedHandler;
@@ -87,11 +86,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JWTFilter(authenticationManager(), cacheService))
                 //登出处理
-                .logout()
-                .logoutUrl("/user/logout")
-                .logoutSuccessHandler(logoutSuccessHandler)
-                //登入成功以及失败的处理
-                .and()
+//                .logout()
+//                .logoutUrl("/user/logout")
+//                .logoutSuccessHandler(logoutSuccessHandler)
+//                登入成功以及失败的处理
+//                .and()
                 .formLogin().permitAll()
 //                .successHandler(loginSuccessHandler)
 //                .failureHandler(loginFailureHandler)

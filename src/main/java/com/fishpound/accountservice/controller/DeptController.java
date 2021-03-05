@@ -51,6 +51,12 @@ public class DeptController {
         }
     }
 
+    /**
+     * 查找部门中待审批的申请单
+     * @param request
+     * @param page
+     * @return
+     */
     @GetMapping("/list")
     public JsonResult getList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -60,6 +66,12 @@ public class DeptController {
         return ResultTool.success(orderApplyService.findByDepartmentAndStatus(user.getDepartment().getDeptName(), 1, page));
     }
 
+    /**
+     * 审批通过该申请单
+     * @param request
+     * @param map
+     * @return
+     */
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
                                    @RequestBody Map<String, String> map)
@@ -70,6 +82,9 @@ public class DeptController {
         }
         if(checkAuthentication(request, id)){
             OrderApply orderApply = orderApplyService.findOne(id);
+            if(orderApply == null){
+                return ResultTool.fail("找不到该申请单");
+            }
             if(orderApply.getStatus() != 1){
                 return ResultTool.fail("不可以对申请单做此操作");
             }
@@ -86,13 +101,25 @@ public class DeptController {
         }
     }
 
+    /**
+     * 打回该申请单
+     * @param request
+     * @param map
+     * @return
+     */
     @PutMapping("/deny")
     public JsonResult denyOrder(HttpServletRequest request,
                                 @RequestBody Map<String, String> map)
     {
         String id = map.get("id"), reason = map.get("reason");
+        if(id.equals("") || id == null || reason.equals("") || reason == null){
+            return ResultTool.fail(ResultCode.PARAM_IS_NULL);
+        }
         if(checkAuthentication(request, id)){
             OrderApply orderApply = orderApplyService.findOne(id);
+            if(orderApply == null){
+                return ResultTool.fail("找不到该申请单");
+            }
             if(orderApply.getStatus() != 1){
                 return ResultTool.fail("不可以对申请单做此操作");
             }

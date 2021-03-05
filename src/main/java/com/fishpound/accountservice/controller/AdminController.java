@@ -2,6 +2,7 @@ package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.result.JsonResult;
+import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.DepartmentService;
@@ -48,6 +49,9 @@ public class AdminController {
     @GetMapping("/user")
     public JsonResult getUser(@RequestParam(value = "uid") String uid){
         UserInfo userInfo = userInfoService.findById(uid);
+        if(userInfo == null){
+            return ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
+        }
         ResultUser user = new ResultUser(userInfo.getId(),
                 userInfo.getUsername(),
                 userInfo.getDepartment().getDeptName(),
@@ -98,13 +102,29 @@ public class AdminController {
 
     /**
      * 批量导入用户，通过传递下载的模板文件
-     * @param file
+     * @param file 文件模板
      * @return
      */
     @PostMapping("/user/batchAdd")
     public JsonResult batchAdduser(@RequestParam(value = "file") MultipartFile file){
         List<Map> userList = FileTools.importExcel(file);
         return ResultTool.success(userInfoService.batchAddUser(userList));
+    }
+
+    /**
+     * 删除一条申请单记录（将该申请单状态更改为-1）
+     * @param id 申请单id
+     * @return
+     */
+    @DeleteMapping("/order/{id}")
+    public JsonResult deleteOrder(@PathVariable(value = "id") String id){
+        OrderApply order = orderApplyService.findOne(id);
+        if(order == null){
+            return ResultTool.fail("找不到该申请单");
+        }
+        order.setStatus(-1);
+        orderApplyService.updateOrder(order);
+        return ResultTool.success();
     }
 
     /**
@@ -125,6 +145,9 @@ public class AdminController {
     @PutMapping("/order/reduct/{id}")
     public JsonResult reductOrder(@PathVariable(value = "id") String id){
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply == null){
+            return ResultTool.fail("找不到申请单");
+        }
         orderApply.setStatus(1);
         orderApplyService.updateOrder(orderApply);
         return ResultTool.success();

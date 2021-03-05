@@ -1,5 +1,6 @@
 package com.fishpound.accountservice.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
@@ -19,10 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -46,6 +44,9 @@ public class OrderController {
     public JsonResult getOneOrder(@RequestParam(value = "id") String id)
     {
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply == null){
+            return ResultTool.fail("找不到申请单");
+        }
         ResultOrder order = new ResultOrder(orderApply);
         return ResultTool.success(order);
     }
@@ -77,13 +78,16 @@ public class OrderController {
                                   @Valid @RequestBody OrderApply orderApply)
     {
         OrderApply o = orderApplyService.findOne(orderApply.getId());
+        if(o == null){
+            return ResultTool.fail("找不到申请单");
+        }
         if(o.getStatus() != 0){
             return ResultTool.fail("申请单状态错误，不可修改");
         }
         if(!equal(request, orderApply.getUid())){
             return ResultTool.fail(ResultCode.NO_PERMISSION);
         }
-        if(o.getWithdrawalReason() != null || "".equals(o.getWithdrawalReason())){
+        if(o.getWithdrawalReason() != null || !"".equals(o.getWithdrawalReason())){
             //被打回的申请单重新提交
             orderApply.setWithdrawalReason("");
             asyncService.createNoticeToDeptLead(orderApply.getUid(), orderApply.getId(),
@@ -96,12 +100,21 @@ public class OrderController {
         return ResultTool.success();
     }
 
+    /**
+     * 撤回申请单(将status改为 0，申请单状态改为已保存(可编辑))
+     * @param request
+     * @param map
+     * @return
+     */
     @PutMapping("/recall")
     public JsonResult recallOrder(HttpServletRequest request,
                                   @RequestBody Map<String, String> map)
     {
         String id = map.get("id");
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply == null){
+            return ResultTool.fail("找不到申请单");
+        }
         if(orderApply.getStatus() != 1){
             return ResultTool.fail("申请单状态错误，撤回失败");
         }
@@ -155,11 +168,19 @@ public class OrderController {
     {
         OrderApply orderApply = orderApplyService.findOne(id);
         try {
+            PrintWriter writer = response.getWriter();
+            if(orderApply == null){
+                writer.write(JSON.toJSONString(ResultTool.fail("找不到申请单")));
+                writer.flush();
+                writer.close();
+                return;
+            }
             FileTools.generateExcel(response, orderApply, true);
         }
         catch(IOException e){
 //            return ResultTool.fail();
 //            System.out.println(e.getMessage());
+            response.setStatus(404);
             e.printStackTrace();
         }
 //        return ResultTool.success();

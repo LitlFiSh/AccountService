@@ -1,7 +1,6 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderApply;
-import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
@@ -26,6 +25,12 @@ public class InstController {
     @Autowired
     AsyncService asyncService;
 
+    /**
+     * 通过月份查找当月所有申请单
+     * @param date
+     * @param page
+     * @return
+     */
     @GetMapping("/orders")
     public JsonResult getAllMonth(@RequestParam(value = "date")String date,
                                   @RequestParam(value = "page", defaultValue = "1")Integer page)
@@ -40,15 +45,25 @@ public class InstController {
         }
     }
 
+    /**
+     * 查找所有部门待审批的申请单(status=2,部门领导已审批)
+     * @param request
+     * @param page
+     * @return
+     */
     @GetMapping("/list")
     public JsonResult getList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        String uid = request.getAttribute("user").toString();
-        UserInfo user = userInfoService.findById(uid);
         return ResultTool.success(orderApplyService.findByDepartmentAndStatus("*", 2, page));
     }
 
+    /**
+     * 审批通过
+     * @param request
+     * @param map
+     * @return
+     */
     @PutMapping("/approve")
     public JsonResult approveOrder(HttpServletRequest request,
                                    @RequestBody Map<String, String> map)
@@ -58,6 +73,9 @@ public class InstController {
             return ResultTool.fail(ResultCode.PARAM_IS_NULL);
         }
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply == null){
+            return ResultTool.fail("找不到申请单");
+        }
         if(orderApply.getStatus() != 2){
             return ResultTool.fail("不可以申请单做此操作");
         }
@@ -69,12 +87,24 @@ public class InstController {
         return ResultTool.success();
     }
 
+    /**
+     * 打回申请单
+     * @param request
+     * @param map
+     * @return
+     */
     @PutMapping("/deny")
     public JsonResult denyOrder(HttpServletRequest request,
                                 @RequestBody Map<String, String> map)
     {
         String id = map.get("id"), reason = map.get("reason");
+        if(id.equals("") || id == null || reason.equals("") || reason == null){
+            return ResultTool.fail(ResultCode.PARAM_IS_NULL);
+        }
         OrderApply orderApply = orderApplyService.findOne(id);
+        if(orderApply == null){
+            return ResultTool.fail("找不到申请单");
+        }
         if(orderApply.getStatus() != 2){
             return ResultTool.fail("不可以申请单做此操作");
         }
