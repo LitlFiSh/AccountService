@@ -89,7 +89,7 @@ public class AdminController {
      * @param page
      * @return
      */
-    @GetMapping("/users")
+    @GetMapping("/user/users")
     public JsonResult getAllUser(HttpServletRequest request,
                                  @RequestParam(value = "page", defaultValue = "1") Integer page)
     {

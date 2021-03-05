@@ -1,6 +1,5 @@
 package com.fishpound.accountservice.controller;
 
-import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -119,12 +117,9 @@ public class DeptController {
     private boolean checkAuthentication(HttpServletRequest request, String oid){
         String uid = request.getAttribute("user").toString();
         OrderApply orderApply = orderApplyService.findOne(oid);
-        Department department = departmentService.findByDeptName(orderApply.getApplyDepartment());
-        List<UserInfo> userInfoList = userInfoService.findByRoleAndDepartment(3, department.getDeptName());
-        for(UserInfo item : userInfoList){
-            if(item.getId().equals(uid)){
-                return true;
-            }
+        UserInfo user = userInfoService.findById(uid);
+        if(user.getDepartment().getDeptName().equals(orderApply.getApplyDepartment())){
+            return true;
         }
         return false;
     }
