@@ -122,17 +122,31 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             resultMap.put("role", role.getId());
             switch(role.getId()){
                 case 1:
-                    Role r1 = roleService.findById(1);
-                    menus.addAll(r1.getMenus());
+                    //管理员
+//                    Role r1 = roleService.findById(1);
+//                    menus.addAll(r1.getMenus());
+                    menus.addAll(roleService.findById(1).getMenus());
+                    menus.addAll(roleService.findById(4).getMenus());
+                    break;
                 case 2:
-                    Role r2 = roleService.findById(2);
-                    menus.addAll(r2.getMenus());
+                    //主管院领导
+//                    Role r2 = roleService.findById(2);
+//                    menus.addAll(r2.getMenus());
+                    menus.addAll(roleService.findById(2).getMenus());
+                    menus.addAll(roleService.findById(4).getMenus());
+                    break;
                 case 3:
-                    Role r3 = roleService.findById(3);
-                    menus.addAll(r3.getMenus());
+                    //部门领导
+//                    Role r3 = roleService.findById(3);
+//                    menus.addAll(r3.getMenus());
+                    menus.addAll(roleService.findById(3).getMenus());
+                    menus.addAll(roleService.findById(4).getMenus());
+                    break;
                 case 4:
-                    Role r4 = roleService.findById(4);
-                    menus.addAll(r4.getMenus());
+                    //普通用户
+//                    Role r4 = roleService.findById(4);
+//                    menus.addAll(r4.getMenus());
+                    menus.addAll(roleService.findById(4).getMenus());
                     break;
                 default:
                     break;

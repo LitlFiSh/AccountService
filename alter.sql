@@ -19,3 +19,18 @@ MODIFY COLUMN `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDA
 ALTER TABLE `demo`.`orderlist`
 MODIFY COLUMN `unit` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '单位' AFTER `configuration`;
 -- 2021/02/06
+-- -----
+insert into demo.menu (id, path, name, pid) values (32, "/listuser", "用户管理", 3);
+UPDATE demo.menu SET path = '/addUser' WHERE id = '31';
+UPDATE demo.menu SET path = '/listUser' WHERE	id = '32';
+
+delete from demo.menu where id = '4' or pid = '4';
+-- 删除了原有的审批菜单，将审批菜单分别放到部门菜单和主管菜单中，路径没有改变
+insert into menu (id, name, rid) values (4, "部门", 3);
+insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);
+insert into menu (id, path, name, pid) values (42, "/deptOrder", "查看部门申请", 4);
+
+insert into menu (id, name, rid) values (5, "主管", 2);
+insert into menu (id, path, name, pid) values (51, "/approval", "待审批", 5);
+insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有申请", 5);
+-- 2021/03/06
