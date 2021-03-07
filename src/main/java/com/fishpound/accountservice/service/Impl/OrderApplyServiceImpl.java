@@ -186,6 +186,12 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         return orderApplyRepository.findAllByApplyDepartmentAndStatus(department, status, pageTools.sortSingle());
     }
 
+    @Override
+    public Page<OrderApply> findByStatus(Integer status, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findAllByStatus(status, pageTools.sortSingle());
+    }
+
     /**
      * 查找所有已删除申请单
      * @param page

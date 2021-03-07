@@ -55,7 +55,7 @@ public class InstController {
     public JsonResult getList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        return ResultTool.success(orderApplyService.findByDepartmentAndStatus("*", 2, page));
+        return ResultTool.success(orderApplyService.findByStatus(2, page));
     }
 
     /**

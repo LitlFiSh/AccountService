@@ -15,6 +15,7 @@ public interface OrderApplyService {
     Page<OrderApply> findByMonth(Date month, Integer page);
     Page<OrderApply> findByDepartment(String department, Integer page);
     Page<OrderApply> findByDepartmentAndStatus(String department, Integer status, Integer page);
+    Page<OrderApply> findByStatus(Integer status, Integer page);
     Page<OrderApply> findDeleted(Integer page);
     void uploadFile(String id, byte[] data);
 }
