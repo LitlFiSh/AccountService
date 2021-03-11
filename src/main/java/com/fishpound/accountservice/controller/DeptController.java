@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -30,25 +32,52 @@ public class DeptController {
     AsyncService asyncService;
 
     /**
-     * 通过部门名称和月份查找部门该月所有申请单
-     * @param dept 部门名称
-     * @param date 精确到月份的日期，格式yyyy年MM月
-     * @param page 查找的页数
+     * 通过查询条件模糊查找申请单（不包括已删除申请单）
+     * @param request
+     * @param oid 申请单id
+     * @param startDate 申请日期开始范围
+     * @param endDate 申请日期结束范围
+     * @param user 申请人名称
+     * @param fundcode 采购经费代码
+     * @param page 查找页数
      * @return
      */
-    @GetMapping("/month")
-    public JsonResult getDeptMonth(@RequestParam(value = "department")String dept,
-                                  @RequestParam(value = "date")String date,
-                                  @RequestParam(value = "page", defaultValue = "1")Integer page)
+    @GetMapping("/orders")
+    public JsonResult getDeptMonth(HttpServletRequest request,
+                                   @RequestParam(value = "oid", defaultValue = "%") String oid,
+                                   @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
+                                   @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
+                                   @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                   @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
+                                   @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            Date tragetMonth = format.parse(date);
-            return ResultTool.success(orderApplyService.findByDepartmentAndMonth(dept, tragetMonth, page));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResultTool.fail("日期格式错误");
+        String uid = request.getAttribute("user").toString();
+        UserInfo userInfo = userInfoService.findById(uid);
+        Map<String, Object> params = new HashMap<>();
+        if(!"%".equals(oid)){
+            oid = "%" + oid + "%";
         }
+        if(!"%".equals(user)){
+            user = "%" + user + "%";
+        }
+        if(!"%".equals(fundcode)){
+            fundcode = "%" + fundcode + "%";
+        }
+        try{
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+        } catch(ParseException pe){
+            return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
+        }
+        params.put("id", oid);
+        params.put("department", userInfo.getDepartment().getDeptName());
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        params.put("user", user);
+        params.put("fundcode", fundcode);
+        params.put("status", -1);
+        return ResultTool.success(orderApplyService.findInCondition(params, page));
     }
 
     /**

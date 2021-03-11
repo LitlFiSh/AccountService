@@ -21,7 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Validated
@@ -145,16 +148,56 @@ public class OrderController {
     }*/
 
     /**
-     * 通过用户id获取该用户所有申请单（不包括已删除申请单）
-     * @param id 用户id
-     * @param page 查询的页码
+     * 通过用户id以及其他查询条件模糊搜索该用户所有申请单（不包括已删除申请单）
+     * @param request
+     * @param oid 申请单id
+     * @param department 部门名称
+     * @param startDate 申请日期开始范围
+     * @param endDate 申请日期结束范围
+     * @param user 申请人名称
+     * @param fundcode 采购经费代码
+     * @param page 查找页数
      * @return
      */
     @GetMapping("/orders")
-    public JsonResult getOrderByUser(@RequestParam(value = "id") String id,
+    public JsonResult getOrderByUser(HttpServletRequest request,
+                                     @RequestParam(value = "oid", defaultValue = "%") String oid,
+                                     @RequestParam(value = "applyDept", defaultValue = "%") String department,
+                                     @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
+                                     @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
+                                     @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                     @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        return ResultTool.success(orderApplyService.findByUser(id, page));
+        Map<String, Object> params = new HashMap<>();
+        String uid = request.getAttribute("user").toString();
+        if(!"%".equals(oid)){
+            oid = "%" + oid + "%";
+        }
+        if(!"%".equals(department)){
+            department = "%" + department + "%";
+        }
+        if(!"%".equals(user)){
+            user = "%" + user + "%";
+        }
+        if(!"%".equals(fundcode)){
+            fundcode = "%" + fundcode + "%";
+        }
+        try{
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+        } catch(ParseException pe){
+            return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
+        }
+        params.put("uid", uid);
+        params.put("id", oid);
+        params.put("department", department);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        params.put("user", user);
+        params.put("fundcode", fundcode);
+        return ResultTool.success(orderApplyService.findByUserInCondition(params, page));
     }
 
     /**

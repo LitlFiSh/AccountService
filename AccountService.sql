@@ -72,8 +72,7 @@ insert into menu (id, path, name, pid) values (21, "/addOrder", "新建申请", 
 insert into menu (id, path, name, pid) values (22, "/listOrder", "查看申请", 2);
 
 insert into menu (id, name, rid) values (3, "管理", 1);
-insert into menu (id, path, name, pid) values (31, "/addUser", "添加用户", 3);
-insert into menu (id, path, name, pid) values (32, "/listUser", "用户管理", 3);
+insert into menu (id, path, name, pid) values (31, "/listUser", "用户管理", 3);
 
 insert into menu (id, name, rid) values (4, "部门", 3);
 insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);

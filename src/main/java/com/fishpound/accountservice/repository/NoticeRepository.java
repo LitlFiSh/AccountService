@@ -11,4 +11,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     int countByUserInfo_IdAndStateIsTrue(String uid);
     Notice getByid(Integer id);
     Page<Notice> findAllByUserInfo_Id(String uid, Pageable pageable);
+    List<Notice> findAllByUserInfo_Id(String uid);
 }

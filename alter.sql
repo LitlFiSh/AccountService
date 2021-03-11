@@ -34,3 +34,7 @@ insert into menu (id, name, rid) values (5, "主管", 2);
 insert into menu (id, path, name, pid) values (51, "/approval", "待审批", 5);
 insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有申请", 5);
 -- 2021/03/06
+-- -----
+delete from demo.menu where id = '31';
+update demo.menu set id = '31' where id = '32';
+-- 2021/03/07

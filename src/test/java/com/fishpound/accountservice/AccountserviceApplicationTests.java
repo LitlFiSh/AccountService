@@ -235,4 +235,22 @@ class AccountserviceApplicationTests {
 //            System.out.println("---");
 //        }
 //    }
+
+//    @Test
+//    void findInCondition(){
+//        String startStr = "1999-01-01", endStr = "2999-12-31";
+//        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, 1);
+//        System.out.println("**************");
+//        Page<OrderApply> list = orderApplyRepository.findCondition("%202101%",
+//                "%",
+//                startStr,
+//                endStr,
+//                "%",
+//                "%123456%",
+//                1,
+//                pageTools.sortSingle());
+//        for(OrderApply apply : list.getContent()) {
+//            System.out.println(apply.getId());
+//        }
+//    }
 }

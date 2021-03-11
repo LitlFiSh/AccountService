@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -26,23 +28,52 @@ public class InstController {
     AsyncService asyncService;
 
     /**
-     * 通过月份查找当月所有申请单
-     * @param date
-     * @param page
+     * 通过查询条件模糊查找所有申请单（不包括已删除申请单）
+     * @param oid 申请单id
+     * @param startDate 申请日期开始范围
+     * @param endDate 申请日期结束范围
+     * @param user 申请人名称
+     * @param fundcode 采购经费代码
+     * @param page 查找页数
      * @return
      */
     @GetMapping("/orders")
-    public JsonResult getAllMonth(@RequestParam(value = "date")String date,
-                                  @RequestParam(value = "page", defaultValue = "1")Integer page)
+    public JsonResult getAllMonth(@RequestParam(value = "oid", defaultValue = "%") String oid,
+                                  @RequestParam(value = "applyDept", defaultValue = "%") String department,
+                                  @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
+                                  @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
+                                  @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                  @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
+                                  @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            Date targetMonth = format.parse(date);
-            return ResultTool.success(orderApplyService.findByMonth(targetMonth, page));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResultTool.fail("日期格式错误");
+        Map<String, Object> params = new HashMap<>();
+        if(!"%".equals(oid)){
+            oid = "%" + oid + "%";
         }
+        if(!"%".equals(department)){
+            department = "%" + department + "%";
+        }
+        if(!"%".equals(user)){
+            user = "%" + user + "%";
+        }
+        if(!"%".equals(fundcode)){
+            fundcode = "%" + fundcode + "%";
+        }
+        try{
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+        } catch(ParseException pe){
+            return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
+        }
+        params.put("id", oid);
+        params.put("department", department);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        params.put("user", user);
+        params.put("fundcode", fundcode);
+        params.put("status", -1);
+        return ResultTool.success(orderApplyService.findInCondition(params, page));
     }
 
     /**

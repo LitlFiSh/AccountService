@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderApplyServiceImpl implements OrderApplyService {
@@ -115,6 +116,24 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     }
 
     /**
+     * 根据传入参数查找申请单
+     * @param param
+     * @return
+     */
+    @Override
+    public Page<OrderApply> findInCondition(Map<String, Object> param, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findInCondition(param.get("id").toString(),
+                param.get("department").toString(),
+                param.get("startDate").toString(),
+                param.get("endDate").toString(),
+                param.get("user").toString(),
+                param.get("fundcode").toString(),
+                Integer.valueOf(param.get("status").toString()),
+                pageTools.sortSingle());
+    }
+
+    /**
      * 查询某部门某月的所有申请单
      * @param department
      * @param date
@@ -144,6 +163,26 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public Page<OrderApply> findByUser(String id, Integer page) {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return orderApplyRepository.findAllByUidAndStatusNot(id, -1, pageTools.sortSingle());
+    }
+
+    /**
+     * 通过传入参数查找用户申请单
+     * @param param
+     * @param page
+     * @return
+     */
+    @Override
+    public Page<OrderApply> findByUserInCondition(Map<String, Object> param, Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return orderApplyRepository.findUserOrders(param.get("uid").toString(),
+                param.get("id").toString(),
+                param.get("department").toString(),
+                param.get("startDate").toString(),
+                param.get("endDate").toString(),
+                param.get("user").toString(),
+                param.get("fundcode").toString(),
+                -1,
+                pageTools.sortSingle());
     }
 
     /**

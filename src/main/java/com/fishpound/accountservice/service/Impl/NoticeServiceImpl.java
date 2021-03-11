@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.List;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -43,6 +43,11 @@ public class NoticeServiceImpl implements NoticeService {
     public Page<Notice> findAllByUser(String uid, Integer page) {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return noticeRepository.findAllByUserInfo_Id(uid, pageTools.sortSingle());
+    }
+
+    @Override
+    public List<Notice> findAll(String uid) {
+        return noticeRepository.findAllByUserInfo_Id(uid);
     }
 
     @Override
