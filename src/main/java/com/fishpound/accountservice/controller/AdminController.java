@@ -5,10 +5,7 @@ import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.result.ResultUser;
-import com.fishpound.accountservice.service.DepartmentService;
-import com.fishpound.accountservice.service.OrderApplyService;
-import com.fishpound.accountservice.service.RoleService;
-import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.*;
 import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -40,6 +37,8 @@ public class AdminController {
     DepartmentService departmentService;
     @Autowired
     OrderApplyService orderApplyService;
+    @Autowired
+    CacheService cacheService;
 
     /**
      * 根据用户ID获取用户信息
@@ -177,6 +176,18 @@ public class AdminController {
             e.printStackTrace();
             response.setStatus(404);
         }
+    }
+
+    /**
+     * 使缓存中的用户 token 失效
+     * @param uid
+     * @return
+     */
+    @GetMapping("/invalidate")
+    public JsonResult invalidateToken(@RequestParam(value = "uid") String uid)
+    {
+        cacheService.setCacheValue("token", uid, "123");
+        return ResultTool.success();
     }
 
     /**

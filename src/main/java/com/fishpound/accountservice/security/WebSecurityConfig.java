@@ -25,9 +25,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static String[] base = {"ROLE_APPLYUSER", "ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
-    private static String[] leader = {"ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
-    private static String[] admin = {"ROLE_ADMIN"};
+    private static final String[] base = {"ROLE_APPLYUSER", "ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
+    private static final String[] leader = {"ROLE_DEPTLEAD", "ROLE_INSTLEAD", "ROLE_ADMIN"};
+    private static final String[] admin = {"ROLE_ADMIN"};
 
     @Autowired
     @Qualifier("userDetailsServiceImpl")

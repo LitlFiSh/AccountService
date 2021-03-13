@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,5 +137,10 @@ public class UserInfoServiceImpl implements UserInfoService{
         res.put("success", n);
         res.put("result", resultList);
         return res;
+    }
+
+    @Override
+    public void throwEx() throws Exception {
+        throw new MissingServletRequestParameterException("12", "123");
     }
 }

@@ -64,7 +64,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
-//        System.out.println("login process...");
 //        logger.info("login filter start");
         String username = "";
         String password = "";
@@ -85,7 +84,14 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             username = jsonObject.getString("username");
             password = jsonObject.getString("password");
         } catch (Exception e) {
-            e.printStackTrace();
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            PrintWriter writer = httpServletResponse.getWriter();
+            writer.write(JSON.toJSONString(ResultTool.fail("获取用户名密码失败")));
+            writer.flush();
+            writer.close();
+            return null;
         }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         return getAuthenticationManager().authenticate(token);

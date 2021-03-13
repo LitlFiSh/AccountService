@@ -2,14 +2,18 @@ package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
+    @Autowired
+    UserInfoService userInfoService;
 
     @GetMapping("/user/hello")
-    public JsonResult testUser(){
+    public JsonResult testUser() throws Exception{
         return ResultTool.success("user hello success");
     }
 
@@ -26,5 +30,11 @@ public class TestController {
     @GetMapping("/admin/hello")
     public JsonResult testAdmin(){
         return ResultTool.success("admin hello success");
+    }
+
+    @GetMapping("/user/exception")
+    public JsonResult exTest() throws Exception{
+        userInfoService.throwEx();
+        return ResultTool.success();
     }
 }

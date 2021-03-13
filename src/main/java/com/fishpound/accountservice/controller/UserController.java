@@ -91,11 +91,4 @@ public class UserController {
             return ResultTool.fail();
         }
     }
-
-    @GetMapping("/invalidate")
-    public JsonResult invalidateToken(@RequestParam(value = "uid") String uid)
-    {
-        cacheService.setCacheValue("token", uid, "123");
-        return ResultTool.success();
-    }
 }

@@ -110,7 +110,7 @@ public class InstController {
         if(orderApply.getStatus() != 2){
             return ResultTool.fail("不可以申请单做此操作");
         }
-        orderApply.setStatus(2);
+        orderApply.setStatus(3);
         orderApplyService.updateOrder(orderApply);
         asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
                 "申请单通过通知",

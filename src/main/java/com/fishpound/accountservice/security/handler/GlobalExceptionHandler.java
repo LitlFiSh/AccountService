@@ -14,6 +14,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
 
+/**
+ * 全局异常处理器
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -44,31 +47,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public JsonResult handlerNotFoundException(NoHandlerFoundException e){
-//        System.out.println("NotFound: " + e.getMessage());
         return ResultTool.fail(ResultCode.FAIL);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public JsonResult handlerUsernameNotFoundException(UsernameNotFoundException e){
-//        System.out.println("Global Not Found" + e.getMessage());
         return ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public JsonResult handlerMissingServletRequestParameterException(MissingServletRequestParameterException e){
-//        System.out.println("ExceptionHandler: " + e.getMessage());
         return ResultTool.fail(ResultCode.PARAM_IS_NULL);
     }
 
     @ExceptionHandler(NullPointerException.class)
     public JsonResult handlerNullPointerException(NullPointerException e){
-//        System.out.println("ExceptionHandler: " + e.getMessage());
         return ResultTool.fail(ResultCode.PARAM_IS_NULL);
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public JsonResult handlerObjectOptimisticLockingFailureException(ObjectOptimisticLockingFailureException e){
-//        System.out.println("ExceptionHandler: " + e.getMessage());
         return ResultTool.fail("申请单已被更新");
     }
 
