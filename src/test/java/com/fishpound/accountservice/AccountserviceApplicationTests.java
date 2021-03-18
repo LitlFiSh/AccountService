@@ -253,4 +253,13 @@ class AccountserviceApplicationTests {
 //            System.out.println(apply.getId());
 //        }
 //    }
+
+//    @Test
+//    void testQuery(){
+//        String username = "%用户%";
+//        List<String> userList = userInfoRepository.findUsername(username);
+//        for(String name : userList){
+//            System.out.println(name);
+//        }
+//    }
 }

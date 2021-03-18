@@ -140,6 +140,11 @@ public class UserInfoServiceImpl implements UserInfoService{
     }
 
     @Override
+    public List<String> findUsername(String username) {
+        return userInfoRepository.findUsername(username);
+    }
+
+    @Override
     public void throwEx() throws Exception {
         throw new MissingServletRequestParameterException("12", "123");
     }

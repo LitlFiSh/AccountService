@@ -119,7 +119,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         String token = JWTTokenUtils.createToken(jwtUser.getId(), jwtUser.getAuthorities());
         response.setHeader("Access-Control-Expose-Headers", JWTTokenUtils.TOKEN_HEADER);
         response.setHeader(JWTTokenUtils.TOKEN_HEADER, JWTTokenUtils.TOKEN_PREFIX + token);
-        resultMap.put("loginName", jwtUser.getUsername());
         PrintWriter printWriter = response.getWriter();
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         for(GrantedAuthority authority : authorities){
@@ -163,7 +162,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         for(Menu menu : menus){
             resultMenus.add(new ResultMenu(menu.getName(), menu.getPath(), menu.getChildren()));
         }
-        resultMap.put("menu", resultMenus);
+        resultMap.put("menu", resultMenus);   //菜单
+        resultMap.put("loginName", jwtUser.getUsername());   //用户名
+        resultMap.put("deptName", jwtUser.getDeptName());   //用户所在部门名称
         printWriter.write(JSON.toJSONString(ResultTool.success(resultMap)));
         printWriter.flush();
         printWriter.close();

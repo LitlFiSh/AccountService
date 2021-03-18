@@ -9,16 +9,27 @@ public class JWTUser implements UserDetails {
     private String id;
     private String username;
     private String password;
+    private Integer rid;
+    private String deptName;
     private Boolean isActive;
     private Collection<? extends GrantedAuthority> authorities;
 
     public JWTUser() {
     }
 
-    public JWTUser(String id, String username, String password, Boolean isActive, Collection<? extends GrantedAuthority> authorities) {
+    public JWTUser(String id,
+                   String username,
+                   String password,
+                   Integer rid,
+                   String deptName,
+                   Boolean isActive,
+                   Collection<? extends GrantedAuthority> authorities)
+    {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.rid = rid;
+        this.deptName = deptName;
         this.isActive = isActive;
         this.authorities = authorities;
     }
@@ -64,5 +75,41 @@ public class JWTUser implements UserDetails {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getRid() {
+        return rid;
+    }
+
+    public void setRid(Integer rid) {
+        this.rid = rid;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 }

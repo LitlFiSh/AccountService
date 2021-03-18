@@ -13,6 +13,7 @@ public interface UserInfoService {
     Map<String, Object> findAllExcept(String uid, Integer page);
     List<UserInfo> findByRoleAndDepartment(Integer rid, String deptName);
     Map<String, Object> batchAddUser(List<Map> userList);
+    List<String> findUsername(String username);
 
     void throwEx() throws Exception;
 }

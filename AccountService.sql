@@ -68,8 +68,8 @@ insert into menu (id, name, rid) values (1, "用户", 4);
 insert into menu (id, path, name, pid) values (11, "/info", "用户信息", 1);
 
 insert into menu (id, name, rid) values (2, "申请单", 4);
-insert into menu (id, path, name, pid) values (21, "/addOrder", "新建申请", 2);
-insert into menu (id, path, name, pid) values (22, "/listOrder", "查看申请", 2);
+insert into menu (id, path, name, pid) values (21, "/listOrder", "查看申请", 2);
+insert into menu (id, path, name, pid) values (22, "/addOrder", "新建申请", 2);
 
 insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/listUser", "用户管理", 3);

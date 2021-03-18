@@ -3,6 +3,7 @@ package com.fishpound.accountservice.service.Impl;
 import com.fishpound.accountservice.entity.Account;
 import com.fishpound.accountservice.entity.Role;
 import com.fishpound.accountservice.entity.UserInfo;
+import com.fishpound.accountservice.repository.AccountRepository;
 import com.fishpound.accountservice.repository.UserInfoRepository;
 import com.fishpound.accountservice.security.jwt.JWTTokenUtils;
 import com.fishpound.accountservice.security.jwt.JWTUser;
@@ -21,6 +22,8 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     UserInfoRepository userInfoRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,6 +38,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             GrantedAuthority authority = new SimpleGrantedAuthority(JWTTokenUtils.ROLE_CLAIMS + role.getRoleName());
             grantedAuthorities.add(authority);
         }
-        return new JWTUser(user.getId(), user.getUsername(), account.getPassword(), account.isActive(), grantedAuthorities);
+        String uid = user.getId();
+        String name = user.getUsername();
+        String password = account.getPassword();
+        Integer rid = account.getRole().getId();
+        String deptName = user.getDepartment().getDeptName();
+        boolean isActive = account.isActive();
+        return new JWTUser(uid, name, password, rid, deptName, isActive, grantedAuthorities);
     }
 }

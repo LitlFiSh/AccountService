@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -234,12 +235,13 @@ public class OrderController {
      * @param response
      */
     @GetMapping("/download")
-    public void downloadFile(HttpServletResponse response){
+    public void downloadFile(HttpServletResponse response) throws Exception{
         response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        response.setHeader("Content-Disposition", "attachment;filename=test.docx");
+        response.setHeader("Content-Disposition", "attachment;filename=" +
+                URLEncoder.encode("可行性论证报告", "UTF-8") + ".docx");
         response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
         try {
-            Resource resource = new ClassPathResource("docs/test.docx");   //静态文件位置
+            Resource resource = new ClassPathResource("docs/可行性论证报告.docx");   //静态文件位置
             InputStream stream = resource.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);

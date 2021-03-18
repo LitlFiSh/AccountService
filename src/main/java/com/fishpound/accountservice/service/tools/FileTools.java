@@ -237,6 +237,11 @@ public class FileTools {
         outputStream.close();
     }
 
+    /**
+     * 批量添加用户，读取传入的excel文件，按行读取数据
+     * @param file
+     * @return
+     */
     public static List<Map> importExcel(MultipartFile file){
         Workbook workbook = getWorkBook(file);
         List<Map> list = new ArrayList<>();

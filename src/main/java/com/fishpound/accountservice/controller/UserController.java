@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,6 +67,7 @@ public class UserController {
                              @RequestParam(value = "uid") String uid)
     {
         if(request.getAttribute("user").equals(uid)){
+            System.out.println(uid);
             cacheService.invalidateCache("token", uid);
             return ResultTool.success();
         } else{
@@ -90,5 +92,17 @@ public class UserController {
         } else{
             return ResultTool.fail();
         }
+    }
+
+    /**
+     * 模糊搜索用户名
+     * @param name 用户名
+     * @return
+     */
+    @GetMapping("/search")
+    public JsonResult searchUsername(@RequestParam(value = "name") String name){
+        name = "%" + name + "%";
+        List<String> list = userInfoService.findUsername(name);
+        return ResultTool.success(list);
     }
 }
