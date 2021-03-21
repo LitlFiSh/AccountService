@@ -38,3 +38,14 @@ insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有�
 delete from demo.menu where id = '31';
 update demo.menu set id = '31' where id = '32';
 -- 2021/03/07
+-- -----
+CREATE TABLE `settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(64) NOT NULL COMMENT '描述',
+  `value` varchar(64) NOT NULL COMMENT '值',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `description` (`description`)
+) ENGINE=InnoDB COMMENT='配置表';
+
+insert into settings(description, value) values("采购经费代码", "123456");
+-- 2021/03/21

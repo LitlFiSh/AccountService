@@ -32,6 +32,16 @@ create table orderlist(
     foreign key (`from_id`) references orderapply(`id`) on delete cascade
 ) engine=innodb comment '申请记录表';
 
+CREATE TABLE `settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(64) NOT NULL COMMENT '描述',
+  `value` varchar(64) NOT NULL COMMENT '值',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `description` (`description`)
+) ENGINE=InnoDB COMMENT='配置表';
+
+insert into settings(description, value) values("采购经费代码", "123456");
+
 insert into orderapply(id, apply_department, apply_user, fund_code, apply_date, total, uid) values
 ("20200102", "办公室", "申请人1", "123456", "2020-12-11 00:00:00", 0, "12345678911");
 insert into orderlist(id, no, name, type, configuration, unit, quantity, budget_unit_price, budget_total_price, reason, new_user, from_id)
