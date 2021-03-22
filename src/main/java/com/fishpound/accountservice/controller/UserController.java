@@ -86,6 +86,9 @@ public class UserController {
         String uid = formMap.get("uid");
         String newPassword = formMap.get("newPassword");
         String oldPassword = formMap.get("oldPassword");
+        if(uid.isEmpty() || newPassword.isEmpty() || oldPassword.isEmpty()){
+            return ResultTool.fail("传入参数为空");
+        }
         if(accountService.alterPassword(uid, newPassword, oldPassword)){
             cacheService.invalidateCache("token", uid);
             return ResultTool.success();
