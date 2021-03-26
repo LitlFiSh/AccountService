@@ -49,3 +49,16 @@ CREATE TABLE `settings` (
 
 insert into settings(description, value) values("采购经费代码", "123456");
 -- 2021/03/21
+-- -----
+create table purchace_order(
+    id int primary key AUTO_INCREMENT comment '主键id，自增',
+    status tinyint(2) not null default 0 comment '采购单状态',
+    uid char(11) not null comment '申请人id',
+    create_time timestamp not null default CURRENT_TIMESTAMP comment '采购单创建时间',
+    update_time timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '采购单更新时间'
+) ENGINE=InnoDB COMMENT='采购单表';
+alter table orderlist add column opinion text default null comment '进入采购阶段后填写的设备列表各种情况或意见';
+alter table orderlist add column status tinyint(2) not null default 0 comment '设备列表状态';
+alter table orderlist add column purchace_id int default null comment '对应采购单id';
+alter table orderlist add constraint `fk_orderlist_purchaceorder` foreign key (`purchace_id`) references purchace_order(`id`);
+-- 2021年3月26日

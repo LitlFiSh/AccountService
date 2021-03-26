@@ -18,6 +18,11 @@ public class OrderListServiceImpl implements OrderListService {
     OrderApplyRepository orderApplyRepository;
 
     @Override
+    public OrderList getOne(String id) {
+        return orderListRepository.getById(id);
+    }
+
+    @Override
     public List<OrderList> findAllByUserId(String id) {
 //        List<OrderList> orderLists = orderListRepository.findAllByUserIdAndStatusNotLike(id, -1);
 //        return orderLists;

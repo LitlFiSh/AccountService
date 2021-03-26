@@ -1,7 +1,6 @@
 package com.fishpound.accountservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -52,10 +51,21 @@ public class OrderList {
     @Column(name = "new_user")
     private String newUser;
 
+    @Column(name = "status")
+    private Integer status;
+
+    @Column(name = "opinion")
+    private String opinion;
+
     @ManyToOne(targetEntity = OrderApply.class, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     @JsonBackReference
     private OrderApply orderApply;
+
+    @ManyToOne(targetEntity = PurchaceOrder.class)
+    @JoinColumn(name = "purchace_id", referencedColumnName = "id")
+    @JsonBackReference
+    private PurchaceOrder purchaceOrder;
 
 //    @Column(name = "status")
 //    private Integer status;
@@ -67,14 +77,6 @@ public class OrderList {
     public void setId(String id) {
         this.id = id;
     }
-
-//    public String getNo() {
-//        return no;
-//    }
-//
-//    public void setNo(String no) {
-//        this.no = no;
-//    }
 
     public String getName() {
         return name;
@@ -156,11 +158,27 @@ public class OrderList {
         this.orderApply = orderApply;
     }
 
-//    public Integer getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(Integer status) {
-//        this.status = status;
-//    }
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public PurchaceOrder getPurchaceOrder() {
+        return purchaceOrder;
+    }
+
+    public void setPurchaceOrder(PurchaceOrder purchaceOrder) {
+        this.purchaceOrder = purchaceOrder;
+    }
+
+    public String getOpinion() {
+        return opinion;
+    }
+
+    public void setOpinion(String opinion) {
+        this.opinion = opinion;
+    }
 }

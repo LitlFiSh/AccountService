@@ -29,7 +29,11 @@ create table orderlist(
     reason text not null comment '申购原因及旧设备参数状态',
     new_user varchar(32) not null comment '新设备使用人',
     from_id char(8) not null comment '对应申请单编号',
-    foreign key (`from_id`) references orderapply(`id`) on delete cascade
+    status tinyint(2) not null default 0 comment '设备列表状态',
+    purchace_id int default null comment '对应采购单id',
+    opinion text default null comment '进入采购阶段后填写的设备列表各种情况或意见',
+    foreign key (`from_id`) references orderapply(`id`) on delete cascade,
+    foreign key (`purchace_id`) references purchace_order(`id`) on delete set null
 ) engine=innodb comment '申请记录表';
 
 CREATE TABLE `settings` (
@@ -42,17 +46,10 @@ CREATE TABLE `settings` (
 
 insert into settings(description, value) values("采购经费代码", "123456");
 
-insert into orderapply(id, apply_department, apply_user, fund_code, apply_date, total, uid) values
-("20200102", "办公室", "申请人1", "123456", "2020-12-11 00:00:00", 0, "12345678911");
-insert into orderlist(id, no, name, type, configuration, unit, quantity, budget_unit_price, budget_total_price, reason, new_user, from_id)
-values ("2020010201", "01", "设备1", "类型1", "配置参数", "个", 5, 0, 0, "原因", "新使用人", "20200102");
-insert into orderlist(id, no, name, type, configuration, unit, quantity, budget_unit_price, budget_total_price, reason, new_user, from_id)
-values ("2020010202", "02", "设备2", "类型2", "配置参数", "台", 1, 0, 0, "原因", "新使用人", "20200102");
-insert into orderlist(id, no, name, type, configuration, unit, quantity, budget_unit_price, budget_total_price, reason, new_user, from_id)
-values ("2020010203", "03", "设备3", "类型3", "配置参数", "部", 1, 0, 0, "原因", "新使用人", "20200102");
-
-insert into orderapply(id, apply_department, apply_user, fund_code, apply_date, total, uid, status) values
-("20200103", "办公室", "办公室用户1", "123456", "2020-12-11 00:00:00", 100, "12345678911", 1);
-insert into orderlist(id, no, name, type, configuration, unit, quantity, budget_unit_price, budget_total_price, reason, new_user, from_id)
-values ("2020010301", "01", "Peral Mini", "Epiphan", "视频输入接口支持3种3G SDI、 HDMI、(3) USB UVC，视频输出接口有HDMI，视频处理编码支持H.264，可网络管理，主机自带7寸触摸显示屏幕，可录制1080p高清视频，支持录制到SD存储卡，可自动上传文件保存到其他服务器",
-"个", 1, 100, 100, "必要性及用途：录像盒子主要是录制周末面授辅导课，每个学期300多门辅导课程的录制工作；使用状况：目前使用的同品牌录像盒子使用已超过6年时间，期间也经历了维修、更换等情况，为保证录课质量需要对录像盒子进行更新换代。旧盒子已达报废年限，可进行报废处理。", "新使用人", "20200103");
+create table purchace_order(
+    id int primary key AUTO_INCREMENT comment '主键id，自增',
+    status tinyint(2) not null default 0 comment '采购单状态',
+    uid char(11) not null comment '申请人id',
+    create_time timestamp not null default CURRENT_TIMESTAMP comment '采购单创建时间',
+    update_time timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '采购单更新时间'
+) ENGINE=InnoDB COMMENT='采购单表';
