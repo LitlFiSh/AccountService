@@ -50,6 +50,6 @@ create table purchace_order(
     id int primary key AUTO_INCREMENT comment '主键id，自增',
     status tinyint(2) not null default 0 comment '采购单状态',
     uid char(11) not null comment '申请人id',
-    create_time timestamp not null default CURRENT_TIMESTAMP comment '采购单创建时间',
-    update_time timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '采购单更新时间'
+    create_time timestamp null default CURRENT_TIMESTAMP comment '采购单创建时间',
+    update_time timestamp null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '采购单更新时间'
 ) ENGINE=InnoDB COMMENT='采购单表';

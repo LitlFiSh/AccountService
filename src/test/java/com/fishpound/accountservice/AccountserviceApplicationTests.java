@@ -1,12 +1,21 @@
 package com.fishpound.accountservice;
 
+import com.fishpound.accountservice.entity.OrderList;
+import com.fishpound.accountservice.entity.PurchaceOrder;
 import com.fishpound.accountservice.repository.*;
+import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.AccountService;
+import com.fishpound.accountservice.service.OrderListService;
 import com.fishpound.accountservice.service.UserInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class AccountserviceApplicationTests {
@@ -37,14 +46,20 @@ class AccountserviceApplicationTests {
     @Autowired
     UserInfoRepository userInfoRepository;
 
-    @Test
-    void contextLoads() {
-    }
+    @Autowired
+    OrderListService orderListService;
 
-    @Test
-    void passwordEncoded(){
-        System.out.println(bCryptPasswordEncoder.encode("123456"));
-    }
+    @Autowired
+    PurchaceOrderRepository purchaceOrderRepository;
+
+//    @Test
+//    void contextLoads() {
+//    }
+//
+//    @Test
+//    void passwordEncoded(){
+//        System.out.println(bCryptPasswordEncoder.encode("123456"));
+//    }
 
 //    @Test
 //    void databaseTest(){
@@ -262,4 +277,33 @@ class AccountserviceApplicationTests {
 //            System.out.println(name);
 //        }
 //    }
+
+//    @Test
+//    void testPurchace(){
+//        List<String> orderLists = new ArrayList<>();
+//        orderLists.add("2020010301");
+//        orderLists.add("2020010401");
+//        String uid = "12345678910";
+//        PurchaceOrder purchaceOrder = new PurchaceOrder();
+//        List<OrderList> l = new ArrayList<>();
+//        for(String olid : orderLists){
+//            OrderList o = orderListService.getOne(olid);
+//            if(o.getPurchaceOrder() == null) {
+//                l.add(o);
+//            }
+//        }
+//        purchaceOrder.setOrderLists(l);
+//        purchaceOrder.setStatus(4);
+//        purchaceOrder.setUid(uid);
+//        purchaceOrder.setCreateTime(new Date());
+//        purchaceOrder.setUpdateTime(new Date());
+//        purchaceOrderRepository.save(purchaceOrder);
+//    }
+
+    @Test
+    void testList(){
+        Integer page = 1;
+        Map<String, Object> all = orderListService.findAll(page);
+        System.out.println("stop");
+    }
 }

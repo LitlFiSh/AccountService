@@ -74,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers("/user/**", "/order/**", "/department/**", "/notice/**").hasAnyAuthority(base)
                 .antMatchers("/dept/**","/inst/**").hasAnyAuthority(leader)
-                .antMatchers("/admin/**").hasAnyAuthority(admin)
+                .antMatchers("/admin/**", "/orderlist/**").hasAnyAuthority(admin)
                 .anyRequest().authenticated()
                 .and()
                 //登录过滤器，在这里拦下登录请求，判断登陆是否成功，生成token
