@@ -21,6 +21,7 @@ import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +98,17 @@ public class AdminController {
                                  @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
         return ResultTool.success(userInfoService.findAllExcept(request.getAttribute("user").toString(), page));
+    }
+
+    @GetMapping("/user/admins")
+    public JsonResult getAdmin(HttpServletRequest request){
+        List<UserInfo> adminList = userInfoService.findUserByRole(1);
+        List<ResultUser> resultUserList = new ArrayList<>();
+        for(UserInfo u : adminList){
+            ResultUser ru = new ResultUser(u);
+            resultUserList.add(ru);
+        }
+        return ResultTool.success(resultUserList);
     }
 
     /**

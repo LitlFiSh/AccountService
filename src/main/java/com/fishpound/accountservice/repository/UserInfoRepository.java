@@ -13,6 +13,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
     UserInfo findByUsername(String username);
     Page<UserInfo> findAllByIdNot(String uid, Pageable pageable);
     List<UserInfo> findAllByAccount_Role_IdAndDepartment_DeptName(Integer rid, String deptName);
+    List<UserInfo> findAllByAccount_Role_Id(Integer rid);
 
     @Query(value = "SELECT username FROM userinfo WHERE username LIKE ?1", nativeQuery = true)
     List<String> findUsername(String username);

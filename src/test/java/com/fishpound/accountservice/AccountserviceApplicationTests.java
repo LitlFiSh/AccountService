@@ -2,8 +2,10 @@ package com.fishpound.accountservice;
 
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.PurchaceOrder;
+import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.repository.*;
 import com.fishpound.accountservice.result.ResultTool;
+import com.fishpound.accountservice.result.ResultUser;
 import com.fishpound.accountservice.service.AccountService;
 import com.fishpound.accountservice.service.OrderListService;
 import com.fishpound.accountservice.service.UserInfoService;
@@ -300,10 +302,26 @@ class AccountserviceApplicationTests {
 //        purchaceOrderRepository.save(purchaceOrder);
 //    }
 
-    @Test
-    void testList(){
-        Integer page = 1;
-        Map<String, Object> all = orderListService.findAll(page);
-        System.out.println("stop");
-    }
+//    @Test
+//    void testList(){
+//        Integer page = 1;
+//        Map<String, Object> all = orderListService.findAll(page);
+//        System.out.println("stop");
+//    }
+
+//    @Test
+//    void testDelete(){
+//        Integer id = 3;
+//        purchaceOrderRepository.deleteById(id);
+//    }
+
+//    @Test
+//    void testAdmin(){
+//        List<UserInfo> adminList = userInfoService.findUserByRole(1);
+//        for(UserInfo u : adminList){
+//            ResultUser ru = new ResultUser(u);
+//            System.out.println(ru.getId());
+//            System.out.println("--------");
+//        }
+//    }
 }

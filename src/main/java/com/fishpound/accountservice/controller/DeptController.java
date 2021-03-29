@@ -1,6 +1,7 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderApply;
+import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
@@ -47,7 +48,7 @@ public class DeptController {
                                    @RequestParam(value = "oid", defaultValue = "%") String oid,
                                    @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
                                    @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
-                                   @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                   @RequestParam(value = "user", defaultValue = "%") String user,
                                    @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
                                    @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
@@ -120,6 +121,9 @@ public class DeptController {
             orderApply.setStatus(2);
             orderApply.setDeptLeaderSign(true);
             orderApply.setDeptLeaderSignDate(new Date());
+            for(OrderList list : orderApply.getOrderLists()){
+                list.setStatus(2);
+            }
             orderApplyService.updateOrder(orderApply);
             asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
                     "申请单通过通知",

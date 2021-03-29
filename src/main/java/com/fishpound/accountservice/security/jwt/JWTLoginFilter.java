@@ -130,22 +130,22 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                     //管理员
 //                    Role r1 = roleService.findById(1);
 //                    menus.addAll(r1.getMenus());
-                    menus.addAll(roleService.findById(1).getMenus());
                     menus.addAll(roleService.findById(4).getMenus());
+                    menus.addAll(roleService.findById(1).getMenus());
                     break;
                 case 2:
                     //主管院领导
 //                    Role r2 = roleService.findById(2);
 //                    menus.addAll(r2.getMenus());
-                    menus.addAll(roleService.findById(2).getMenus());
                     menus.addAll(roleService.findById(4).getMenus());
+                    menus.addAll(roleService.findById(2).getMenus());
                     break;
                 case 3:
                     //部门领导
 //                    Role r3 = roleService.findById(3);
 //                    menus.addAll(r3.getMenus());
-                    menus.addAll(roleService.findById(3).getMenus());
                     menus.addAll(roleService.findById(4).getMenus());
+                    menus.addAll(roleService.findById(3).getMenus());
                     break;
                 case 4:
                     //普通用户

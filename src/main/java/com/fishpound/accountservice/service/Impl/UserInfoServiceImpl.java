@@ -79,7 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Override
     public List<UserInfo> findByRoleAndDepartment(Integer rid, String deptName) {
-        return userInfoRepository.findAllByAccount_Role_IdAndDepartment_DeptName(rid, deptName);
+        return userInfoRepository.findAllByAccount_Role_Id(rid);
     }
 
     @Override
@@ -137,6 +137,11 @@ public class UserInfoServiceImpl implements UserInfoService{
         res.put("success", n);
         res.put("result", resultList);
         return res;
+    }
+
+    @Override
+    public List<UserInfo> findUserByRole(Integer rid) {
+        return userInfoRepository.findAllByAccount_Role_Id(rid);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderApply;
+import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
@@ -42,7 +43,7 @@ public class InstController {
                                   @RequestParam(value = "applyDept", defaultValue = "%") String department,
                                   @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
                                   @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
-                                  @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                  @RequestParam(value = "user", defaultValue = "%") String user,
                                   @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
                                   @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
@@ -111,6 +112,11 @@ public class InstController {
             return ResultTool.fail("不可以申请单做此操作");
         }
         orderApply.setStatus(3);
+        for(OrderList list : orderApply.getOrderLists()){
+            list.setStatus(3);
+        }
+        orderApply.setDeptLeaderSign(true);
+        orderApply.setDeptLeaderSignDate(new Date());
         orderApplyService.updateOrder(orderApply);
         asyncService.createNoticeByUid(orderApply.getUid(), orderApply.getId(),
                 "申请单通过通知",

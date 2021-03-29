@@ -62,3 +62,10 @@ alter table orderlist add column status tinyint(2) not null default 0 comment '�
 alter table orderlist add column purchace_id int default null comment '对应采购单id';
 alter table orderlist add constraint `fk_orderlist_purchaceorder` foreign key (`purchace_id`) references purchace_order(`id`);
 -- 2021年3月26日
+-- ---
+insert into menu (id, name, rid) values (6, "设备列表", 1);
+insert into menu (id, path, name, pid) values (61, "/orderlist", "所有申请设备", 6);
+
+insert into menu (id, name, rid) values (7, "采购单", 1);
+insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采购单", 7);
+-- 2021年3月29日

@@ -166,7 +166,7 @@ public class OrderController {
                                      @RequestParam(value = "applyDept", defaultValue = "%") String department,
                                      @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
                                      @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
-                                     @RequestParam(value = "applyUser", defaultValue = "%") String user,
+                                     @RequestParam(value = "user", defaultValue = "%") String user,
                                      @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
     {

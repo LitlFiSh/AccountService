@@ -65,7 +65,7 @@ public class OrderApply {
     @NotNull(message = "申请设备列表不能为空")
     @OneToMany(targetEntity = OrderList.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "from_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "list_apply")
     private List<OrderList> orderLists;
 
     @NotEmpty(message = "申请单对应用户id不能为空")

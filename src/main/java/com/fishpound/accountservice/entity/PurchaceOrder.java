@@ -34,7 +34,7 @@ public class PurchaceOrder {
 
     @OneToMany(targetEntity = OrderList.class)
     @JoinColumn(name = "purchace_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "list_purchace")
     private List<OrderList> orderLists;
 
     public Integer getId() {

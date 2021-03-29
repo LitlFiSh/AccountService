@@ -59,12 +59,12 @@ public class OrderList {
 
     @ManyToOne(targetEntity = OrderApply.class, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "from_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "list_apply")
     private OrderApply orderApply;
 
     @ManyToOne(targetEntity = PurchaceOrder.class)
     @JoinColumn(name = "purchace_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "list_purchace")
     private PurchaceOrder purchaceOrder;
 
 //    @Column(name = "status")

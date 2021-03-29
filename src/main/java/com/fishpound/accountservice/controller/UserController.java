@@ -67,7 +67,7 @@ public class UserController {
                              @RequestParam(value = "uid") String uid)
     {
         if(request.getAttribute("user").equals(uid)){
-            System.out.println(uid);
+//            System.out.println(uid);
             cacheService.invalidateCache("token", uid);
             return ResultTool.success();
         } else{

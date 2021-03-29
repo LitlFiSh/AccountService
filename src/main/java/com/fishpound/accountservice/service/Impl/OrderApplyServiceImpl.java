@@ -49,6 +49,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
         int no = 1;
         for(OrderList orderList : orderLists){
             orderList.setId(id + new DecimalFormat("00").format(no++));
+            orderList.setStatus(1);
             orderList.setOrderApply(orderApply);
         }
         orderApply.setOrderLists(orderLists);
