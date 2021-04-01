@@ -44,7 +44,8 @@ public class InstController {
                                   @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
                                   @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
                                   @RequestParam(value = "user", defaultValue = "%") String user,
-                                  @RequestParam(value = "fundcode", defaultValue = "%") String fundcode,
+                                  @RequestParam(value = "fundCode", defaultValue = "%") String fundcode,
+                                  @RequestParam(value = "status", defaultValue = "10") Integer status,
                                   @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
         Map<String, Object> params = new HashMap<>();
@@ -62,8 +63,8 @@ public class InstController {
         }
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date start = format.parse(startDate);
-            Date end = format.parse(endDate);
+            format.parse(startDate);
+            format.parse(endDate);
         } catch(ParseException pe){
             return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
         }
@@ -73,7 +74,7 @@ public class InstController {
         params.put("endDate", endDate);
         params.put("user", user);
         params.put("fundcode", fundcode);
-        params.put("status", -1);
+        params.put("status", status);
         return ResultTool.success(orderApplyService.findInCondition(params, page));
     }
 

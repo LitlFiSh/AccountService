@@ -85,5 +85,5 @@ insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有�
 insert into menu (id, name, rid) vlues (6, "设备列表", 1);
 insert into menu (id, path, name, pid) value (61, "/orderlist", "所有申请设备", 6);
 
-insert into menu (id, name, rid) values (7, "采购单", 1);
+insert into menu (id, name, rid) values (7, "采购单");
 insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采购单", 7);

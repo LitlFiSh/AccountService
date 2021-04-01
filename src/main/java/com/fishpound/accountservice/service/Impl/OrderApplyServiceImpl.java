@@ -175,15 +175,28 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     @Override
     public Page<OrderApply> findByUserInCondition(Map<String, Object> param, Integer page) {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
-        return orderApplyRepository.findUserOrders(param.get("uid").toString(),
-                param.get("id").toString(),
-                param.get("department").toString(),
-                param.get("startDate").toString(),
-                param.get("endDate").toString(),
-                param.get("user").toString(),
-                param.get("fundcode").toString(),
-                -1,
-                pageTools.sortSingle());
+        Integer status = (Integer) param.get("status");
+        if(status == 10){
+            return orderApplyRepository.findUserOrders1(param.get("uid").toString(),
+                    param.get("id").toString(),
+                    param.get("department").toString(),
+                    param.get("startDate").toString(),
+                    param.get("endDate").toString(),
+                    param.get("user").toString(),
+                    param.get("fundcode").toString(),
+                    -1,
+                    pageTools.sortSingle());
+        } else {
+            return orderApplyRepository.findUserOrders2(param.get("uid").toString(),
+                    param.get("id").toString(),
+                    param.get("department").toString(),
+                    param.get("startDate").toString(),
+                    param.get("endDate").toString(),
+                    param.get("user").toString(),
+                    param.get("fundcode").toString(),
+                    status,
+                    pageTools.sortSingle());
+        }
     }
 
     /**

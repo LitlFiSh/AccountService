@@ -9,4 +9,5 @@ public interface MenuService {
     void updateMenu(Menu menu);
     void deleteMenu(Integer id);
     List<Menu> findAll();
+    Menu findByName(String menuName);
 }

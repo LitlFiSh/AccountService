@@ -40,6 +40,8 @@ public class AdminController {
     OrderApplyService orderApplyService;
     @Autowired
     CacheService cacheService;
+    @Autowired
+    SettingsService settingsService;
 
     /**
      * 根据用户ID获取用户信息
@@ -49,13 +51,24 @@ public class AdminController {
     @GetMapping("/user")
     public JsonResult getUser(@RequestParam(value = "uid") String uid){
         UserInfo userInfo = userInfoService.findById(uid);
+        ResultUser user;
         if(userInfo == null){
             return ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
         }
-        ResultUser user = new ResultUser(userInfo.getId(),
-                userInfo.getUsername(),
-                userInfo.getDepartment().getDeptName(),
-                userInfo.getAccount().getRole().getRoleDescription());
+        Settings settings = settingsService.findByDescription(uid);
+        if(settings != null) {
+            user = new ResultUser(userInfo.getId(),
+                    userInfo.getUsername(),
+                    userInfo.getDepartment().getDeptName(),
+                    userInfo.getAccount().getRole().getRoleDescription(),
+                    settings.getValue().equals("1") ? true : false);
+        } else{
+            user = new ResultUser(userInfo.getId(),
+                    userInfo.getUsername(),
+                    userInfo.getDepartment().getDeptName(),
+                    userInfo.getAccount().getRole().getRoleDescription(),
+                    false);
+        }
         return ResultTool.success(user);
     }
 
@@ -100,12 +113,26 @@ public class AdminController {
         return ResultTool.success(userInfoService.findAllExcept(request.getAttribute("user").toString(), page));
     }
 
-    @GetMapping("/user/admins")
-    public JsonResult getAdmin(HttpServletRequest request){
-        List<UserInfo> adminList = userInfoService.findUserByRole(1);
+    /**
+     * 通过用户真实姓名模糊查找用户信息
+     * @param request
+     * @return
+     */
+    @GetMapping("/user/users/info")
+    public JsonResult getAdmin(HttpServletRequest request, @RequestParam(value = "username", defaultValue = "%") String name){
+        /*List<UserInfo> adminList = userInfoService.findUserByRole(1);
         List<ResultUser> resultUserList = new ArrayList<>();
         for(UserInfo u : adminList){
             ResultUser ru = new ResultUser(u);
+            resultUserList.add(ru);
+        }*/
+        if(!"%".equals(name)){
+            name = "%" + name + "%";
+        }
+        List<UserInfo> userInfos = userInfoService.findUsername(name);
+        List<ResultUser> resultUserList = new ArrayList<>();
+        for(UserInfo user : userInfos){
+            ResultUser ru = new ResultUser(user);
             resultUserList.add(ru);
         }
         return ResultTool.success(resultUserList);
@@ -190,15 +217,46 @@ public class AdminController {
         }
     }
 
-    /**
-     * 使缓存中的用户 token 失效
-     * @param uid
-     * @return
-     */
-    @GetMapping("/invalidate")
-    public JsonResult invalidateToken(@RequestParam(value = "uid") String uid)
-    {
-        cacheService.setCacheValue("token", uid, "123");
+//    /**
+//     * 使缓存中的用户 token 失效
+//     * @param uid
+//     * @return
+//     */
+//    @GetMapping("/invalidate")
+//    public JsonResult invalidateToken(@RequestParam(value = "uid") String uid)
+//    {
+//        cacheService.setCacheValue("token", uid, "123");
+//        return ResultTool.success();
+//    }
+
+    @GetMapping("/user/appointment")
+    public JsonResult appointmentUser(@RequestParam(value = "uid") String uid){
+        UserInfo user = userInfoService.findById(uid);
+        Settings setting = settingsService.findByDescription(uid);
+        if(user == null){
+            //查找不到用户
+            return ResultTool.fail("找不到用户");
+        }
+        if(setting != null){
+            if(setting.getValue() == "1"){
+                return ResultTool.fail("用户已是采购负责人");
+            }
+        } else{
+            Settings s = new Settings();
+            s.setDescription(uid);
+            s.setValue("1");
+            settingsService.addSetting(s);
+        }
+        return ResultTool.success();
+    }
+
+    @GetMapping("/user/disappointment")
+    public JsonResult disappointment(@RequestParam(value = "uid") String uid){
+        Settings settings = settingsService.findByDescription(uid);
+        if(settings != null){
+            settings.setValue("0");
+            settingsService.updateSettings(settings);
+        }
         return ResultTool.success();
     }
 
@@ -210,16 +268,25 @@ public class AdminController {
      */
     private UserInfo createUser(ResultUser user, boolean b){
         UserInfo u = userInfoService.findById(user.getId());
+        UserInfo userInfo;
+        Account account;
         if(b && u != null) {
             return null;
         }
-        UserInfo userInfo = new UserInfo();
-        Account account = new Account();
+        if(b) {
+            userInfo = new UserInfo();
+            account = new Account();
+        } else{
+            userInfo = u;
+            account = u.getAccount();
+        }
         Department department = departmentService.findByDeptName(user.getDepartment());
         Role role = roleService.findByDescription(user.getRole());
-
+        if(department == null || role == null){
+            return null;
+        }
         account.setId(user.getId());
-        if(b || (user.getPassword() != null && "".equals(user.getPassword()))) {
+        if(b || (user.getPassword() != null && !"".equals(user.getPassword()))) {
             account.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         } else{
             account.setPassword(u.getAccount().getPassword());

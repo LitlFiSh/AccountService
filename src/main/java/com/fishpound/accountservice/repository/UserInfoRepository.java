@@ -15,6 +15,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
     List<UserInfo> findAllByAccount_Role_IdAndDepartment_DeptName(Integer rid, String deptName);
     List<UserInfo> findAllByAccount_Role_Id(Integer rid);
 
-    @Query(value = "SELECT username FROM userinfo WHERE username LIKE ?1", nativeQuery = true)
-    List<String> findUsername(String username);
+    @Query(value = "SELECT * FROM userinfo WHERE username LIKE ?1", nativeQuery = true)
+    List<UserInfo> findUsername(String username);
 }

@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fishpound.accountservice.entity.Menu;
 import com.fishpound.accountservice.entity.Role;
+import com.fishpound.accountservice.entity.Settings;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultMenu;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.CacheService;
+import com.fishpound.accountservice.service.MenuService;
 import com.fishpound.accountservice.service.RoleService;
+import com.fishpound.accountservice.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,10 +42,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     private final static Logger logger = LoggerFactory.getLogger(JWTLoginFilter.class);
     private RoleService roleService;
     private CacheService cacheService;
+    private SettingsService settingsService;
+    private MenuService menuService;
 
     /**
      * 用 setter 注入 Service
-     * @param roleService
      */
     private void setRoleService(RoleService roleService) {
         this.roleService = roleService;
@@ -50,16 +54,26 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     private void setCacheService(CacheService cacheService){
         this.cacheService = cacheService;
     }
+    private void setSettingsService(SettingsService settingsService){
+        this.settingsService = settingsService;
+    }
+    private void setMenuService(MenuService menuService){
+        this.menuService = menuService;
+    }
 
     public JWTLoginFilter(String defaultFilterProcessesUrl,
                           AuthenticationManager authenticationManager,
                           RoleService roleService,
-                          CacheService cacheService)
+                          CacheService cacheService,
+                          SettingsService settingsService,
+                          MenuService menuService)
     {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
         setRoleService(roleService);
         setAuthenticationManager(authenticationManager);
         setCacheService(cacheService);
+        setSettingsService(settingsService);
+        setMenuService(menuService);
     }
 
     @Override
@@ -157,6 +171,14 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                     break;
             }
 //            menus.addAll(role.getMenus());
+            Settings settings = settingsService.findByDescription(jwtUser.getId());
+            if(settings != null) {
+                if (settings.getValue() == "1") {
+                    menus.add(menuService.findByName("采购单"));
+                }
+            } else if(role.getId() == 1){
+                menus.add(menuService.findByName("采购单"));
+            }
         }
         List<ResultMenu> resultMenus = new ArrayList<>();
         for(Menu menu : menus){

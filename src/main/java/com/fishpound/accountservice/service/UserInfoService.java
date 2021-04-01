@@ -14,7 +14,7 @@ public interface UserInfoService {
     List<UserInfo> findByRoleAndDepartment(Integer rid, String deptName);
     Map<String, Object> batchAddUser(List<Map> userList);
     List<UserInfo> findUserByRole(Integer rid);
-    List<String> findUsername(String username);
+    List<UserInfo> findUsername(String username);
 
     void throwEx() throws Exception;
 }

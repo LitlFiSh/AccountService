@@ -13,6 +13,7 @@ public interface OrderApplyRepository extends JpaRepository<OrderApply, String> 
     OrderApply getById(String id);
     long countByIdStartsWith(String id);
     Page<OrderApply> findAllByUidAndStatusNot(String username, Integer status, Pageable pageable);
+
     @Query(value ="select * from orderapply where uid = ?1" +
             " and id like ?2" +
             " and apply_department like ?3" +
@@ -22,8 +23,21 @@ public interface OrderApplyRepository extends JpaRepository<OrderApply, String> 
             " and fund_code like ?7" +
             " and status != ?8",
             nativeQuery = true)
-    Page<OrderApply> findUserOrders(String uid, String id, String deptName, String startDate, String endDate,
+    Page<OrderApply> findUserOrders1(String uid, String id, String deptName, String startDate, String endDate,
                                     String username, String fundcode, Integer status, Pageable pageable);
+    @Query(value ="select * from orderapply where uid = ?1" +
+            " and id like ?2" +
+            " and apply_department like ?3" +
+            " and apply_date > ?4" +
+            " and apply_date < ?5" +
+            " and apply_user like ?6" +
+            " and fund_code like ?7" +
+            " and status = ?8",
+            nativeQuery = true)
+    Page<OrderApply> findUserOrders2(String uid, String id, String deptName, String startDate, String endDate,
+                                    String username, String fundcode, Integer status, Pageable pageable);
+
+
     Page<OrderApply> findAllByApplyDateBetweenAndStatusNot(Date date1, Date date2, Integer status, Pageable pageable);
     Page<OrderApply> findAllByApplyDepartmentAndApplyDateBetweenAndStatusNot(
             String department, Date date1, Date date2, Integer status, Pageable pageable);

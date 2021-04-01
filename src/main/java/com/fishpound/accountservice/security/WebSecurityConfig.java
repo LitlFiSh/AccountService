@@ -8,7 +8,9 @@ import com.fishpound.accountservice.security.jwt.JWTFilter;
 import com.fishpound.accountservice.security.jwt.JWTLoginFilter;
 import com.fishpound.accountservice.service.CacheService;
 import com.fishpound.accountservice.service.Impl.UserDetailsServiceImpl;
+import com.fishpound.accountservice.service.MenuService;
 import com.fishpound.accountservice.service.RoleService;
+import com.fishpound.accountservice.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,9 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private RoleService roleService;
-
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private SettingsService settingsService;
+    @Autowired
+    private MenuService menuService;
 
 //    @Autowired   //登陆成功处理逻辑
 //            LoginSuccessHandler loginSuccessHandler;
@@ -80,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //登录过滤器，在这里拦下登录请求，判断登陆是否成功，生成token
                 .addFilterBefore(new JWTLoginFilter(
                         "/user/login",
-                        authenticationManager(), roleService, cacheService),
+                        authenticationManager(), roleService, cacheService, settingsService, menuService),
                         UsernamePasswordAuthenticationFilter.class)
                 //权限过滤器，拦截每条需要验证的请求，判断携带的token是否存在或有效
 //                .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)

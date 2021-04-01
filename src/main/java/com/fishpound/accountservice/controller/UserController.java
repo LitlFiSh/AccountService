@@ -1,9 +1,6 @@
 package com.fishpound.accountservice.controller;
 
-import com.fishpound.accountservice.entity.Account;
-import com.fishpound.accountservice.entity.Department;
-import com.fishpound.accountservice.entity.Role;
-import com.fishpound.accountservice.entity.UserInfo;
+import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultTool;
@@ -32,14 +29,18 @@ public class UserController {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     CacheService cacheService;
+    @Autowired
+    SettingsService settingsService;
+    @Autowired
+    PurchaceOrderService purchaceOrderService;
 
     /**
      * 通过用户 id 查找用户信息并返回
-     * @param id 用户id
      * @return
      */
     @GetMapping("/info")
-    public JsonResult getUserInfo(@RequestParam String id){
+    public JsonResult getUserInfo(HttpServletRequest request){
+        String id = request.getAttribute("user").toString();
         UserInfo userInfo = userInfoService.findById(id);
         if(userInfo == null){
             return ResultTool.fail(ResultCode.USER_ACCOUNT_NOT_EXIST);
@@ -47,13 +48,25 @@ public class UserController {
         Account user_account = userInfo.getAccount();
         Role user_role = user_account.getRole();
         Department user_department = userInfo.getDepartment();
-        return ResultTool.success(new ResultUser(
-                        userInfo.getId(),
-                        userInfo.getUsername(),
-                        user_department.getDeptName(),
-                        user_role.getRoleDescription()
-                        )
-                );
+        Settings settings = settingsService.findByDescription(userInfo.getId());
+        if(settings == null) {
+            return ResultTool.success(new ResultUser(
+                            userInfo.getId(),
+                            userInfo.getUsername(),
+                            user_department.getDeptName(),
+                            user_role.getRoleDescription(),
+                            false
+                    )
+            );
+        } else{
+            return ResultTool.success(new ResultUser(
+                    userInfo.getId(),
+                    userInfo.getUsername(),
+                    user_department.getDeptName(),
+                    user_role.getRoleDescription(),
+                    settings.getValue().equals("1") ? true : false
+            ));
+        }
     }
 
     /**
@@ -97,15 +110,21 @@ public class UserController {
         }
     }
 
-    /**
-     * 模糊搜索用户名
-     * @param name 用户名
-     * @return
-     */
-    @GetMapping("/search")
-    public JsonResult searchUsername(@RequestParam(value = "name") String name){
-        name = "%" + name + "%";
-        List<String> list = userInfoService.findUsername(name);
-        return ResultTool.success(list);
+//    /**
+//     * 模糊搜索用户名
+//     * @param name 用户名
+//     * @return
+//     */
+//    @GetMapping("/search")
+//    public JsonResult searchUsername(@RequestParam(value = "name") String name){
+//        name = "%" + name + "%";
+//        List<String> list = userInfoService.findUsername(name);
+//        return ResultTool.success(list);
+//    }
+
+    @GetMapping("/purchace/purchaces")
+    public JsonResult getUsersPurchace(@RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        return ResultTool.success(purchaceOrderService.findAll(page));
     }
 }

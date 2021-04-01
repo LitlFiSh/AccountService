@@ -13,4 +13,5 @@ public interface PurchaceOrderService {
     void deletePurchace(Integer id);
 
     Page<PurchaceOrder> findAllByUser(String uid, Integer page);
+    Page<PurchaceOrder> findAll(Integer page);
 }

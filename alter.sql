@@ -69,3 +69,6 @@ insert into menu (id, path, name, pid) values (61, "/orderlist", "所有申请�
 insert into menu (id, name, rid) values (7, "采购单", 1);
 insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采购单", 7);
 -- 2021年3月29日
+-- ---
+update menu set rid=null where id=7;
+-- 2021年4月1日

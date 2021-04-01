@@ -2,10 +2,12 @@ package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.PurchaceOrder;
+import com.fishpound.accountservice.entity.Settings;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.OrderListService;
 import com.fishpound.accountservice.service.PurchaceOrderService;
+import com.fishpound.accountservice.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,8 @@ public class PurchaceOrderController {
     PurchaceOrderService purchaceOrderService;
     @Autowired
     OrderListService orderListService;
+    @Autowired
+    SettingsService settingsService;
 
     /**
      * 建立一个新的采购单
@@ -62,13 +66,18 @@ public class PurchaceOrderController {
         purchaceOrder.setCreateTime(new Date());
         purchaceOrder.setUpdateTime(new Date());
         purchaceOrderService.createPurchace(purchaceOrder);
-        return ResultTool.success();
-    }
 
-    @GetMapping("/purchaces")
-    public JsonResult getUsersPurchace(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") Integer page)
-    {
-        String uid = request.getAttribute("user").toString();
-        return ResultTool.success(purchaceOrderService.findAllByUser(uid, page));
+        Settings settings = settingsService.findByDescription(uid);
+        if(settings == null){
+            Settings s = new Settings();
+            s.setDescription(uid);
+            s.setValue("1");
+            settingsService.addSetting(s);
+        } else{
+            settings.setValue("1");
+            settingsService.updateSettings(settings);
+        }
+
+        return ResultTool.success();
     }
 }

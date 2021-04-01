@@ -32,4 +32,9 @@ public class MenuServiceImpl implements MenuService {
     public List<Menu> findAll() {
         return menuRepository.findAll();
     }
+
+    @Override
+    public Menu findByName(String menuName) {
+        return menuRepository.findByName(menuName);
+    }
 }

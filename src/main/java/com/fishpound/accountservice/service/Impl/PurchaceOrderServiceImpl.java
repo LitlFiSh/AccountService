@@ -38,4 +38,10 @@ public class PurchaceOrderServiceImpl implements PurchaceOrderService {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return purchaceOrderRepository.findAllByUid(uid, pageTools.sortSingle());
     }
+
+    @Override
+    public Page<PurchaceOrder> findAll(Integer page) {
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        return purchaceOrderRepository.findAll(pageTools.sortSingle());
+    }
 }
