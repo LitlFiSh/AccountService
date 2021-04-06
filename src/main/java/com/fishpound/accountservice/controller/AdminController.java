@@ -129,12 +129,7 @@ public class AdminController {
         if(!"%".equals(name)){
             name = "%" + name + "%";
         }
-        List<UserInfo> userInfos = userInfoService.findUsername(name);
-        List<ResultUser> resultUserList = new ArrayList<>();
-        for(UserInfo user : userInfos){
-            ResultUser ru = new ResultUser(user);
-            resultUserList.add(ru);
-        }
+        List<ResultUser> resultUserList = userInfoService.findUsername(name);
         return ResultTool.success(resultUserList);
     }
 

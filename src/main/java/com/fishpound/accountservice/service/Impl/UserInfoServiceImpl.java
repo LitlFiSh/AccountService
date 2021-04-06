@@ -156,8 +156,14 @@ public class UserInfoServiceImpl implements UserInfoService{
     }
 
     @Override
-    public List<UserInfo> findUsername(String username) {
-        return userInfoRepository.findUsername(username);
+    public List<ResultUser> findUsername(String username) {
+        List<UserInfo> userInfoList = userInfoRepository.findUsername(username);
+        List<ResultUser> resultUserList = new ArrayList<>();
+        for(UserInfo user : userInfoList){
+            ResultUser ru = new ResultUser(user);
+            resultUserList.add(ru);
+        }
+        return resultUserList;
     }
 
     @Override

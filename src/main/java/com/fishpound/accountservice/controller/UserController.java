@@ -110,17 +110,17 @@ public class UserController {
         }
     }
 
-//    /**
-//     * 模糊搜索用户名
-//     * @param name 用户名
-//     * @return
-//     */
-//    @GetMapping("/search")
-//    public JsonResult searchUsername(@RequestParam(value = "name") String name){
-//        name = "%" + name + "%";
-//        List<String> list = userInfoService.findUsername(name);
-//        return ResultTool.success(list);
-//    }
+    /**
+     * 模糊搜索用户名
+     * @param name 用户名
+     * @return
+     */
+    @GetMapping("/search")
+    public JsonResult searchUsername(@RequestParam(value = "name") String name){
+        name = "%" + name + "%";
+        List<ResultUser> list = userInfoService.findUsername(name);
+        return ResultTool.success(list);
+    }
 
     @GetMapping("/purchace/purchaces")
     public JsonResult getUsersPurchace(@RequestParam(value = "page", defaultValue = "1") Integer page)
