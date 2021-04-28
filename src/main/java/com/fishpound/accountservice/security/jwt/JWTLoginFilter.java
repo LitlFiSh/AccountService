@@ -173,7 +173,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 //            menus.addAll(role.getMenus());
             Settings settings = settingsService.findByDescription(jwtUser.getId());
             if(settings != null) {
-                if (settings.getValue() == "1") {
+                if (settings.getValue().equals("1")) {
                     menus.add(menuService.findByName("采购单"));
                 }
             } else if(role.getId() == 1){

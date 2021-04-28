@@ -156,7 +156,7 @@ public class OrderController {
      * @param startDate 申请日期开始范围
      * @param endDate 申请日期结束范围
      * @param user 申请人名称
-     * @param fundcode 采购经费代码
+     * @param fundCode 采购经费代码
      * @param page 查找页数
      * @return
      */
@@ -167,7 +167,7 @@ public class OrderController {
                                      @RequestParam(value = "startDate", defaultValue = "1970-01-01") String startDate,
                                      @RequestParam(value = "endDate", defaultValue = "2038-01-19") String endDate,
                                      @RequestParam(value = "user", defaultValue = "%") String user,
-                                     @RequestParam(value = "fundCode", defaultValue = "%") String fundcode,
+                                     @RequestParam(value = "fundCode", defaultValue = "%") String fundCode,
                                      @RequestParam(value = "status", defaultValue = "10") Integer status,
                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
@@ -182,8 +182,8 @@ public class OrderController {
         if(!"%".equals(user)){
             user = "%" + user + "%";
         }
-        if(!"%".equals(fundcode)){
-            fundcode = "%" + fundcode + "%";
+        if(!"%".equals(fundCode)){
+            fundCode = "%" + fundCode + "%";
         }
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -198,7 +198,7 @@ public class OrderController {
         params.put("startDate", startDate);
         params.put("endDate", endDate);
         params.put("user", user);
-        params.put("fundcode", fundcode);
+        params.put("fundCode", fundCode);
         params.put("status", status);
         return ResultTool.success(orderApplyService.findByUserInCondition(params, page));
     }
@@ -214,8 +214,8 @@ public class OrderController {
     {
         OrderApply orderApply = orderApplyService.findOne(id);
         try {
-            PrintWriter writer = response.getWriter();
             if(orderApply == null){
+                PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(ResultTool.fail("找不到申请单")));
                 writer.flush();
                 writer.close();

@@ -52,17 +52,17 @@ insert into department (id, dept_name) values ("08", "资源部");
 insert into department (id, dept_name) values ("09", "技术部");
 insert into department (id, dept_name) values ("10", "培训中心");
 
-insert into account (id, password, role_id, is_active) values ("12345678910", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 1, 1);
-insert into account (id, password, role_id, is_active) values ("12345678911", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
-insert into account (id, password, role_id, is_active) values ("12345678912", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
-insert into account (id, password, role_id, is_active) values ("12345678913", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
-insert into account (id, password, role_id, is_active) values ("12345678914", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 3, 1);
+-- insert into account (id, password, role_id, is_active) values ("12345678910", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 1, 1);
+-- insert into account (id, password, role_id, is_active) values ("12345678911", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+-- insert into account (id, password, role_id, is_active) values ("12345678912", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+-- insert into account (id, password, role_id, is_active) values ("12345678913", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 4, 1);
+-- insert into account (id, password, role_id, is_active) values ("12345678914", "$2a$10$Uyeh8RHUoOsA3yVg9FFHMeW.Kp9gOdnDQyC7Ll0qpTjULvGwA7y4G", 3, 1);
 
-insert into userinfo (id, username, account_id, department_id) values ("12345678910", "TestAdmin", "12345678910", "01");
-insert into userinfo (id, username, account_id, department_id) values ("12345678911", "办公室用户1", "12345678911", "01");
-insert into userinfo (id, username, account_id, department_id) values ("12345678912", "办公室用户2", "12345678912", "01");
-insert into userinfo (id, username, account_id, department_id) values ("12345678913", "财务部用户1", "12345678913", "02");
-insert into userinfo (id, username, account_id, department_id) values ("12345678914", "办公室领导", "12345678914", "01");
+-- insert into userinfo (id, username, account_id, department_id) values ("12345678910", "TestAdmin", "12345678910", "01");
+-- insert into userinfo (id, username, account_id, department_id) values ("12345678911", "办公室用户1", "12345678911", "01");
+-- insert into userinfo (id, username, account_id, department_id) values ("12345678912", "办公室用户2", "12345678912", "01");
+-- insert into userinfo (id, username, account_id, department_id) values ("12345678913", "财务部用户1", "12345678913", "02");
+-- insert into userinfo (id, username, account_id, department_id) values ("12345678914", "办公室领导", "12345678914", "01");
 
 insert into menu (id, name, rid) values (1, "用户", 4);
 insert into menu (id, path, name, pid) values (11, "/info", "用户信息", 1);
@@ -73,6 +73,7 @@ insert into menu (id, path, name, pid) values (22, "/addOrder", "新建申请", 
 
 insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/listUser", "用户管理", 3);
+insert into menu (id, path, name, pid) values (32, "/code", "采购经费代码设置", 3);
 
 insert into menu (id, name, rid) values (4, "部门", 3);
 insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);
@@ -85,5 +86,5 @@ insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有�
 insert into menu (id, name, rid) vlues (6, "设备列表", 1);
 insert into menu (id, path, name, pid) value (61, "/orderlist", "所有申请设备", 6);
 
-insert into menu (id, name, rid) values (7, "采购单");
+insert into menu (id, name) values (7, "采购单");
 insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采购单", 7);

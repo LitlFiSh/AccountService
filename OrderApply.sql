@@ -10,7 +10,7 @@ create table orderapply(
     inst_leader_sign tinyint(1) default 0 null comment '主管院领导签名状态',
     inst_leader_sign_date datetime null comment '主管院领导签名日期',
     status tinyint(2) default 0 comment '申请单状态',
-    file blob null comment '签名文件',
+    file mediumblob null comment '签名文件',
     uid char(11) not null comment '申请人id',
     withdrawal_reason text null comment '撤回原因',
     create_time timestamp null default CURRENT_TIMESTAMP comment '创建时间（自动维护）',

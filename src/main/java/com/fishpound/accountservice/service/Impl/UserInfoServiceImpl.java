@@ -160,7 +160,7 @@ public class UserInfoServiceImpl implements UserInfoService{
         List<UserInfo> userInfoList = userInfoRepository.findUsername(username);
         List<ResultUser> resultUserList = new ArrayList<>();
         for(UserInfo user : userInfoList){
-            ResultUser ru = new ResultUser(user);
+            ResultUser ru = new ResultUser(user, true);
             resultUserList.add(ru);
         }
         return resultUserList;

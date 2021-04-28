@@ -7,8 +7,8 @@ public enum ResultCode {
     FAIL(0, "失败"),
     SUCCESS(1, "成功"),
     /*token错误*/
-    TOKEN_NOT_VALID(2, "token失效"),
-    TOKEN_IS_NULL(3, "token为空"),
+    TOKEN_NOT_VALID(2, "token失效，请重新登录"),
+    TOKEN_IS_NULL(3, "token为空，请登录"),
 
     /*参数错误*/
     PARAM_IS_NULL(11, "参数缺失"),

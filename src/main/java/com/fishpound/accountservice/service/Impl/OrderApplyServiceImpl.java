@@ -129,7 +129,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
                 param.get("startDate").toString(),
                 param.get("endDate").toString(),
                 param.get("user").toString(),
-                param.get("fundcode").toString(),
+                param.get("fundCode").toString(),
                 Integer.valueOf(param.get("status").toString()),
                 pageTools.sortSingle());
     }
@@ -183,7 +183,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
                     param.get("startDate").toString(),
                     param.get("endDate").toString(),
                     param.get("user").toString(),
-                    param.get("fundcode").toString(),
+                    param.get("fundCode").toString(),
                     -1,
                     pageTools.sortSingle());
         } else {
@@ -193,7 +193,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
                     param.get("startDate").toString(),
                     param.get("endDate").toString(),
                     param.get("user").toString(),
-                    param.get("fundcode").toString(),
+                    param.get("fundCode").toString(),
                     status,
                     pageTools.sortSingle());
         }

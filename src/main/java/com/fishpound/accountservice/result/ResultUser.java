@@ -16,14 +16,6 @@ public class ResultUser {
     public ResultUser() {
     }
 
-    public ResultUser(String id, String username, String department, String role, boolean inCharge) {
-        this.id = id;
-        this.username = username;
-        this.department = department;
-        this.role = role;
-        this.inCharge = inCharge;
-    }
-
     public ResultUser(String id, String username, String department, String password, String role, boolean inCharge) {
         this.id = id;
         this.username = username;
@@ -33,11 +25,25 @@ public class ResultUser {
         this.inCharge = inCharge;
     }
 
-    public ResultUser(UserInfo userInfo) {
-        this.id = userInfo.getId();
-        this.username = userInfo.getUsername();
-        this.department = userInfo.getDepartment().getDeptName();
-        this.role = userInfo.getAccount().getRole().getRoleDescription();
+    public ResultUser(String id, String username, String department, String role, boolean inCharge) {
+        this.id = id;
+        this.username = username;
+        this.department = department;
+        this.role = role;
+        this.inCharge = inCharge;
+    }
+
+    public ResultUser(UserInfo userInfo, boolean hideSensitive) {
+        if(hideSensitive){
+            //不返回敏感信息
+            this.username = userInfo.getUsername();
+            this.department = userInfo.getDepartment().getDeptName();
+        } else {
+            this.id = userInfo.getId();
+            this.username = userInfo.getUsername();
+            this.department = userInfo.getDepartment().getDeptName();
+            this.role = userInfo.getAccount().getRole().getRoleDescription();
+        }
     }
 
     public String getId() {

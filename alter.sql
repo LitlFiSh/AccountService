@@ -72,3 +72,6 @@ insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采�
 -- ---
 update menu set rid=null where id=7;
 -- 2021年4月1日
+-- ---
+insert into menu (id, path, name, pid) values (32, "/code", "采购经费代码设置", 3);
+-- 2021年4月7日
