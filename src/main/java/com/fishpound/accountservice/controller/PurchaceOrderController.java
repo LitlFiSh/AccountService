@@ -22,7 +22,7 @@ import java.util.Map;
  * @Date 2021/3/26 22:40
  */
 @RestController
-@RequestMapping("/admin/purchace")
+@RequestMapping("/purchace")
 public class PurchaceOrderController {
     @Autowired
     PurchaceOrderService purchaceOrderService;

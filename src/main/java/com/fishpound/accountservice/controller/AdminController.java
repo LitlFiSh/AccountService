@@ -255,6 +255,24 @@ public class AdminController {
         return ResultTool.success();
     }
 
+    @PostMapping("/department")
+    public JsonResult addDepartment(@RequestBody Department department){
+        departmentService.addDept(department);
+        return ResultTool.success();
+    }
+
+    @PutMapping("/department")
+    public JsonResult updateDepartment(@RequestBody Department department){
+        departmentService.updateDept(department);
+        return ResultTool.success();
+    }
+
+    @DeleteMapping("/department/{id}")
+    public JsonResult deleteDepartment(@PathVariable(value = "id") String id){
+        departmentService.deleteDept(id);
+        return ResultTool.success();
+    }
+
     /**
      * 通过 ResultUser 类生成实体类 UserInfo
      * @param user ResultUser类

@@ -64,4 +64,17 @@ public class NoticeController {
         }
         return ResultTool.success();
     }
+
+    /**
+     * 设定一条消息为已读
+     * @param nid
+     * @return
+     */
+    @GetMapping("/read")
+    public JsonResult setNoticeRead(@RequestParam(value = "notice_id") Integer nid){
+        Notice notice = noticeService.getOne(nid);
+        notice.setState(false);
+        noticeService.updateNotice(notice);
+        return ResultTool.success();
+    }
 }

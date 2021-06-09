@@ -1,5 +1,6 @@
 package com.fishpound.accountservice;
 
+import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.PurchaceOrder;
 import com.fishpound.accountservice.entity.UserInfo;
@@ -323,5 +324,20 @@ class AccountserviceApplicationTests {
 //            System.out.println(ru.getId());
 //            System.out.println("--------");
 //        }
+//    }
+
+//    @Test
+//    void testGenerateId(){
+//        int id = generateId((int) (departmentRepository.count() + 1));
+//        System.out.println(id);
+//    }
+//    private int generateId(int n){
+//        List<Department> all = departmentRepository.findAll();
+//        for(Department d : all){
+//            if(Integer.valueOf(d.getId()).intValue() == n){
+//                n = generateId(n + 1);
+//            }
+//        }
+//        return n;
 //    }
 }

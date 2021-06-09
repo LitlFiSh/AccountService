@@ -15,6 +15,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void addDept(Department department) {
+        int idInt = generateId((int) (departmentRepository.count() + 1));
+        department.setId(String.valueOf(idInt));
         departmentRepository.save(department);
     }
 
@@ -41,5 +43,15 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<Department> findAll() {
         return departmentRepository.findAll();
+    }
+
+    private int generateId(int n){
+        List<Department> all = departmentRepository.findAll();
+        for(Department d : all){
+            if(Integer.valueOf(d.getId()).intValue() == n){
+                n = generateId(n + 1);
+            }
+        }
+        return n;
     }
 }
