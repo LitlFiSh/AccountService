@@ -21,7 +21,8 @@ public interface OrderApplyRepository extends JpaRepository<OrderApply, String> 
             " and apply_date < ?5" +
             " and apply_user like ?6" +
             " and fund_code like ?7" +
-            " and status != ?8",
+            " and status != ?8" +
+            " order by apply_date desc",
             nativeQuery = true)
     Page<OrderApply> findUserOrders1(String uid, String id, String deptName, String startDate, String endDate,
                                     String username, String fundcode, Integer status, Pageable pageable);
@@ -32,7 +33,8 @@ public interface OrderApplyRepository extends JpaRepository<OrderApply, String> 
             " and apply_date < ?5" +
             " and apply_user like ?6" +
             " and fund_code like ?7" +
-            " and status = ?8",
+            " and status = ?8" +
+            " order by apply_date desc",
             nativeQuery = true)
     Page<OrderApply> findUserOrders2(String uid, String id, String deptName, String startDate, String endDate,
                                     String username, String fundcode, Integer status, Pageable pageable);

@@ -225,35 +225,40 @@ public class AdminController {
 //    }
 
     @GetMapping("/user/appointment")
-    public JsonResult appointmentUser(@RequestParam(value = "uid") String uid){
-        UserInfo user = userInfoService.findById(uid);
-        Settings setting = settingsService.findByDescription(uid);
-        if(user == null){
-            //查找不到用户
-            return ResultTool.fail("找不到用户");
-        }
-        if(setting != null){
-            if(setting.getValue() == "1"){
-                return ResultTool.fail("用户已是采购负责人");
+    public JsonResult appointmentUser(@RequestParam(value = "uid") String uid, @RequestParam(value = "type") String type){
+        if(type == "0" || type == "1" || type == "2") {
+            UserInfo user = userInfoService.findById(uid);
+            Settings setting = settingsService.findByDescription(uid);
+            if (user == null) {
+                //查找不到用户
+                return ResultTool.fail("找不到用户");
             }
-        } else{
+            if (setting != null) {
+                if (setting.getValue() == "1") {
+                    return ResultTool.fail("用户已是采购负责人");
+                } else if (setting.getValue() == "2") {
+                    return ResultTool.fail("用户已是采购总负责人");
+                }
+            }
             Settings s = new Settings();
             s.setDescription(uid);
-            s.setValue("1");
+            s.setValue(type);
             settingsService.addSetting(s);
+            return ResultTool.success();
+        } else{
+            return ResultTool.fail("tpye参数的值错误（应为 1 或 2）");
         }
-        return ResultTool.success();
     }
 
-    @GetMapping("/user/disappointment")
-    public JsonResult disappointment(@RequestParam(value = "uid") String uid){
-        Settings settings = settingsService.findByDescription(uid);
-        if(settings != null){
-            settings.setValue("0");
-            settingsService.updateSettings(settings);
-        }
-        return ResultTool.success();
-    }
+//    @GetMapping("/user/disappointment")
+//    public JsonResult disappointment(@RequestParam(value = "uid") String uid){
+//        Settings settings = settingsService.findByDescription(uid);
+//        if(settings != null){
+//            settings.setValue("0");
+//            settingsService.updateSettings(settings);
+//        }
+//        return ResultTool.success();
+//    }
 
     @PostMapping("/department")
     public JsonResult addDepartment(@RequestBody Department department){
