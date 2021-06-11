@@ -226,27 +226,22 @@ public class AdminController {
 
     @GetMapping("/user/appointment")
     public JsonResult appointmentUser(@RequestParam(value = "uid") String uid, @RequestParam(value = "type") String type){
-        if(type == "0" || type == "1" || type == "2") {
+        if("0".equals(type) || "1".equals(type) || "2".equals(type)) {
             UserInfo user = userInfoService.findById(uid);
             Settings setting = settingsService.findByDescription(uid);
             if (user == null) {
                 //查找不到用户
                 return ResultTool.fail("找不到用户");
             }
-            if (setting != null) {
-                if (setting.getValue() == "1") {
-                    return ResultTool.fail("用户已是采购负责人");
-                } else if (setting.getValue() == "2") {
-                    return ResultTool.fail("用户已是采购总负责人");
-                }
+            if(setting == null){
+                setting = new Settings();
             }
-            Settings s = new Settings();
-            s.setDescription(uid);
-            s.setValue(type);
-            settingsService.addSetting(s);
+            setting.setDescription(uid);
+            setting.setValue(type);
+            settingsService.addSetting(setting);
             return ResultTool.success();
         } else{
-            return ResultTool.fail("tpye参数的值错误（应为 1 或 2）");
+            return ResultTool.fail("tpye参数的值错误（应为0、 1 或 2）");
         }
     }
 
