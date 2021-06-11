@@ -55,7 +55,7 @@ public class UserController {
                             userInfo.getUsername(),
                             user_department.getDeptName(),
                             user_role.getRoleDescription(),
-                            false
+                            "0"
                     )
             );
         } else{
@@ -64,7 +64,7 @@ public class UserController {
                     userInfo.getUsername(),
                     user_department.getDeptName(),
                     user_role.getRoleDescription(),
-                    settings.getValue().equals("1") ? true : false
+                    settings.getValue()
             ));
         }
     }

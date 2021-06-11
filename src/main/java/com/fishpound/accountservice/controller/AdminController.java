@@ -61,13 +61,13 @@ public class AdminController {
                     userInfo.getUsername(),
                     userInfo.getDepartment().getDeptName(),
                     userInfo.getAccount().getRole().getRoleDescription(),
-                    settings.getValue().equals("1") ? true : false);
+                    settings.getValue());
         } else{
             user = new ResultUser(userInfo.getId(),
                     userInfo.getUsername(),
                     userInfo.getDepartment().getDeptName(),
                     userInfo.getAccount().getRole().getRoleDescription(),
-                    false);
+                    "0");
         }
         return ResultTool.success(user);
     }

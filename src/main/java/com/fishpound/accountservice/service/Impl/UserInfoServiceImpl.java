@@ -70,13 +70,13 @@ public class UserInfoServiceImpl implements UserInfoService{
                         user.getUsername(),
                         user.getDepartment().getDeptName(),
                         user.getAccount().getRole().getRoleDescription(),
-                        userSetting.getValue().equals("1") ? true : false);
+                        userSetting.getValue());
             } else{
                 resultUser = new ResultUser(user.getId(),
                         user.getUsername(),
                         user.getDepartment().getDeptName(),
                         user.getAccount().getRole().getRoleDescription(),
-                        false);
+                        "0");
             }
             resultUserList.add(resultUser);
         }

@@ -11,12 +11,12 @@ public class ResultUser {
     private String department;
     private String password;
     private String role;
-    private boolean inCharge;
+    private String inCharge;
 
     public ResultUser() {
     }
 
-    public ResultUser(String id, String username, String department, String password, String role, boolean inCharge) {
+    public ResultUser(String id, String username, String department, String password, String role, String inCharge) {
         this.id = id;
         this.username = username;
         this.department = department;
@@ -25,7 +25,7 @@ public class ResultUser {
         this.inCharge = inCharge;
     }
 
-    public ResultUser(String id, String username, String department, String role, boolean inCharge) {
+    public ResultUser(String id, String username, String department, String role, String inCharge) {
         this.id = id;
         this.username = username;
         this.department = department;
@@ -86,11 +86,11 @@ public class ResultUser {
         this.password = password;
     }
 
-    public boolean isInCharge() {
+    public String isInCharge() {
         return inCharge;
     }
 
-    public void setInCharge(boolean inCharge) {
+    public void setInCharge(String inCharge) {
         this.inCharge = inCharge;
     }
 }
