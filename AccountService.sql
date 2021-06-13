@@ -74,6 +74,7 @@ insert into menu (id, path, name, pid) values (22, "/addOrder", "新建申请", 
 insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/listUser", "用户管理", 3);
 insert into menu (id, path, name, pid) values (32, "/code", "采购经费代码设置", 3);
+insert into menu (id, path, name, pid) values (33, "/department", "部门管理", 3);
 
 insert into menu (id, name, rid) values (4, "部门", 3);
 insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);

@@ -86,3 +86,6 @@ create table file(
     primary key (id)
 ) engine=innodb comment '附件表';
 -- 2021年6月9日
+-- ---
+insert into menu (id, path, name, pid) values (33, "/department", "部门管理", 3);
+-- 2021年6月13日

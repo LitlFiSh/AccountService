@@ -86,7 +86,7 @@ public class ResultUser {
         this.password = password;
     }
 
-    public String isInCharge() {
+    public String getInCharge() {
         return inCharge;
     }
 
