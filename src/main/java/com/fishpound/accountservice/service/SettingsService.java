@@ -13,5 +13,6 @@ public interface SettingsService {
     void updateSettings(Settings settings);
     void deleteSettings(Integer id);
     Settings findByDescription(String desc);
+    List<Settings> fingAllByDescription(String desc);
     List<Settings> findAll();
 }

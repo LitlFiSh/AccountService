@@ -1,9 +1,11 @@
 package com.fishpound.accountservice.controller;
 
 import com.fishpound.accountservice.entity.File;
+import com.fishpound.accountservice.entity.Settings;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.FileService;
+import com.fishpound.accountservice.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -21,17 +24,27 @@ import java.util.Date;
 @RequestMapping("/file")
 public class FileController {
     @Autowired
-    FileService fileService;
+    private FileService fileService;
+    @Autowired
+    private SettingsService settingsService;
 
     @PostMapping("/upload")
     public JsonResult uploadFile(@RequestParam(value = "file")MultipartFile file,
                                  @RequestParam(value = "oid")String oid,
-                                 @RequestParam(value = "status")String status)
+                                 @RequestParam(value = "status")String status,
+                                 HttpServletRequest request)
     {
+        String uid = (String) request.getAttribute("user");
+        Settings setting = settingsService.findByDescription(uid);
+        if(setting == null || "0".equals(setting.getValue()) || "1".equals(setting.getValue())){
+            return ResultTool.fail("没有权限");
+        }
         try{
-            byte[] data = file.getBytes();
             File f = new File();
-            f.setFile(data);
+            if(file != null) {
+                byte[] data = file.getBytes();
+                f.setFile(data);
+            }
             f.setDescription(status);
             f.setOid(oid);
             f.setCreateTime(new Date());

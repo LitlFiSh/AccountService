@@ -1,14 +1,14 @@
 package com.fishpound.accountservice.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.fishpound.accountservice.entity.File;
 import com.fishpound.accountservice.entity.OrderApply;
+import com.fishpound.accountservice.entity.Settings;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultOrder;
 import com.fishpound.accountservice.result.ResultTool;
-import com.fishpound.accountservice.service.AsyncService;
-import com.fishpound.accountservice.service.OrderApplyService;
-import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.*;
 import com.fishpound.accountservice.service.tools.FileTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -24,20 +24,22 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Validated
 @RestController
 @RequestMapping("/order")
 public class OrderController {
     @Autowired
-    OrderApplyService orderApplyService;
+    private OrderApplyService orderApplyService;
     @Autowired
-    UserInfoService userInfoService;
+    private UserInfoService userInfoService;
     @Autowired
-    AsyncService asyncService;
+    private AsyncService asyncService;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private SettingsService settingsService;
 
     /**
      * 通过申请单id获取申请单内容
@@ -305,6 +307,37 @@ public class OrderController {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("/orderStatus")
+    public JsonResult getStatus(@RequestParam(value = "oid")String oid){
+        Map<String, Object> result = new LinkedHashMap<>();
+        List<File> all = fileService.findAllByOid(oid);
+        List<Settings> status = settingsService.fingAllByDescription("申请单状态");
+        File file1 = all.get(0);
+        boolean b = false;
+        for(Settings s : status){
+            if(file1.getDescription().equals(s.getValue())){
+                b = true;
+            }
+        }
+        if(b){
+            //其中一个状态符合设置中的状态
+            for(Settings s : status){
+                boolean flag = false;
+                for(File f1 : all){
+                    if(s.getValue().equals(f1.getDescription())){
+                        flag = true;
+                    }
+                }
+                result.put(s.getValue(), flag);
+            }
+        } else{
+            for(File f2 : all){
+                result.put(f2.getDescription(), true);
+            }
+        }
+        return ResultTool.success(result);
     }
 
     private boolean equal(HttpServletRequest request, String uid){

@@ -89,3 +89,7 @@ create table file(
 -- ---
 insert into menu (id, path, name, pid) values (33, "/department", "部门管理", 3);
 -- 2021年6月13日
+-- ---
+update menu set rid=null where id=6;
+insert into menu (id, path, name, pid) values (34, "/status", "申请单状态管理", 3);
+-- 2021年6月14日

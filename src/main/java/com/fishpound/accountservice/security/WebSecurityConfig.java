@@ -77,9 +77,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //只开放登录接口，其他访问路径都需要身份验证
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .antMatchers("/user/**", "/order/**", "/department/**", "/notice/**", "/purchace/**", "/file/**").hasAnyAuthority(base)
+                .antMatchers("/user/**", "/order/**", "/department/**", "/notice/**", "/purchace/**", "/orderlist/**", "/file/**").hasAnyAuthority(base)
                 .antMatchers("/dept/**","/inst/**").hasAnyAuthority(leader)
-                .antMatchers("/admin/**", "/orderlist/**").hasAnyAuthority(admin)
+                .antMatchers("/admin/**").hasAnyAuthority(admin)
                 .anyRequest().authenticated()
                 .and()
                 //登录过滤器，在这里拦下登录请求，判断登陆是否成功，生成token

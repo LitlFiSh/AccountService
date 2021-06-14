@@ -38,6 +38,11 @@ public class SettingsServiceImpl implements SettingsService {
     }
 
     @Override
+    public List<Settings> fingAllByDescription(String desc) {
+        return settingsRepository.findAllByDescription(desc);
+    }
+
+    @Override
     public List<Settings> findAll() {
         return settingsRepository.findAll();
     }

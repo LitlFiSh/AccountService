@@ -75,6 +75,7 @@ insert into menu (id, name, rid) values (3, "管理", 1);
 insert into menu (id, path, name, pid) values (31, "/listUser", "用户管理", 3);
 insert into menu (id, path, name, pid) values (32, "/code", "采购经费代码设置", 3);
 insert into menu (id, path, name, pid) values (33, "/department", "部门管理", 3);
+insert into menu (id, path, name, pid) values (34, "/status", "申请单状态管理", 3);
 
 insert into menu (id, name, rid) values (4, "部门", 3);
 insert into menu (id, path, name, pid) values (41, "/approval", "待审批", 4);
@@ -84,7 +85,7 @@ insert into menu (id, name, rid) values (5, "主管", 2);
 insert into menu (id, path, name, pid) values (51, "/approval", "待审批", 5);
 insert into menu (id, path, name, pid) values (52, "/instOrder", "查看所有申请", 5);
 
-insert into menu (id, name, rid) vlues (6, "设备列表", 1);
+insert into menu (id, name, rid) vlues (6, "设备列表");
 insert into menu (id, path, name, pid) value (61, "/orderlist", "所有申请设备", 6);
 
 insert into menu (id, name) values (7, "采购单");
