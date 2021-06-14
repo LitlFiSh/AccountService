@@ -70,6 +70,26 @@ public class UserController {
     }
 
     /**
+     * 通过用户真实姓名模糊查找用户信息
+     * @param request
+     * @return
+     */
+    @GetMapping("/users/info")
+    public JsonResult getAdmin(HttpServletRequest request, @RequestParam(value = "username", defaultValue = "%") String name){
+        /*List<UserInfo> adminList = userInfoService.findUserByRole(1);
+        List<ResultUser> resultUserList = new ArrayList<>();
+        for(UserInfo u : adminList){
+            ResultUser ru = new ResultUser(u);
+            resultUserList.add(ru);
+        }*/
+        if(!"%".equals(name)){
+            name = "%" + name + "%";
+        }
+        List<ResultUser> resultUserList = userInfoService.findUsername(name);
+        return ResultTool.success(resultUserList);
+    }
+
+    /**
      * 退出登录，销毁缓存中的 token
      * @param request
      * @param uid

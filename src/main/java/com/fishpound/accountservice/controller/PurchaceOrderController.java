@@ -74,8 +74,10 @@ public class PurchaceOrderController {
             s.setValue("1");
             settingsService.addSetting(s);
         } else{
-            settings.setValue("1");
-            settingsService.updateSettings(settings);
+            if("0".equals(settings.getValue())) {
+                settings.setValue("1");
+                settingsService.updateSettings(settings);
+            }
         }
 
         return ResultTool.success();
