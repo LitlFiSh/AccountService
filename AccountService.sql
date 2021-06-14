@@ -90,3 +90,6 @@ insert into menu (id, path, name, pid) value (61, "/orderlist", "所有申请设
 
 insert into menu (id, name) values (7, "采购单");
 insert into menu (id, path, name, pid) values (71, "/purchaceOrder", "查看采购单", 7);
+
+insert into menu (id, name, rid) values (8, "申请单管理");
+insert into menu (id, path, name, pid) values (81, "/listOrderApply", "所有申请单", 8);
