@@ -3,11 +3,13 @@ package com.fishpound.accountservice.controller;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.PurchaceOrder;
 import com.fishpound.accountservice.entity.Settings;
+import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.OrderListService;
 import com.fishpound.accountservice.service.PurchaceOrderService;
 import com.fishpound.accountservice.service.SettingsService;
+import com.fishpound.accountservice.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +27,13 @@ import java.util.Map;
 @RequestMapping("/purchace")
 public class PurchaceOrderController {
     @Autowired
-    PurchaceOrderService purchaceOrderService;
+    private PurchaceOrderService purchaceOrderService;
     @Autowired
-    OrderListService orderListService;
+    private OrderListService orderListService;
     @Autowired
-    SettingsService settingsService;
+    private SettingsService settingsService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     /**
      * 建立一个新的采购单
@@ -81,5 +85,31 @@ public class PurchaceOrderController {
         }
 
         return ResultTool.success();
+    }
+
+    /**
+     * 获取该用户所能看到的所有申请单
+     * @param page
+     * @param request
+     * @return
+     */
+    @GetMapping("/purchaces")
+    public JsonResult getUsersPurchace(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                       HttpServletRequest request)
+    {
+        String uid = request.getAttribute("user").toString();
+        Settings s = settingsService.findByDescription(uid);
+        UserInfo user = userInfoService.findById(uid);
+        if(user.getAccount().getRole().getId() == 1){
+            return ResultTool.success(purchaceOrderService.findAll(page));
+        } else{
+            if(s != null && "2".equals(s.getValue())) {
+                return ResultTool.success(purchaceOrderService.findAll(page));
+            } else if(s != null && "1".equals(s.getValue())){
+                return ResultTool.success(purchaceOrderService.findAllByUser(uid, page));
+            } else{
+                return ResultTool.fail("没有权限");
+            }
+        }
     }
 }

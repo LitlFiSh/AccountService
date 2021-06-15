@@ -141,10 +141,4 @@ public class UserController {
         List<ResultUser> list = userInfoService.findUsername(name);
         return ResultTool.success(list);
     }
-
-    @GetMapping("/purchace/purchaces")
-    public JsonResult getUsersPurchace(@RequestParam(value = "page", defaultValue = "1") Integer page)
-    {
-        return ResultTool.success(purchaceOrderService.findAll(page));
-    }
 }

@@ -172,15 +172,17 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             }
 //            menus.addAll(role.getMenus());
             Settings settings = settingsService.findByDescription(jwtUser.getId());
-            if(settings != null) {
-                if (settings.getValue().equals("2")) {
-                    menus.add(menuService.findByName("申请单管理"));
-                    menus.add(menuService.findByName("设备列表"));
-                    menus.add(menuService.findByName("采购单"));
-                } else if(role.getId() == 1){
-                    menus.add(menuService.findByName("采购单"));
+            if(role.getId() != 1) {
+                if (settings != null) {
+                    if ("2".equals(settings.getValue())) {
+                        menus.add(menuService.findByName("申请单管理"));
+                        menus.add(menuService.findByName("设备列表"));
+                        menus.add(menuService.findByName("采购单"));
+                    } else if ("1".equals(settings.getValue())) {
+                        menus.add(menuService.findByName("采购单"));
+                    }
                 }
-            } else if(role.getId() == 1){
+            } else{
                 menus.add(menuService.findByName("申请单管理"));
                 menus.add(menuService.findByName("设备列表"));
                 menus.add(menuService.findByName("采购单"));

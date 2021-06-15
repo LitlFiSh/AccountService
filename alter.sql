@@ -95,3 +95,6 @@ insert into menu (id, path, name, pid) values (34, "/status", "申请单状态�
 insert into menu (id, name, rid) values (8, "申请单管理", 4);
 insert into menu (id, path, name, pid) values (81, "/listOrderApply", "所有申请单", 8);
 -- 2021年6月14日
+-- ---
+update menu set rid=null where id=8;
+--2021年6月15日
