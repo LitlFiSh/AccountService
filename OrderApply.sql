@@ -40,8 +40,7 @@ CREATE TABLE `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
   `description` varchar(64) NOT NULL COMMENT '描述',
   `value` varchar(64) NOT NULL COMMENT '值',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `description` (`description`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='配置表';
 
 insert into settings(description, value) values("采购经费代码", "123456");
@@ -49,7 +48,7 @@ insert into settings(description, value) values("采购经费代码", "123456");
 create table purchace_order(
     id int primary key AUTO_INCREMENT comment '主键id，自增',
     status tinyint(2) not null default 0 comment '采购单状态',
-    uid char(11) not null comment '采购负责人id',
+    uid char(11) not null comment '申请人id',
     create_time timestamp null default CURRENT_TIMESTAMP comment '采购单创建时间',
     update_time timestamp null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '采购单更新时间'
 ) ENGINE=InnoDB COMMENT='采购单表';

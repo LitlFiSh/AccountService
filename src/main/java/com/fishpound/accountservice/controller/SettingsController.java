@@ -42,6 +42,6 @@ public class SettingsController {
 
     @GetMapping("/all")
     public JsonResult getAll(@RequestParam(value = "description") String desc){
-        return ResultTool.success(settingsService.findByDescription(desc));
+        return ResultTool.success(settingsService.fingAllByDescription(desc));
     }
 }

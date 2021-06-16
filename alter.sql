@@ -98,3 +98,6 @@ insert into menu (id, path, name, pid) values (81, "/listOrderApply", "所有申
 -- ---
 update menu set rid=null where id=8;
 --2021年6月15日
+-- ---
+alter table settings drop index `description`
+--2021年6月16日
