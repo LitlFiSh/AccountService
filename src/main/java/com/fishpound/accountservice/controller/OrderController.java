@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fishpound.accountservice.entity.File;
 import com.fishpound.accountservice.entity.OrderApply;
 import com.fishpound.accountservice.entity.Settings;
+import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultCode;
 import com.fishpound.accountservice.result.ResultOrder;
@@ -338,6 +339,18 @@ public class OrderController {
             }
         }
         return ResultTool.success(result);
+    }
+
+    @GetMapping("/orders/all")
+    public JsonResult getAllOrders(@RequestParam(value = "page")Integer page,  HttpServletRequest request){
+        String uid = request.getAttribute("user").toString();
+        UserInfo user = userInfoService.findById(uid);
+        Settings settings = settingsService.findByDescription(uid);
+        if(user.getAccount().getRole().getId() == 1 || "2".equals(settings.getValue())){
+            return ResultTool.success(orderApplyService.findByStatus(3, page));
+        } else{
+            return ResultTool.fail("没有权限");
+        }
     }
 
     private boolean equal(HttpServletRequest request, String uid){

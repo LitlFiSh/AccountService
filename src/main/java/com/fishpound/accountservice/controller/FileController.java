@@ -9,12 +9,15 @@ import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.Date;
 
 /**
@@ -64,6 +67,19 @@ public class FileController {
             return ResultTool.success();
         } else{
             return ResultTool.fail("申请单状态错误");
+        }
+    }
+
+    @GetMapping()
+    public void getFile(@RequestParam(value = "oid")String oid, @RequestParam(value = "description") String description, HttpServletResponse response){
+        File file = fileService.findAllByOidAndDesc(oid, description);
+        try{
+            OutputStream outputStream = response.getOutputStream();
+            outputStream.write(file.getFile());
+            outputStream.flush();
+            outputStream.close();
+        } catch(Exception e){
+
         }
     }
 }
