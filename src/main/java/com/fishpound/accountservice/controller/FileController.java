@@ -8,11 +8,7 @@ import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +20,7 @@ import java.util.Date;
  * @author Litl_FiSh
  * @Date 2021/6/12 17:03
  */
-@Controller
+@RestController
 @RequestMapping("/file")
 public class FileController {
     @Autowired
@@ -37,7 +33,7 @@ public class FileController {
     private UserInfoService userInfoService;
 
     @PostMapping("/upload")
-    public JsonResult uploadFile(@RequestParam(value = "file")MultipartFile file,
+    public JsonResult uploadFile(@RequestParam(value = "file", required = false)MultipartFile file,
                                  @RequestParam(value = "oid")String oid,
                                  @RequestParam(value = "status")String status,
                                  HttpServletRequest request)
