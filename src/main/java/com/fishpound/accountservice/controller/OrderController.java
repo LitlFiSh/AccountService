@@ -315,6 +315,16 @@ public class OrderController {
         Map<String, Object> result = new LinkedHashMap<>();
         List<File> all = fileService.findAllByOid(oid);
         List<Settings> status = settingsService.fingAllByDescription("申请单状态");
+        if(status == null || status.size() == 0){
+            return ResultTool.fail("还没有设置申请单状态");
+        }
+        if(all == null || all.size() == 0){
+            for(Settings s : status){
+                boolean flag = false;
+                result.put(s.getValue(), flag);
+            }
+            return ResultTool.success(result);
+        }
         File file1 = all.get(0);
         boolean b = false;
         for(Settings s : status){
