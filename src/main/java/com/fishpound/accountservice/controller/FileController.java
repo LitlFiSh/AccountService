@@ -43,8 +43,10 @@ public class FileController {
             String uid = (String) request.getAttribute("user");
             UserInfo user = userInfoService.findById(uid);
             Settings setting = settingsService.findByDescription(uid);
-            if(!"管理员".equals(user.getAccount().getRole().getRoleName()) && (setting == null || "0".equals(setting.getValue()) || "1".equals(setting.getValue()))){
-                return ResultTool.fail("没有权限");
+            if(user.getAccount().getRole().getId() != 1){
+                if(setting == null || "0".equals(setting.getValue()) || "1".equals(setting.getValue())){
+                    return ResultTool.fail("没有权限");
+                }
             }
             try {
                 File f = new File();
