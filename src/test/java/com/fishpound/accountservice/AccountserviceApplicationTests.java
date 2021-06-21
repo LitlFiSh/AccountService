@@ -1,5 +1,6 @@
 package com.fishpound.accountservice;
 
+import com.alibaba.fastjson.JSON;
 import com.fishpound.accountservice.entity.Department;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.PurchaceOrder;
@@ -339,5 +340,11 @@ class AccountserviceApplicationTests {
 //            }
 //        }
 //        return n;
+//    }
+
+//    @Test
+//    void testFindNull(){
+//        Map<String, Object> all = orderListService.findAll(3);
+//        System.out.println(JSON.toJSONString(all));
 //    }
 }

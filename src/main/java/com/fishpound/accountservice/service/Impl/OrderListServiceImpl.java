@@ -44,15 +44,13 @@ public class OrderListServiceImpl implements OrderListService {
         Map<String, Object> result = new HashMap<>();
         List<ResultOrderList> resultList = new ArrayList<>();
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
-        Page<OrderList> orderLists = orderListRepository.findAllByStatus(3, pageTools.sortSingle());
+        Page<OrderList> orderLists = orderListRepository.findAllByStatusAndPurchaceId(3, pageTools.sortSingle());
         for(OrderList orderList : orderLists.getContent()){
-            if(orderList.getPurchaceOrder() == null) {
                 String uid = orderList.getOrderApply().getUid();
                 String username = userInfoService.findById(uid).getUsername();
                 String deptName = orderList.getOrderApply().getApplyDepartment();
                 ResultOrderList resultOrderList = new ResultOrderList(orderList, username, deptName);
                 resultList.add(resultOrderList);
-            }
         }
         result.put("totalPages", orderLists.getTotalPages());
         result.put("totalElements", orderLists.getTotalElements());
