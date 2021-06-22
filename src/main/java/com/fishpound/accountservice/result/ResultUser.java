@@ -36,6 +36,7 @@ public class ResultUser {
     public ResultUser(UserInfo userInfo, boolean hideSensitive) {
         if(hideSensitive){
             //不返回敏感信息
+            this.id = userInfo.getId();
             this.username = userInfo.getUsername();
             this.department = userInfo.getDepartment().getDeptName();
         } else {
