@@ -12,7 +12,7 @@ public interface FileService {
     void addFile(File file);
     void updateFile(File file);
     void deleteFile(Integer id);
-    File findAllByOidAndDesc(String oid, String desc);
-    List<File> findAllByOid(String oid);
+    File findAllByPurchaceIdAndDesc(Integer pid, String desc);
+    List<File> findAllByPurchaceId(Integer pid);
     List<File> findAll();
 }

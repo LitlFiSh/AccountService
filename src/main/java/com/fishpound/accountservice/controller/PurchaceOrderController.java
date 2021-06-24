@@ -1,23 +1,14 @@
 package com.fishpound.accountservice.controller;
 
-import com.fishpound.accountservice.entity.OrderList;
-import com.fishpound.accountservice.entity.PurchaceOrder;
-import com.fishpound.accountservice.entity.Settings;
-import com.fishpound.accountservice.entity.UserInfo;
+import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
-import com.fishpound.accountservice.service.OrderListService;
-import com.fishpound.accountservice.service.PurchaceOrderService;
-import com.fishpound.accountservice.service.SettingsService;
-import com.fishpound.accountservice.service.UserInfoService;
+import com.fishpound.accountservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Litl_FiSh
@@ -34,6 +25,8 @@ public class PurchaceOrderController {
     private SettingsService settingsService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private FileService fileService;
 
     /**
      * 建立一个新的采购单
@@ -111,5 +104,51 @@ public class PurchaceOrderController {
                 return ResultTool.fail("没有权限");
             }
         }
+    }
+
+    /**
+     * 获取采购单自定义状态
+     * @param pid
+     * @return
+     */
+    @GetMapping("/purchaceStatus")
+    public JsonResult getStatus(@RequestParam(value = "pid")Integer pid){
+        Map<String, Object> result = new LinkedHashMap<>();
+        List<File> all = fileService.findAllByPurchaceId(pid);
+        List<Settings> status = settingsService.fingAllByDescription("采购单状态");
+        if(status == null || status.size() == 0){
+            return ResultTool.fail("还没有设置采购单状态");
+        }
+        if(all == null || all.size() == 0){
+            for(Settings s : status){
+                boolean flag = false;
+                result.put(s.getValue(), flag);
+            }
+            return ResultTool.success(result);
+        }
+        File file1 = all.get(0);
+        boolean b = false;
+        for(Settings s : status){
+            if(file1.getDescription().equals(s.getValue())){
+                b = true;
+            }
+        }
+        if(b){
+            //其中一个状态符合设置中的状态
+            for(Settings s : status){
+                boolean flag = false;
+                for(File f1 : all){
+                    if(s.getValue().equals(f1.getDescription())){
+                        flag = true;
+                    }
+                }
+                result.put(s.getValue(), flag);
+            }
+        } else{
+            for(File f2 : all){
+                result.put(f2.getDescription(), true);
+            }
+        }
+        return ResultTool.success(result);
     }
 }

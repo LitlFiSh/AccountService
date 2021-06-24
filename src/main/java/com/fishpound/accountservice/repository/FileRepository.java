@@ -11,6 +11,6 @@ import java.util.List;
  * @Date 2021/6/12 16:54
  */
 public interface FileRepository extends JpaRepository<File, Integer> {
-    List<File> getAllByOid(String oid);
-    File getByOidAndDescription(String oid, String description);
+    List<File> getAllByPurchaceId(Integer pid);
+    File getByPurchaceIdAndDescription(Integer pid, String description);
 }

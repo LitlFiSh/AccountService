@@ -11,6 +11,7 @@ public interface PurchaceOrderService {
     void createPurchace(PurchaceOrder purchaceOrder);
     void updatePurchace(PurchaceOrder purchaceOrder);
     void deletePurchace(Integer id);
+    PurchaceOrder findOne(Integer id);
 
     Page<PurchaceOrder> findAllByUser(String uid, Integer page);
     Page<PurchaceOrder> findAll(Integer page);

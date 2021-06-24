@@ -33,13 +33,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File findAllByOidAndDesc(String oid, String desc) {
-        return fileRepository.getByOidAndDescription(oid, desc);
+    public File findAllByPurchaceIdAndDesc(Integer pid, String desc) {
+        return fileRepository.getByPurchaceIdAndDescription(pid, desc);
     }
 
     @Override
-    public List<File> findAllByOid(String oid) {
-        return fileRepository.getAllByOid(oid);
+    public List<File> findAllByPurchaceId(Integer pid) {
+        return fileRepository.getAllByPurchaceId(pid);
     }
 
     @Override

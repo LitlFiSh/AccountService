@@ -101,3 +101,8 @@ update menu set rid=null where id=8;
 -- ---
 alter table settings drop index `description`
 --2021年6月16日
+-- ---
+insert into menu (id, path, name, pid) value (62, "/orderlist/all", "查看所有", 6);
+alter table file drop column oid;
+alter table file add column purchace_id int not null comment '对应采购单id';
+--2021年6月24日

@@ -176,34 +176,66 @@ public class OrderController {
     {
         Map<String, Object> params = new HashMap<>();
         String uid = request.getAttribute("user").toString();
-        if(!"%".equals(oid)){
-            oid = "%" + oid + "%";
+        UserInfo loginUser = userInfoService.findById(uid);
+        if(loginUser.getAccount().getRole().getId() == 1){
+            if (!"%".equals(oid)) {
+                oid = "%" + oid + "%";
+            }
+            if (!"%".equals(department)) {
+                department = "%" + department + "%";
+            }
+            if (!"%".equals(user)) {
+                user = "%" + user + "%";
+            }
+            if (!"%".equals(fundCode)) {
+                fundCode = "%" + fundCode + "%";
+            }
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                format.parse(startDate);
+                format.parse(endDate);
+            } catch (ParseException pe) {
+                return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
+            }
+            params.put("uid", uid);
+            params.put("id", oid);
+            params.put("department", department);
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+            params.put("user", user);
+            params.put("fundCode", fundCode);
+            params.put("status", status);
+            return ResultTool.success(orderApplyService.findInCondition(params, page));
+        } else {
+            if (!"%".equals(oid)) {
+                oid = "%" + oid + "%";
+            }
+            if (!"%".equals(department)) {
+                department = "%" + department + "%";
+            }
+            if (!"%".equals(user)) {
+                user = "%" + user + "%";
+            }
+            if (!"%".equals(fundCode)) {
+                fundCode = "%" + fundCode + "%";
+            }
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                format.parse(startDate);
+                format.parse(endDate);
+            } catch (ParseException pe) {
+                return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
+            }
+            params.put("uid", uid);
+            params.put("id", oid);
+            params.put("department", department);
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+            params.put("user", user);
+            params.put("fundCode", fundCode);
+            params.put("status", status);
+            return ResultTool.success(orderApplyService.findByUserInCondition(params, page));
         }
-        if(!"%".equals(department)){
-            department = "%" + department + "%";
-        }
-        if(!"%".equals(user)){
-            user = "%" + user + "%";
-        }
-        if(!"%".equals(fundCode)){
-            fundCode = "%" + fundCode + "%";
-        }
-        try{
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            format.parse(startDate);
-            format.parse(endDate);
-        } catch(ParseException pe){
-            return ResultTool.fail("日期格式错误，格式应为'yyyy-MM-dd'");
-        }
-        params.put("uid", uid);
-        params.put("id", oid);
-        params.put("department", department);
-        params.put("startDate", startDate);
-        params.put("endDate", endDate);
-        params.put("user", user);
-        params.put("fundCode", fundCode);
-        params.put("status", status);
-        return ResultTool.success(orderApplyService.findByUserInCondition(params, page));
     }
 
     /**
@@ -307,59 +339,6 @@ public class OrderController {
             outputStream.close();
         }catch(Exception e){
             e.printStackTrace();
-        }
-    }
-
-    @GetMapping("/orderStatus")
-    public JsonResult getStatus(@RequestParam(value = "oid")String oid){
-        Map<String, Object> result = new LinkedHashMap<>();
-        List<File> all = fileService.findAllByOid(oid);
-        List<Settings> status = settingsService.fingAllByDescription("申请单状态");
-        if(status == null || status.size() == 0){
-            return ResultTool.fail("还没有设置申请单状态");
-        }
-        if(all == null || all.size() == 0){
-            for(Settings s : status){
-                boolean flag = false;
-                result.put(s.getValue(), flag);
-            }
-            return ResultTool.success(result);
-        }
-        File file1 = all.get(0);
-        boolean b = false;
-        for(Settings s : status){
-            if(file1.getDescription().equals(s.getValue())){
-                b = true;
-            }
-        }
-        if(b){
-            //其中一个状态符合设置中的状态
-            for(Settings s : status){
-                boolean flag = false;
-                for(File f1 : all){
-                    if(s.getValue().equals(f1.getDescription())){
-                        flag = true;
-                    }
-                }
-                result.put(s.getValue(), flag);
-            }
-        } else{
-            for(File f2 : all){
-                result.put(f2.getDescription(), true);
-            }
-        }
-        return ResultTool.success(result);
-    }
-
-    @GetMapping("/orders/all")
-    public JsonResult getAllOrders(@RequestParam(value = "page")Integer page,  HttpServletRequest request){
-        String uid = request.getAttribute("user").toString();
-        UserInfo user = userInfoService.findById(uid);
-        Settings settings = settingsService.findByDescription(uid);
-        if(user.getAccount().getRole().getId() == 1 || "2".equals(settings.getValue())){
-            return ResultTool.success(orderApplyService.findByStatus(3, page));
-        } else{
-            return ResultTool.fail("没有权限");
         }
     }
 

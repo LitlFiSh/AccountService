@@ -34,6 +34,11 @@ public class PurchaceOrderServiceImpl implements PurchaceOrderService {
     }
 
     @Override
+    public PurchaceOrder findOne(Integer id) {
+        return purchaceOrderRepository.getOne(id);
+    }
+
+    @Override
     public Page<PurchaceOrder> findAllByUser(String uid, Integer page) {
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
         return purchaceOrderRepository.findAllByUid(uid, pageTools.sortSingle());

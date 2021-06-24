@@ -1,9 +1,6 @@
 package com.fishpound.accountservice.controller;
 
-import com.fishpound.accountservice.entity.File;
-import com.fishpound.accountservice.entity.OrderApply;
-import com.fishpound.accountservice.entity.Settings;
-import com.fishpound.accountservice.entity.UserInfo;
+import com.fishpound.accountservice.entity.*;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.*;
@@ -28,49 +25,45 @@ public class FileController {
     @Autowired
     private SettingsService settingsService;
     @Autowired
-    private OrderApplyService orderApplyService;
+    private PurchaceOrderService purchaceOrderService;
     @Autowired
     private UserInfoService userInfoService;
 
     @PostMapping("/upload")
     public JsonResult uploadFile(@RequestParam(value = "file", required = false)MultipartFile file,
-                                 @RequestParam(value = "oid")String oid,
+                                 @RequestParam(value = "pid")Integer pid,
                                  @RequestParam(value = "status")String status,
                                  HttpServletRequest request)
     {
-        OrderApply orderApply = orderApplyService.findOne(oid);
-        if(orderApply.getStatus() == 3) {
-            String uid = (String) request.getAttribute("user");
-            UserInfo user = userInfoService.findById(uid);
-            Settings setting = settingsService.findByDescription(uid);
-            if(user.getAccount().getRole().getId() != 1){
-                if(setting == null || "0".equals(setting.getValue()) || "1".equals(setting.getValue())){
-                    return ResultTool.fail("没有权限");
-                }
+        PurchaceOrder purchaceOrder = purchaceOrderService.findOne(pid);
+        String uid = (String) request.getAttribute("user");
+        UserInfo user = userInfoService.findById(uid);
+        Settings setting = settingsService.findByDescription(uid);
+        if(user.getAccount().getRole().getId() != 1){
+            if(setting == null || "0".equals(setting.getValue()) || "1".equals(setting.getValue())){
+                return ResultTool.fail("没有权限");
             }
-            try {
-                File f = new File();
-                if (file != null) {
-                    byte[] data = file.getBytes();
-                    f.setFile(data);
-                }
-                f.setDescription(status);
-                f.setOid(oid);
-                f.setCreateTime(new Date());
-                f.setUpdateTime(new Date());
-                fileService.addFile(f);
-            } catch (Exception e) {
-                return ResultTool.fail(e.getMessage());
-            }
-            return ResultTool.success();
-        } else{
-            return ResultTool.fail("申请单状态错误");
         }
+        try {
+            File f = new File();
+            if (file != null) {
+                byte[] data = file.getBytes();
+                f.setFile(data);
+            }
+            f.setDescription(status);
+            f.setPurchaceId(pid);
+            f.setCreateTime(new Date());
+            f.setUpdateTime(new Date());
+            fileService.addFile(f);
+        } catch (Exception e) {
+            return ResultTool.fail(e.getMessage());
+        }
+        return ResultTool.success();
     }
 
     @GetMapping()
-    public void getFile(@RequestParam(value = "oid")String oid, @RequestParam(value = "description") String description, HttpServletResponse response){
-        File file = fileService.findAllByOidAndDesc(oid, description);
+    public void getFile(@RequestParam(value = "pid")Integer pid, @RequestParam(value = "description") String description, HttpServletResponse response){
+        File file = fileService.findAllByPurchaceIdAndDesc(pid, description);
         try{
             OutputStream outputStream = response.getOutputStream();
             outputStream.write(file.getFile());

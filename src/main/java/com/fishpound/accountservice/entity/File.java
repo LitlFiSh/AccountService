@@ -15,8 +15,8 @@ public class File {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "oid")
-    private String oid;
+    @Column(name = "purchace_id")
+    private Integer purchaceId;
 
     @Column(name = "file")
     private byte[] file;
@@ -38,12 +38,12 @@ public class File {
         this.id = id;
     }
 
-    public String getOid() {
-        return oid;
+    public Integer getPurchaceId() {
+        return purchaceId;
     }
 
-    public void setOid(String oid) {
-        this.oid = oid;
+    public void setPurchaceId(Integer purchaceId) {
+        this.purchaceId = purchaceId;
     }
 
     public byte[] getFile() {
