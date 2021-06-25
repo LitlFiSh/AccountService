@@ -40,17 +40,53 @@ public class OrderListServiceImpl implements OrderListService {
     }
 
     @Override
-    public Map<String, Object> findAll(Integer page) {
+    public Map<String, Object> findAll(Map<String, Object> param, Integer page) {
         Map<String, Object> result = new HashMap<>();
         List<ResultOrderList> resultList = new ArrayList<>();
         PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
-        Page<OrderList> orderLists = orderListRepository.findAllByStatusAndPurchaceId(3, pageTools.sortSingle());
+        Page<OrderList> orderLists = orderListRepository.findInConditionAndPurchaceId(
+                param.get("id").toString(),
+                param.get("name").toString(),
+                param.get("type").toString(),
+                param.get("configuration").toString(),
+                param.get("oid").toString(),
+                Integer.valueOf(param.get("status").toString()),
+                pageTools.sortSingle()
+        );
         for(OrderList orderList : orderLists.getContent()){
                 String uid = orderList.getOrderApply().getUid();
                 String username = userInfoService.findById(uid).getUsername();
                 String deptName = orderList.getOrderApply().getApplyDepartment();
                 ResultOrderList resultOrderList = new ResultOrderList(orderList, username, deptName);
                 resultList.add(resultOrderList);
+        }
+        result.put("totalPages", orderLists.getTotalPages());
+        result.put("totalElements", orderLists.getTotalElements());
+        result.put("size", orderLists.getSize());
+        result.put("number", orderLists.getNumber());
+        result.put("content", resultList);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> findAllAdmin(Map<String, Object> param, Integer page) {
+        Map<String, Object> result = new HashMap<>();
+        List<ResultOrderList> resultList = new ArrayList<>();
+        PageTools pageTools = new PageTools("id", Sort.Direction.DESC, page);
+        Page<OrderList> orderLists = orderListRepository.findInCondition(
+                param.get("id").toString(),
+                param.get("name").toString(),
+                param.get("type").toString(),
+                param.get("configuration").toString(),
+                param.get("oid").toString(),
+                pageTools.sortSingle()
+        );
+        for(OrderList orderList : orderLists.getContent()){
+            String uid = orderList.getOrderApply().getUid();
+            String username = userInfoService.findById(uid).getUsername();
+            String deptName = orderList.getOrderApply().getApplyDepartment();
+            ResultOrderList resultOrderList = new ResultOrderList(orderList, username, deptName);
+            resultList.add(resultOrderList);
         }
         result.put("totalPages", orderLists.getTotalPages());
         result.put("totalElements", orderLists.getTotalElements());

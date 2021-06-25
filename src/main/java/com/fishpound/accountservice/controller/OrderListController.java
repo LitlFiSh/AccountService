@@ -3,17 +3,20 @@ package com.fishpound.accountservice.controller;
 import com.fishpound.accountservice.entity.File;
 import com.fishpound.accountservice.entity.OrderList;
 import com.fishpound.accountservice.entity.Settings;
+import com.fishpound.accountservice.entity.UserInfo;
 import com.fishpound.accountservice.result.JsonResult;
 import com.fishpound.accountservice.result.ResultTool;
 import com.fishpound.accountservice.service.FileService;
 import com.fishpound.accountservice.service.OrderListService;
 import com.fishpound.accountservice.service.SettingsService;
+import com.fishpound.accountservice.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,8 @@ public class OrderListController {
     FileService fileService;
     @Autowired
     SettingsService settingsService;
+    @Autowired
+    private UserInfoService userInfoService;
 
 //    @DeleteMapping("/{id}")
 //    public JsonResult deleteOrderList(@PathVariable(value = "id") String id){
@@ -80,8 +85,71 @@ public class OrderListController {
     }
 
     @GetMapping("/all")
-    public JsonResult findAll(@RequestParam(value = "page") Integer page){
-        Map<String, Object> resultMap = orderListService.findAll(page);
+    public JsonResult findAll(@RequestParam(value = "id", defaultValue = "%") String id,
+                              @RequestParam(value = "name", defaultValue = "%") String name,
+                              @RequestParam(value = "type", defaultValue = "%") String type,
+                              @RequestParam(value = "configuration", defaultValue = "%") String configuration,
+                              @RequestParam(value = "applyUid", defaultValue = "%") String uid,
+                              @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        Map<String, Object> params = new HashMap<>();
+        if (!"%".equals(id)) {
+            id = "%" + id + "%";
+        }
+        if (!"%".equals(name)) {
+            name = "%" + name + "%";
+        }
+        if (!"%".equals(type)) {
+            type = "%" + type + "%";
+        }
+        if (!"%".equals(configuration)) {
+            configuration = "%" + configuration + "%";
+        }
+        if (!"%".equals(uid)) {
+            UserInfo user = userInfoService.findById(uid);
+            uid = user.getId();
+        }
+        params.put("id", id);
+        params.put("name", name);
+        params.put("type", type);
+        params.put("configuration", configuration);
+        params.put("uid", uid);
+        params.put("status", 3);
+        Map<String, Object> resultMap = orderListService.findAll(params, page);
+        return ResultTool.success(resultMap);
+    }
+
+    @GetMapping("/orderlists/all")
+    public JsonResult getAllOrderList(@RequestParam(value = "id", defaultValue = "%") String id,
+                                      @RequestParam(value = "name", defaultValue = "%") String name,
+                                      @RequestParam(value = "type", defaultValue = "%") String type,
+                                      @RequestParam(value = "configuration", defaultValue = "%") String configuration,
+                                      @RequestParam(value = "applyUid", defaultValue = "%") String uid,
+                                      @RequestParam(value = "page", defaultValue = "1") Integer page)
+    {
+        Map<String, Object> params = new HashMap<>();
+        if (!"%".equals(id)) {
+            id = "%" + id + "%";
+        }
+        if (!"%".equals(name)) {
+            name = "%" + name + "%";
+        }
+        if (!"%".equals(type)) {
+            type = "%" + type + "%";
+        }
+        if (!"%".equals(configuration)) {
+            configuration = "%" + configuration + "%";
+        }
+        if (!"%".equals(uid)) {
+            UserInfo user = userInfoService.findById(uid);
+            uid = user.getId();
+        }
+        params.put("id", id);
+        params.put("name", name);
+        params.put("type", type);
+        params.put("configuration", configuration);
+        params.put("uid", uid);
+        Map<String, Object> resultMap = orderListService.findAll(params, page);
         return ResultTool.success(resultMap);
     }
 }

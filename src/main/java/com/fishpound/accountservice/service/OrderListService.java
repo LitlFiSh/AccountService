@@ -10,7 +10,8 @@ import java.util.Map;
 public interface OrderListService {
     OrderList getOne(String id);
     List<OrderList> findAllByUserId(String id);
-    Map<String, Object> findAll(Integer page);
+    Map<String, Object> findAll(Map<String, Object> param, Integer page);
+    Map<String, Object> findAllAdmin(Map<String, Object> param, Integer page);
     boolean deleteOrderList(String id);
     boolean addOrderList(OrderList orderList);
 }

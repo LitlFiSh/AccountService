@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,8 @@ public class AdminController {
     CacheService cacheService;
     @Autowired
     SettingsService settingsService;
+    @Autowired
+    private OrderListService orderListService;
 
     /**
      * 根据用户ID获取用户信息
