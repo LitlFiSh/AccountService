@@ -29,6 +29,14 @@ public class FileController {
     @Autowired
     private UserInfoService userInfoService;
 
+    /**
+     * 上传对应的自定义状态的文件
+     * @param file
+     * @param pid
+     * @param status
+     * @param request
+     * @return
+     */
     @PostMapping("/upload")
     public JsonResult uploadFile(@RequestParam(value = "file", required = false)MultipartFile file,
                                  @RequestParam(value = "pid")Integer pid,
@@ -36,6 +44,9 @@ public class FileController {
                                  HttpServletRequest request)
     {
         PurchaceOrder purchaceOrder = purchaceOrderService.findOne(pid);
+        if(purchaceOrder == null){
+            return ResultTool.fail("找不到采购单");
+        }
         String uid = (String) request.getAttribute("user");
         UserInfo user = userInfoService.findById(uid);
         Settings setting = settingsService.findByDescription(uid);

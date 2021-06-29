@@ -207,6 +207,12 @@ public class AdminController {
 //        return ResultTool.success();
 //    }
 
+    /**
+     * 任命用户为采购负责人或采购总负责人
+     * @param uid
+     * @param type
+     * @return
+     */
     @GetMapping("/user/appointment")
     public JsonResult appointmentUser(@RequestParam(value = "uid") String uid, @RequestParam(value = "type") String type){
         if("0".equals(type) || "1".equals(type) || "2".equals(type)) {
@@ -238,20 +244,39 @@ public class AdminController {
 //        return ResultTool.success();
 //    }
 
+    /**
+     * 添加部门
+     * @param department
+     * @return
+     */
     @PostMapping("/department")
     public JsonResult addDepartment(@RequestBody Department department){
         departmentService.addDept(department);
         return ResultTool.success();
     }
 
+    /**
+     * 更新部门
+     * @param department
+     * @return
+     */
     @PutMapping("/department")
     public JsonResult updateDepartment(@RequestBody Department department){
         departmentService.updateDept(department);
         return ResultTool.success();
     }
 
+    /**
+     * 删除部门
+     * @param id
+     * @return
+     */
     @DeleteMapping("/department/{id}")
     public JsonResult deleteDepartment(@PathVariable(value = "id") String id){
+        Department department = departmentService.findById(id);
+        if(department.getUserInfoSet() != null && department.getUserInfoSet().size() > 0){
+            return ResultTool.fail("要删除的部门中还存在用户，请先将用户转移到其他部门");
+        }
         departmentService.deleteDept(id);
         return ResultTool.success();
     }

@@ -41,6 +41,12 @@ public class OrderListController {
 //            return ResultTool.fail();
 //        }
 //    }
+
+    /**
+     * 获取设备列表状态
+     * @param id
+     * @return
+     */
     @GetMapping("/status")
     public JsonResult getStatus(@RequestParam(value = "id") String id){
         OrderList orderList = orderListService.getOne(id);
@@ -84,6 +90,16 @@ public class OrderListController {
         return ResultTool.success(result);
     }
 
+    /**
+     * 通过条件查询已经过审核的设备列表
+     * @param id
+     * @param name
+     * @param type
+     * @param configuration
+     * @param uid
+     * @param page
+     * @return
+     */
     @GetMapping("/all")
     public JsonResult findAll(@RequestParam(value = "id", defaultValue = "%") String id,
                               @RequestParam(value = "name", defaultValue = "%") String name,
@@ -119,6 +135,16 @@ public class OrderListController {
         return ResultTool.success(resultMap);
     }
 
+    /**
+     * 通过条件查询所有设备列表
+     * @param id
+     * @param name
+     * @param type
+     * @param configuration
+     * @param uid
+     * @param page
+     * @return
+     */
     @GetMapping("/orderlists/all")
     public JsonResult getAllOrderList(@RequestParam(value = "id", defaultValue = "%") String id,
                                       @RequestParam(value = "name", defaultValue = "%") String name,

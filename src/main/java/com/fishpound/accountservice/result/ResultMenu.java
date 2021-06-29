@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ResultMenu {
-    private String name;
-    private String path;
-    private List<Menu> children;
+    private String name;   //菜单名称
+    private String path;   //菜单路径
+    private List<Menu> children;   //子菜单
 
     public ResultMenu() {
     }

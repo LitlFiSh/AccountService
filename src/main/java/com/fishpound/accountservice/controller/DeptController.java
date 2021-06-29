@@ -20,6 +20,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 部门领导
+ */
 @RestController
 @RequestMapping("/dept")
 public class DeptController {

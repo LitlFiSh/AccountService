@@ -6,12 +6,12 @@ import com.fishpound.accountservice.entity.UserInfo;
  * 用于用户信息的返回以及添加用户时前端传入参数的对应
  */
 public class ResultUser {
-    private String id;
-    private String username;
-    private String department;
-    private String password;
-    private String role;
-    private String inCharge;
+    private String id;   //用户ID
+    private String username;   //用户姓名
+    private String department;   //用户所属部门名
+    private String password;   //用户密码
+    private String role;   //用户角色名
+    private String inCharge;   //用户采购权限，0:无权限、1:采购负责人、2:采购总负责人
 
     public ResultUser() {
     }
